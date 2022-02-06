@@ -1,0 +1,22 @@
+# Version Docker Compose
+version: '3.8'
+
+services:
+
+# Configuration MySql version
+  mysql:
+    # Imagem a ser baixada
+    image: mysql:8.0.28
+    # Nome do container
+    container_name: mysql
+    # Configuracao da porta de conexao
+    ports:
+      - 3306:3306
+    environment:
+      # Usuario da aplicacao
+      MYSQL_USER: vendas
+      MYSQL_PASSWORD: vendas
+      # Usuario root
+      MYSQL_ROOT_PASSWORD: root
+      # Nome do banco de dados
+      MYSQL_DATABASE: vendas_db
