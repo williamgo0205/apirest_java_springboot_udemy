@@ -4,6 +4,9 @@
 https://hub.docker.com/
 https://hub.docker.com/_/mysql
 
+-- Clone do projeto
+git@github.com:williamgo0205/apirest_java_springboot_udemy.git
+
 ----------------
 -- 1 - DOCKER --
 ----------------
