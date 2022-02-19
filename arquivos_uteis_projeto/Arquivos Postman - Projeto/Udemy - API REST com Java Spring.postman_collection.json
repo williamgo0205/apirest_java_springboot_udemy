@@ -9,7 +9,7 @@
 			"name": "Categoria",
 			"item": [
 				{
-					"name": "localhost:8080/categoria",
+					"name": "GET localhost:8080/categoria",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -27,7 +27,7 @@
 					"response": []
 				},
 				{
-					"name": "localhost:8080/categoria/{categoria)",
+					"name": "GET localhost:8080/categoria/{categoria)",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -40,6 +40,33 @@
 							"path": [
 								"categoria",
 								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST localhost:8080/categoria",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n         \"nome\": \"Biblioteca\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/categoria",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"categoria"
 							]
 						}
 					},
