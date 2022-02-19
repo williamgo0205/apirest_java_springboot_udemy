@@ -103,17 +103,4 @@ public class Produto {
                 Objects.equals(precoVenda, produto.precoVenda) && Objects.equals(observacao, produto.observacao) &&
                 Objects.equals(categoria, produto.categoria);
     }
-
-    @Override
-    public String toString() {
-        return "Produto{" +
-                "codigo=" + codigo +
-                ", descricao='" + descricao + '\'' +
-                ", quantidade=" + quantidade +
-                ", precoCusto=" + precoCusto +
-                ", precoVenda=" + precoVenda +
-                ", observacao='" + observacao + '\'' +
-                ", categoria=" + categoria +
-                '}';
-    }
 }

@@ -42,12 +42,4 @@ public class Categoria{
         Categoria categoria = (Categoria) o;
         return Objects.equals(codigo, categoria.codigo) && Objects.equals(nome, categoria.nome);
     }
-
-    @Override
-    public String toString() {
-        return "Categoria{" +
-                "codigo=" + codigo +
-                ", nome='" + nome + '\'' +
-                '}';
-    }
 }
