@@ -39,10 +39,10 @@ public class GestaoVendasExceptionHandler extends ResponseEntityExceptionHandler
     }
 
     private String tartarMensagemDeErroParaUsuario(FieldError fildError) {
-        if (fildError.getCode().equals(CONSTANT_VALIDATION_NOT_BLANK)){
+        if (fildError.getCode().equals(CONSTANT_VALIDATION_NOT_BLANK)) {
             return fildError.getDefaultMessage().concat(" é um campo obrigatório.");
         }
-        if (fildError.getCode().equals(CONSTANT_VALIDATION_LENGTH)){
+        if (fildError.getCode().equals(CONSTANT_VALIDATION_LENGTH)) {
             return fildError.getDefaultMessage().concat(String.format(" deve ter entre %s e %s caracteres.",
                     fildError.getArguments()[2], fildError.getArguments()[1]));
         }
