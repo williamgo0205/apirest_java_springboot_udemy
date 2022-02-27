@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,7 +35,7 @@ public class CategoriaController {
 
     // POST - localhost:8080/categoria
     @PostMapping
-    public ResponseEntity<Categoria> salvar(@RequestBody Categoria categoria) {
+    public ResponseEntity<Categoria> salvar(@Valid @RequestBody Categoria categoria) {
         Categoria categoriaSalva = categoriaService.salvar(categoria);
         return ResponseEntity.status(HttpStatus.CREATED).body(categoriaSalva);
     }
@@ -42,7 +43,7 @@ public class CategoriaController {
     // PUT - localhost:8080/categoria/{codigo}
     @PutMapping("/{codigo}")
     public ResponseEntity<Categoria> atualizar(@PathVariable(name = "codigo") Long codigo,
-                                               @RequestBody Categoria categoria) {
+                                               @Valid @RequestBody Categoria categoria) {
         return ResponseEntity.ok(categoriaService.atualizar(codigo, categoria));
     }
 }
