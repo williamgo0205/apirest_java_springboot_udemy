@@ -1,5 +1,6 @@
 package com.vendas.gestaovendas.exception;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -7,10 +8,12 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @ControllerAdvice
@@ -26,6 +29,18 @@ public class GestaoVendasExceptionHandler extends ResponseEntityExceptionHandler
                                                                   WebRequest request) {
         List<Error> errors = gerarListaDeErros(ex.getBindingResult());
         return handleExceptionInternal(ex, errors, headers, HttpStatus.BAD_REQUEST, request);
+    }
+
+    // Excecao EmptyResultDataAccessException não existente na extensao ResponseEntityExceptionHandler
+    // por esse motivo foi criada com a anotacao  @ExceptionHandler(EmptyResultDataAccessException.class)
+    // indicando a classe de excecao
+    @ExceptionHandler(EmptyResultDataAccessException.class)
+    public ResponseEntity<Object> handleEmptyResultDataAccessException(EmptyResultDataAccessException ex,
+                                                                        WebRequest request){
+        String msgUsuario = "Recurso não encontrado.";
+        String msgDesenvolvedor = ex.toString();
+        List<Error> errors = Arrays.asList(new Error(msgUsuario, msgDesenvolvedor));
+        return handleExceptionInternal(ex, errors, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 
     private List<Error> gerarListaDeErros(BindingResult bindingResult) {
