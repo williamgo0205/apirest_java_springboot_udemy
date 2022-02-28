@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "434cee15-5cb2-4d73-b5fa-e4d9ba5b6e12",
+		"_postman_id": "afc1b503-7dda-4895-a17c-2d31e93f83c2",
 		"name": "Udemy - API REST com Java Spring",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -73,9 +73,9 @@
 					"response": []
 				},
 				{
-					"name": "PUT - localhost:8080/categoria/{codigo}",
+					"name": "DELETE - localhost:8080/categoria/{codigo}",
 					"request": {
-						"method": "PUT",
+						"method": "DELETE",
 						"header": [],
 						"body": {
 							"mode": "raw",
@@ -87,14 +87,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/categoria/5",
+							"raw": "localhost:8080/categoria/9",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
 								"categoria",
-								"5"
+								"9"
 							]
 						}
 					},
