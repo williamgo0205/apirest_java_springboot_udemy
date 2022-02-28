@@ -45,6 +45,11 @@ public class CategoriaService {
         return categoriaRepository.save(categoriaSalvar);
     }
 
+    // Método para deletar a Categoria no banco de dados
+    public void deletar(Long codigo){
+        categoriaRepository.deleteById(codigo);
+    }
+
     private Categoria validarCategoriaExiste(Long codigo) {
         Optional<Categoria> categoria = buscarPorCodigo(codigo);
         // Caso a categoria nao exista lanca uma exception

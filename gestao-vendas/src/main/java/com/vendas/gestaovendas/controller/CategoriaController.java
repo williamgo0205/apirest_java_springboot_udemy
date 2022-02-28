@@ -22,14 +22,14 @@ public class CategoriaController {
     private CategoriaService categoriaService;
 
     // GET - localhost:8080/categoria
-    @ApiOperation(value = "Listar")
+    @ApiOperation(value = "Listar Todas as Categorias Existentes")
     @GetMapping
     public List<Categoria> listar() {
         return categoriaService.listarTodas();
     }
 
     // GET - localhost:8080/categoria/{codigo}
-    @ApiOperation(value = "listar Por Código")
+    @ApiOperation(value = "Listar a Categoria Informada Pelo Código")
     @GetMapping("/{codigo}")
     public ResponseEntity<Optional<Categoria>> listarPorCodigo(@PathVariable(name = "codigo") Long codigo) {
         Optional<Categoria> optCategoria = categoriaService.buscarPorCodigo(codigo);
@@ -39,7 +39,7 @@ public class CategoriaController {
     }
 
     // POST - localhost:8080/categoria
-    @ApiOperation(value = "Salvar")
+    @ApiOperation(value = "Salvar/Criar uma Categoria")
     @PostMapping
     public ResponseEntity<Categoria> salvar(@Valid @RequestBody Categoria categoria) {
         Categoria categoriaSalva = categoriaService.salvar(categoria);
@@ -47,10 +47,19 @@ public class CategoriaController {
     }
 
     // PUT - localhost:8080/categoria/{codigo}
-    @ApiOperation(value = "Atualizar")
+    @ApiOperation(value = "Atualizar uma Categoria")
     @PutMapping("/{codigo}")
     public ResponseEntity<Categoria> atualizar(@PathVariable(name = "codigo") Long codigo,
                                                @Valid @RequestBody Categoria categoria) {
         return ResponseEntity.ok(categoriaService.atualizar(codigo, categoria));
+    }
+
+    // DELETE - localhost:8080/categoria/{codigo}
+    // HttpStatus.NO_CONTENT (204) - Executado o metodo porém sem nada a retornar
+    @ApiOperation(value = "Deletar uma Categoria")
+    @DeleteMapping("/{codigo}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletar (@PathVariable Long codigo){
+        categoriaService.deletar(codigo);
     }
 }
