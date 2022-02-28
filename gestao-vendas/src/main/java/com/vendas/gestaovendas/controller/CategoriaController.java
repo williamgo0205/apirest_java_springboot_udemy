@@ -2,6 +2,8 @@ package com.vendas.gestaovendas.controller;
 
 import com.vendas.gestaovendas.entities.Categoria;
 import com.vendas.gestaovendas.service.CategoriaService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +13,7 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
+@Api(tags = "Categoria")
 @RestController
 @RequestMapping("/categoria")
 public class CategoriaController {
@@ -19,14 +22,16 @@ public class CategoriaController {
     private CategoriaService categoriaService;
 
     // GET - localhost:8080/categoria
+    @ApiOperation(value = "Listar")
     @GetMapping
-    public List<Categoria> listarTodas() {
+    public List<Categoria> listar() {
         return categoriaService.listarTodas();
     }
 
     // GET - localhost:8080/categoria/{codigo}
+    @ApiOperation(value = "listar Por Código")
     @GetMapping("/{codigo}")
-    public ResponseEntity<Optional<Categoria>> buscarPorId(@PathVariable(name = "codigo") Long codigo) {
+    public ResponseEntity<Optional<Categoria>> listarPorCodigo(@PathVariable(name = "codigo") Long codigo) {
         Optional<Categoria> optCategoria = categoriaService.buscarPorCodigo(codigo);
         return optCategoria.isPresent()
                 ? ResponseEntity.ok(optCategoria)
@@ -34,6 +39,7 @@ public class CategoriaController {
     }
 
     // POST - localhost:8080/categoria
+    @ApiOperation(value = "Salvar")
     @PostMapping
     public ResponseEntity<Categoria> salvar(@Valid @RequestBody Categoria categoria) {
         Categoria categoriaSalva = categoriaService.salvar(categoria);
@@ -41,6 +47,7 @@ public class CategoriaController {
     }
 
     // PUT - localhost:8080/categoria/{codigo}
+    @ApiOperation(value = "Atualizar")
     @PutMapping("/{codigo}")
     public ResponseEntity<Categoria> atualizar(@PathVariable(name = "codigo") Long codigo,
                                                @Valid @RequestBody Categoria categoria) {

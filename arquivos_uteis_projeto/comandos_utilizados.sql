@@ -7,6 +7,9 @@ https://hub.docker.com/_/mysql
 -- Projeto Spring
 https://start.spring.io/
 
+-- Link Swagger local
+http://localhost:8080/swagger-ui.html
+
 -- Clone do projeto
 git@github.com:williamgo0205/apirest_java_springboot_udemy.git
 
@@ -18,7 +21,6 @@ docker-compose up
 
 -- Executando container mysql
 docker exec -it mysql mysql -uvendas -pvendas
-
 
 ---------------
 -- 2 - MYSQL --
