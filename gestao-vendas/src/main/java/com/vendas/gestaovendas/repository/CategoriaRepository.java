@@ -4,4 +4,6 @@ import com.vendas.gestaovendas.entities.Categoria;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CategoriaRepository extends JpaRepository<Categoria, Long> {
+    // Busca uma categoria pelo Nome Informado
+    Categoria findByNome(String nome);
 }

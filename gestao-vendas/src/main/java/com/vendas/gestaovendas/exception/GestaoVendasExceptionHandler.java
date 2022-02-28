@@ -1,5 +1,6 @@
 package com.vendas.gestaovendas.exception;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+@Slf4j
 @ControllerAdvice
 public class GestaoVendasExceptionHandler extends ResponseEntityExceptionHandler {
 
@@ -58,8 +60,24 @@ public class GestaoVendasExceptionHandler extends ResponseEntityExceptionHandler
     @ExceptionHandler(EmptyResultDataAccessException.class)
     public ResponseEntity<Object> handleEmptyResultDataAccessException(EmptyResultDataAccessException ex,
                                                                         WebRequest request){
+        log.error("Recurso não encontrado.");
         String msgUsuario = "Recurso não encontrado.";
         String msgDesenvolvedor = ex.toString();
+        List<Error> errors = Arrays.asList(new Error(msgUsuario, msgDesenvolvedor));
+        return handleExceptionInternal(ex, errors, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+    }
+
+    /**
+     * Excecao RegraNegocioException não existente na extensao ResponseEntityExceptionHandler
+     * por esse motivo foi criada com a anotacao  @ExceptionHandler(RegraNegocioException.class)
+     * indicando a classe de excecao, classe essa criada no projeto
+     */
+    @ExceptionHandler(RegraNegocioException.class)
+    public ResponseEntity<Object> handleEmptyRegraNegocioException(RegraNegocioException ex,
+                                                                       WebRequest request){
+        log.error("Erro de Regra de Negocio.");
+        String msgUsuario = ex.getMessage();
+        String msgDesenvolvedor = ex.getMessage();
         List<Error> errors = Arrays.asList(new Error(msgUsuario, msgDesenvolvedor));
         return handleExceptionInternal(ex, errors, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
@@ -76,9 +94,11 @@ public class GestaoVendasExceptionHandler extends ResponseEntityExceptionHandler
 
     private String tartarMensagemDeErroParaUsuario(FieldError fildError) {
         if (fildError.getCode().equals(CONSTANT_VALIDATION_NOT_BLANK)) {
+            log.error("Erro de validação: campo obrigatório não informado.");
             return fildError.getDefaultMessage().concat(" é um campo obrigatório.");
         }
         if (fildError.getCode().equals(CONSTANT_VALIDATION_LENGTH)) {
+            log.error("Erro na validação do tamanho do campo.");
             return fildError.getDefaultMessage().concat(String.format(" deve ter entre %s e %s caracteres.",
                     fildError.getArguments()[2], fildError.getArguments()[1]));
         }
