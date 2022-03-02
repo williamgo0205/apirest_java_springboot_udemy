@@ -1,22 +1,42 @@
 -- Comandos Curso Spring boot com Java (UDEMY)
 
--- Referencias Documentação
+--------------------------------
+-- ## REFERNCIAS DOCUMENTACAO --
+--------------------------------
 https://hub.docker.com/
 https://hub.docker.com/_/mysql
 
--- Projeto Spring
+-----------------------
+-- ## PROJETO SPRING --
+-----------------------
 https://start.spring.io/
 
+----------------
+-- ## SWAGGER --
+----------------
 -- Link Swagger local
 http://localhost:8080/swagger-ui.html
 
+-----------------------
+-- ## TRACING JAEGER --
+-----------------------
 -- Link Jaeger - Acessar Docs/Get Started (Controle da aplicação com Microserviços)
 https://www.jaegertracing.io/
 
     -- Acesso local Jaeager
     http://localhost:16686/search
 
--- Clone do projeto
+-- links GIT
+
+-- java-spring-jaeger
+https://github.com/opentracing-contrib/java-spring-jaeger
+
+-- java-jdbc
+https://github.com/opentracing-contrib/java-jdbc
+
+----------------------
+-- ## CLONE PROJETO --
+----------------------
 git@github.com:williamgo0205/apirest_java_springboot_udemy.git
 
 ----------------

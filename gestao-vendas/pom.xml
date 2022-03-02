@@ -72,6 +72,13 @@
 			<version>3.3.1</version>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/io.opentracing.contrib/opentracing-jdbc -->
+		<dependency>
+			<groupId>io.opentracing.contrib</groupId>
+			<artifactId>opentracing-jdbc</artifactId>
+			<version>0.2.15</version>
+		</dependency>
+
 		<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-slf4j-impl -->
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
