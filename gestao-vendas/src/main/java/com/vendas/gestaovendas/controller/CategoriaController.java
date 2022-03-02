@@ -24,7 +24,7 @@ public class CategoriaController {
     // GET - localhost:8080/categoria
     @ApiOperation(value = "Listar Todas as Categorias Existentes")
     @GetMapping
-    public List<Categoria> listar() {
+    public List<Categoria> listarTodas() {
         return categoriaService.listarTodas();
     }
 

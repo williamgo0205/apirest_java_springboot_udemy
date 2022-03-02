@@ -10,6 +10,12 @@ https://start.spring.io/
 -- Link Swagger local
 http://localhost:8080/swagger-ui.html
 
+-- Link Jaeger - Acessar Docs/Get Started (Controle da aplicação com Microserviços)
+https://www.jaegertracing.io/
+
+    -- Acesso local Jaeager
+    http://localhost:16686/search
+
 -- Clone do projeto
 git@github.com:williamgo0205/apirest_java_springboot_udemy.git
 
