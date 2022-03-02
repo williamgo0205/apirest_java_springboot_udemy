@@ -16,26 +16,30 @@ import java.util.Optional;
 
 @Api(tags = "Produto")
 @RestController
-@RequestMapping("/produto")
+@RequestMapping("/categoria/{codigoCategoria}/produto")
 public class ProdutoController {
 
     @Autowired
     private ProdutoService produtoService;
 
-    // GET - localhost:8080/produto
-    @ApiOperation(value = "Listar Todos os Produtos Existentes")
+    // GET - localhost:8080/categoria/{codigoCategoria}/produto
+    @ApiOperation(value = "Listar Todos os Produtos Existentes de uma Determinada Categoria",
+                  nickname = "listarTodos")
     @GetMapping
-    public List<Produto> listarTodos() {
-        return produtoService.listarTodos();
+    public List<Produto> listarTodos(@PathVariable(name = "codigoCategoria") Long codigoCategoria) {
+        return produtoService.listarTodos(codigoCategoria);
     }
 
-    // GET - localhost:8080/produto/{codigo}
-    @ApiOperation(value = "Listar o Produto Informado Pelo Código")
+    // GET - localhost:8080/categoria/{codigoCategoria}/produto/{codigo}
+    @ApiOperation(value = "Listar o Produto Informado Pelo Codigo e Categoria Informados",
+                  nickname = "listarPorCodigoECategoria")
     @GetMapping("/{codigo}")
-    public ResponseEntity<Optional<Produto>> listarPorCodigo(@PathVariable(name = "codigo") Long codigo) {
-        Optional<Produto> optionalProduto = produtoService.buscarPorCodigo(codigo);
-        return optionalProduto.isPresent()
-                ? ResponseEntity.ok(optionalProduto)
+    public ResponseEntity<Optional<Produto>> listarPorCodigoECategoria(
+            @PathVariable(name = "codigoCategoria") Long codigoCategoria,
+            @PathVariable(name = "codigo") Long codigo)  {
+        Optional<Produto> optProduto = produtoService.buscaPorCodigoProduto(codigo, codigoCategoria);
+        return optProduto.isPresent()
+                ? ResponseEntity.ok(optProduto)
                 : ResponseEntity.notFound().build();
     }
 }

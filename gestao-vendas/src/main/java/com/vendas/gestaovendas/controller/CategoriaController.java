@@ -22,14 +22,16 @@ public class CategoriaController {
     private CategoriaService categoriaService;
 
     // GET - localhost:8080/categoria
-    @ApiOperation(value = "Listar Todas as Categorias Existentes")
+    @ApiOperation(value = "Listar Todas as Categorias Existentes",
+                  nickname = "listarTodas")
     @GetMapping
     public List<Categoria> listarTodas() {
         return categoriaService.listarTodas();
     }
 
     // GET - localhost:8080/categoria/{codigo}
-    @ApiOperation(value = "Listar a Categoria Informada Pelo Código")
+    @ApiOperation(value = "Listar a Categoria Informada Pelo Código",
+                  nickname = "listarPorCodigo")
     @GetMapping("/{codigo}")
     public ResponseEntity<Optional<Categoria>> listarPorCodigo(@PathVariable(name = "codigo") Long codigo) {
         Optional<Categoria> optCategoria = categoriaService.buscarPorCodigo(codigo);
@@ -39,7 +41,8 @@ public class CategoriaController {
     }
 
     // POST - localhost:8080/categoria
-    @ApiOperation(value = "Salvar/Criar uma Categoria")
+    @ApiOperation(value = "Salvar/Criar uma Categoria",
+                  nickname = "salvar")
     @PostMapping
     public ResponseEntity<Categoria> salvar(@Valid @RequestBody Categoria categoria) {
         Categoria categoriaSalva = categoriaService.salvar(categoria);
@@ -47,7 +50,8 @@ public class CategoriaController {
     }
 
     // PUT - localhost:8080/categoria/{codigo}
-    @ApiOperation(value = "Atualizar uma Categoria")
+    @ApiOperation(value = "Atualizar uma Categoria",
+                  nickname = "atualizar")
     @PutMapping("/{codigo}")
     public ResponseEntity<Categoria> atualizar(@PathVariable(name = "codigo") Long codigo,
                                                @Valid @RequestBody Categoria categoria) {
@@ -56,7 +60,8 @@ public class CategoriaController {
 
     // DELETE - localhost:8080/categoria/{codigo}
     // HttpStatus.NO_CONTENT (204) - Executado o metodo porém sem nada a retornar
-    @ApiOperation(value = "Deletar uma Categoria")
+    @ApiOperation(value = "Deletar uma Categoria",
+                  nickname = "deletar")
     @DeleteMapping("/{codigo}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletar (@PathVariable Long codigo){
