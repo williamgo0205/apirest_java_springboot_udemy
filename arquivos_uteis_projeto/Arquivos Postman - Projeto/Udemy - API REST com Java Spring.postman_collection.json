@@ -27,7 +27,7 @@
 					"response": []
 				},
 				{
-					"name": "GET localhost:8080/categoria/{categoria)",
+					"name": "GET localhost:8080/categoria/{codigoCategoria)",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -73,9 +73,9 @@
 					"response": []
 				},
 				{
-					"name": "DELETE - localhost:8080/categoria/{codigo}",
+					"name": "PUT - localhost:8080/categoria/{codigoCategoria}",
 					"request": {
-						"method": "DELETE",
+						"method": "PUT",
 						"header": [],
 						"body": {
 							"mode": "raw",
@@ -87,14 +87,80 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/categoria/9",
+							"raw": "localhost:8080/categoria/50",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
 								"categoria",
-								"9"
+								"50"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE - localhost:8080/categoria/{codigoCategoria}",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/categoria/6",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"categoria",
+								"6"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Produto",
+			"item": [
+				{
+					"name": "GET - localhost:8080/categoria/{codigoCategoria}/produto",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/categoria/1/produto",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"categoria",
+								"1",
+								"produto"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET - localhost:8080/categoria/{codigoCategoria}/produto/{codigo}",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/categoria/1/produto/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"categoria",
+								"1",
+								"produto",
+								"1"
 							]
 						}
 					},
