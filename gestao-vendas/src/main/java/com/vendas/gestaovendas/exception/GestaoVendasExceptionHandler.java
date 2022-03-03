@@ -23,6 +23,7 @@ import java.util.List;
 public class GestaoVendasExceptionHandler extends ResponseEntityExceptionHandler {
 
     public static final String CONSTANT_VALIDATION_NOT_BLANK = "NotBlank";
+    public static final String CONSTANT_VALIDATION_NOT_NULL = "NotNull";
     public static final String CONSTANT_VALIDATION_LENGTH = "Length";
 
     /**
@@ -99,16 +100,20 @@ public class GestaoVendasExceptionHandler extends ResponseEntityExceptionHandler
     private List<Error> gerarListaDeErros(BindingResult bindingResult) {
         List<Error> errors = new ArrayList<Error>();
         bindingResult.getFieldErrors().forEach(fildError -> {
-            String msgUsuario = tartarMensagemDeErroParaUsuario(fildError);
+            String msgUsuario = tratarMensagemDeErroParaUsuario(fildError);
             String msgDesenvolvedor = fildError.toString();
             errors.add(new Error(msgUsuario, msgDesenvolvedor));
         });
         return errors;
     }
 
-    private String tartarMensagemDeErroParaUsuario(FieldError fildError) {
+    private String tratarMensagemDeErroParaUsuario(FieldError fildError) {
         if (fildError.getCode().equals(CONSTANT_VALIDATION_NOT_BLANK)) {
             log.error("Erro de validação: campo obrigatório não informado.");
+            return fildError.getDefaultMessage().concat(" é um campo obrigatório.");
+        }
+        if (fildError.getCode().equals(CONSTANT_VALIDATION_NOT_NULL)) {
+            log.error("Erro de validação: campo obrigatório não pode ser nulo.");
             return fildError.getDefaultMessage().concat(" é um campo obrigatório.");
         }
         if (fildError.getCode().equals(CONSTANT_VALIDATION_LENGTH)) {
