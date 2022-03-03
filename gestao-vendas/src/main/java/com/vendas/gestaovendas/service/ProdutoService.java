@@ -1,6 +1,5 @@
 package com.vendas.gestaovendas.service;
 
-import com.vendas.gestaovendas.entities.Categoria;
 import com.vendas.gestaovendas.entities.Produto;
 import com.vendas.gestaovendas.repository.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +15,17 @@ public class ProdutoService {
     private ProdutoRepository produtoRepository;
 
     // Busca todos os produtos da categoria informada
-    public List<Produto> listarTodos(Long codigoCategoria){
+    public List<Produto> listarTodos(Long codigoCategoria) {
         return produtoRepository.findByCategoriaCodigo(codigoCategoria);
     }
 
     // Busca apenas um produto repassada por codigo e código da categoria
-    public Optional<Produto> buscaPorCodigoProduto(Long codigo, Long codigoCategoria){
+    public Optional<Produto> buscaPorCodigoProduto(Long codigo, Long codigoCategoria) {
         return produtoRepository.buscaPorCodigoProduto(codigo, codigoCategoria);
+    }
+
+    // Metodo para salvar um produto no banco de dados
+    public Produto salvar(Produto produto) {
+        return produtoRepository.save(produto);
     }
 }

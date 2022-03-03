@@ -42,7 +42,7 @@ public class CategoriaController {
 
     // POST - localhost:8080/categoria
     @ApiOperation(value = "Salvar/Criar uma Categoria",
-                  nickname = "salvar")
+                  nickname = "salvarCategoria")
     @PostMapping
     public ResponseEntity<Categoria> salvar(@Valid @RequestBody Categoria categoria) {
         Categoria categoriaSalva = categoriaService.salvar(categoria);
@@ -51,7 +51,7 @@ public class CategoriaController {
 
     // PUT - localhost:8080/categoria/{codigo}
     @ApiOperation(value = "Atualizar uma Categoria",
-                  nickname = "atualizar")
+                  nickname = "atualizarCategoria")
     @PutMapping("/{codigo}")
     public ResponseEntity<Categoria> atualizar(@PathVariable(name = "codigo") Long codigo,
                                                @Valid @RequestBody Categoria categoria) {
@@ -61,7 +61,7 @@ public class CategoriaController {
     // DELETE - localhost:8080/categoria/{codigo}
     // HttpStatus.NO_CONTENT (204) - Executado o metodo porém sem nada a retornar
     @ApiOperation(value = "Deletar uma Categoria",
-                  nickname = "deletar")
+                  nickname = "deletarCategoria")
     @DeleteMapping("/{codigo}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletar (@PathVariable Long codigo){
