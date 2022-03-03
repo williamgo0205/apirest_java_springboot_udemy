@@ -223,6 +223,27 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "DELETE - localhost:8080/categoria/{codigoCategoria}/produto/{codigoProduto}",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/categoria/1/produto/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"categoria",
+								"1",
+								"produto",
+								"1"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}
