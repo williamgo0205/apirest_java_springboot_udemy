@@ -50,4 +50,13 @@ public class ProdutoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(produtoService.salvar(produto));
     }
 
+    // PUT - localhost:8080/categoria/{codigoCategoria}/produto/{codigoProduto}
+    @ApiOperation(value = "Atualizar um Produto",
+            nickname = "atualizarProduto")
+    @PutMapping("/{codigoProduto}")
+    public ResponseEntity<Produto> atualizar(@PathVariable(name = "codigoCategoria") Long codigoCategoria,
+                                               @PathVariable(name = "codigoProduto") Long codigoProduto,
+                                             @Valid @RequestBody Produto produto) {
+        return ResponseEntity.ok(produtoService.atualizar(codigoCategoria, codigoProduto, produto));
+    }
 }

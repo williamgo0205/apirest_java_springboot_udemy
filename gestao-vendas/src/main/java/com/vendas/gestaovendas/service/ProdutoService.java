@@ -1,12 +1,16 @@
 package com.vendas.gestaovendas.service;
 
+import com.vendas.gestaovendas.entities.Categoria;
 import com.vendas.gestaovendas.entities.Produto;
 import com.vendas.gestaovendas.exception.RegraNegocioException;
 import com.vendas.gestaovendas.repository.ProdutoRepository;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 @Service
@@ -35,6 +39,22 @@ public class ProdutoService {
         return produtoRepository.save(produto);
     }
 
+    // Metodo para Atualizar um produto no banco de dados
+    public Produto atualizar(Long codigoCategoria, Long codigoProduto, Produto produto) {
+        Produto produtoSalvar = validarSeProdutoExiste(codigoProduto, codigoCategoria);
+        validarSeCategoriaDoProdutoExiste(produto.getCategoria().getCodigo());
+        validarProdutoDuplicado(produto);
+
+         /* BeanUtils substitui a entidade recebida via parametro no banco de dados
+          > SOURCE = entidade a ser salva (recebida por parametro)
+          > TARGET = entidade do banco de dados
+          > Terceiro parâmetro = campo que não deve ser modificado nessa acao*/
+        BeanUtils.copyProperties(produto, produtoSalvar, "codigo");
+
+        // Persiste a entidade no banco de dados
+        return produtoRepository.save(produtoSalvar);
+    }
+
     // Método para validações referentes a Categoria informada
     private void validarSeCategoriaDoProdutoExiste(Long codigoCategoria) {
         if (codigoCategoria == null) {
@@ -49,11 +69,21 @@ public class ProdutoService {
 
     // Método para validações referentes a produto duplicado
     private void validarProdutoDuplicado(Produto produto) {
-        if (produtoRepository.findByCategoriaCodigoAndDescricao(produto.getCategoria().getCodigo(),
-                produto.getDescricao()).isPresent()) {
+        Optional<Produto> optProdutoEncontrado = produtoRepository
+                .findByCategoriaCodigoAndDescricao(produto.getCategoria().getCodigo(), produto.getDescricao());
+
+        if (optProdutoEncontrado.isPresent() && optProdutoEncontrado.get().getCodigo() != produto.getCodigo()) {
             throw new RegraNegocioException(
-                    String.format("O produto: %s já está cadastrado no sistema.",
-                            produto.getDescricao()));
+                    String.format("O produto: %s já está cadastrado no sistema.", produto.getDescricao()));
         }
+    }
+
+    // Método para validar se um produto existe
+    private Produto validarSeProdutoExiste(Long codigoProduto, Long codigoCategoria) {
+        Optional<Produto> optProduto = buscaPorCodigoProduto(codigoProduto, codigoCategoria);
+        if (optProduto.isEmpty()) {
+            throw new EmptyResultDataAccessException(1);
+        }
+        return optProduto.get();
     }
 }

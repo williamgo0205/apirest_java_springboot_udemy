@@ -42,7 +42,7 @@ public class CategoriaService {
         /* BeanUtils substitui a entidade recebida via parametro no banco de dados
           > SOURCE = entidade a ser salva (recebida por parametro)
           > TARGET = entidade do banco de dados
-          > Terceiro parâmetro = campo que nãos eve ser modificado nessa acao*/
+          > Terceiro parâmetro = campo que não deve ser modificado nessa acao*/
         BeanUtils.copyProperties(categoria, categoriaSalvar, "codigo");
 
         // Persiste a entidade no banco de dados
