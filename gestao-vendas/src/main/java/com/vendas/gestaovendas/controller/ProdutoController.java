@@ -46,8 +46,9 @@ public class ProdutoController {
     @ApiOperation(value = "Salvar/Criar um Produto",
                   nickname = "salvarProduto")
     @PostMapping
-    public ResponseEntity<Produto> salvar(@Valid @RequestBody Produto produto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(produtoService.salvar(produto));
+    public ResponseEntity<Produto> salvar(@PathVariable(name = "codigoCategoria") Long codigoCategoria,
+                                          @Valid @RequestBody Produto produto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(produtoService.salvar(codigoCategoria, produto));
     }
 
     // PUT - localhost:8080/categoria/{codigoCategoria}/produto/{codigoProduto}
@@ -55,7 +56,7 @@ public class ProdutoController {
             nickname = "atualizarProduto")
     @PutMapping("/{codigoProduto}")
     public ResponseEntity<Produto> atualizar(@PathVariable(name = "codigoCategoria") Long codigoCategoria,
-                                               @PathVariable(name = "codigoProduto") Long codigoProduto,
+                                             @PathVariable(name = "codigoProduto") Long codigoProduto,
                                              @Valid @RequestBody Produto produto) {
         return ResponseEntity.ok(produtoService.atualizar(codigoCategoria, codigoProduto, produto));
     }

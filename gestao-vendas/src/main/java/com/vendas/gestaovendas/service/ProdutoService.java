@@ -33,8 +33,8 @@ public class ProdutoService {
     }
 
     // Metodo para salvar um produto no banco de dados
-    public Produto salvar(Produto produto) {
-        validarSeCategoriaDoProdutoExiste(produto.getCategoria().getCodigo());
+    public Produto salvar(Long codigoCategoria, Produto produto) {
+        validarSeCategoriaDoProdutoExiste(codigoCategoria);
         validarProdutoDuplicado(produto);
         return produtoRepository.save(produto);
     }
