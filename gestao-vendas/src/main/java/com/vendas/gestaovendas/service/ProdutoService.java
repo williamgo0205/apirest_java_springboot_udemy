@@ -55,6 +55,12 @@ public class ProdutoService {
         return produtoRepository.save(produtoSalvar);
     }
 
+    // Método para deletar um Produto no banco de dados
+    public void deletar(Long codigoCategoria, Long codigoProduto){
+        Produto produto = validarSeProdutoExiste(codigoProduto, codigoCategoria);
+        produtoRepository.delete(produto);
+    }
+
     // Método para validações referentes a Categoria informada
     private void validarSeCategoriaDoProdutoExiste(Long codigoCategoria) {
         if (codigoCategoria == null) {

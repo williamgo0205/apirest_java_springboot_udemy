@@ -60,4 +60,15 @@ public class ProdutoController {
                                              @Valid @RequestBody Produto produto) {
         return ResponseEntity.ok(produtoService.atualizar(codigoCategoria, codigoProduto, produto));
     }
+
+    // DELETE - localhost:8080/categoria/{codigoCategoria}/produto/{codigoProduto}
+    // HttpStatus.NO_CONTENT (204) - Executado o metodo porém sem nada a retornar
+    @ApiOperation(value = "Deletar um Produto",
+            nickname = "deletarProduto")
+    @DeleteMapping("/{codigoProduto}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletar (@PathVariable(name = "codigoCategoria") Long codigoCategoria,
+                         @PathVariable(name = "codigoProduto") Long codigoProduto){
+        produtoService.deletar(codigoCategoria, codigoProduto);
+    }
 }
