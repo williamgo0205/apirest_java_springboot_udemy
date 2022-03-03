@@ -193,6 +193,36 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "localhost:8080/categoria/{codigoCategoria}/produto/{codigoProduto}",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"categoria\": {\r\n    \"codigo\": 1\r\n  },\r\n  \"codigo\": 1,\r\n  \"descricao\": \"TV Philco 32\\\"\",\r\n  \"observacao\": \"Tv 32 Polegadas Philco Led Hd Conv. Digital Ptv32b51d\",\r\n  \"precoCusto\": 500,\r\n  \"precoVenda\": 870,\r\n  \"quantidade\": 10\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/categoria/1/produto/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"categoria",
+								"1",
+								"produto",
+								"1"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}
