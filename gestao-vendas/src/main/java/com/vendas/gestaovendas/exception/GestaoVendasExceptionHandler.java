@@ -1,6 +1,7 @@
 package com.vendas.gestaovendas.exception;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -74,10 +75,23 @@ public class GestaoVendasExceptionHandler extends ResponseEntityExceptionHandler
      */
     @ExceptionHandler(RegraNegocioException.class)
     public ResponseEntity<Object> handleEmptyRegraNegocioException(RegraNegocioException ex,
-                                                                       WebRequest request){
+                                                                       WebRequest request) {
         log.error("Erro de Regra de Negocio.");
         String msgUsuario = ex.getMessage();
         String msgDesenvolvedor = ex.getMessage();
+        List<Error> errors = Arrays.asList(new Error(msgUsuario, msgDesenvolvedor));
+        return handleExceptionInternal(ex, errors, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    }
+
+    /**
+     * Excecao DataIntegrityViolationException criada para tratamento de integridade de Banco de Dados
+     */
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<Object> handleDataIntegrityViolationException(DataIntegrityViolationException ex,
+                                                                        WebRequest request) {
+        log.error("Recurso não encontrado. Foreign Key não localizada.");
+        String msgUsuario = "Recurso não encontrado.";
+        String msgDesenvolvedor = ex.toString();
         List<Error> errors = Arrays.asList(new Error(msgUsuario, msgDesenvolvedor));
         return handleExceptionInternal(ex, errors, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
