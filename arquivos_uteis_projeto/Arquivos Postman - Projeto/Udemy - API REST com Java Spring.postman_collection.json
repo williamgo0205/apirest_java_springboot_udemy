@@ -119,8 +119,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Produto",
@@ -165,10 +164,37 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "POST - localhost:8080/categoria/{codigoCategoria}/produto",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"categoria\": {\r\n    \"codigo\": 1\r\n  },\r\n  \"descricao\": \"Tablet Samsung\",\r\n  \"observacao\": \"Tablet Samsung 7 polegadas\",\r\n  \"precoCusto\": 1000,\r\n  \"precoVenda\": 1300,\r\n  \"quantidade\": 10\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/categoria/1/produto",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"categoria",
+								"1",
+								"produto"
+							]
+						}
+					},
+					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		}
-	],
-	"protocolProfileBehavior": {}
+	]
 }
