@@ -30,13 +30,13 @@ public class ProdutoService {
 
     // Metodo para salvar um produto no banco de dados
     public Produto salvar(Produto produto) {
-        validarCategoriaExistenteProduto(produto.getCategoria().getCodigo());
+        validarSeCategoriaDoProdutoExiste(produto.getCategoria().getCodigo());
         validarProdutoDuplicado(produto);
         return produtoRepository.save(produto);
     }
 
     // Método para validações referentes a Categoria informada
-    private void validarCategoriaExistenteProduto(Long codigoCategoria) {
+    private void validarSeCategoriaDoProdutoExiste(Long codigoCategoria) {
         if (codigoCategoria == null) {
             throw new RegraNegocioException("A Categoria não pode ser nula.");
         }
