@@ -1,5 +1,6 @@
 package com.vendas.gestaovendas.controller;
 
+import com.vendas.gestaovendas.dto.produto.ProdutoResponseDTO;
 import com.vendas.gestaovendas.entity.Produto;
 import com.vendas.gestaovendas.service.ProdutoService;
 import io.swagger.annotations.Api;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Api(tags = "Produto")
 @RestController
@@ -25,20 +27,23 @@ public class ProdutoController {
     @ApiOperation(value = "Listar Todos os Produtos Existentes de uma Determinada Categoria",
                   nickname = "listarTodos")
     @GetMapping
-    public List<Produto> listarTodos(@PathVariable(name = "codigoCategoria") Long codigoCategoria) {
-        return produtoService.listarTodos(codigoCategoria);
+    public List<ProdutoResponseDTO> listarTodos(@PathVariable(name = "codigoCategoria") Long codigoCategoria) {
+        return produtoService.listarTodos(codigoCategoria)
+                .stream()
+                .map(produto -> ProdutoResponseDTO.converterParaProdutoDTO(produto))
+                .collect(Collectors.toList());
     }
 
     // GET - localhost:8080/categoria/{codigoCategoria}/produto/{codigo}
     @ApiOperation(value = "Listar o Produto Informado Pelo Codigo e Categoria Informados",
                   nickname = "listarPorCodigoECategoria")
     @GetMapping("/{codigo}")
-    public ResponseEntity<Optional<Produto>> listarPorCodigoECategoria (
+    public ResponseEntity<ProdutoResponseDTO> listarPorCodigoECategoria(
             @PathVariable(name = "codigoCategoria") Long codigoCategoria,
-            @PathVariable(name = "codigo") Long codigo)  {
+            @PathVariable(name = "codigo") Long codigo) {
         Optional<Produto> optProduto = produtoService.buscaPorCodigoProduto(codigo, codigoCategoria);
         return optProduto.isPresent()
-                ? ResponseEntity.ok(optProduto)
+                ? ResponseEntity.ok(ProdutoResponseDTO.converterParaProdutoDTO(optProduto.get()))
                 : ResponseEntity.notFound().build();
     }
 
@@ -53,7 +58,7 @@ public class ProdutoController {
 
     // PUT - localhost:8080/categoria/{codigoCategoria}/produto/{codigoProduto}
     @ApiOperation(value = "Atualizar um Produto",
-            nickname = "atualizarProduto")
+                  nickname = "atualizarProduto")
     @PutMapping("/{codigoProduto}")
     public ResponseEntity<Produto> atualizar(@PathVariable(name = "codigoCategoria") Long codigoCategoria,
                                              @PathVariable(name = "codigoProduto") Long codigoProduto,
@@ -64,11 +69,11 @@ public class ProdutoController {
     // DELETE - localhost:8080/categoria/{codigoCategoria}/produto/{codigoProduto}
     // HttpStatus.NO_CONTENT (204) - Executado o metodo porém sem nada a retornar
     @ApiOperation(value = "Deletar um Produto",
-            nickname = "deletarProduto")
+                  nickname = "deletarProduto")
     @DeleteMapping("/{codigoProduto}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deletar (@PathVariable(name = "codigoCategoria") Long codigoCategoria,
-                         @PathVariable(name = "codigoProduto") Long codigoProduto){
+    public void deletar(@PathVariable(name = "codigoCategoria") Long codigoCategoria,
+                        @PathVariable(name = "codigoProduto") Long codigoProduto) {
         produtoService.deletar(codigoCategoria, codigoProduto);
     }
 }

@@ -1,7 +1,7 @@
 package com.vendas.gestaovendas.controller;
 
-import com.vendas.gestaovendas.dto.CategoriaRequestDTO;
-import com.vendas.gestaovendas.dto.CategoriaResponseDTO;
+import com.vendas.gestaovendas.dto.categoria.CategoriaRequestDTO;
+import com.vendas.gestaovendas.dto.categoria.CategoriaResponseDTO;
 import com.vendas.gestaovendas.entity.Categoria;
 import com.vendas.gestaovendas.service.CategoriaService;
 import io.swagger.annotations.Api;
