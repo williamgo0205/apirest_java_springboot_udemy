@@ -1,5 +1,6 @@
 package com.vendas.gestaovendas.controller;
 
+import com.vendas.gestaovendas.dto.CategoriaRequestDTO;
 import com.vendas.gestaovendas.dto.CategoriaResponseDTO;
 import com.vendas.gestaovendas.entity.Categoria;
 import com.vendas.gestaovendas.service.CategoriaService;
@@ -49,18 +50,22 @@ public class CategoriaController {
     @ApiOperation(value = "Salvar/Criar uma Categoria",
                   nickname = "salvarCategoria")
     @PostMapping
-    public ResponseEntity<Categoria> salvar(@Valid @RequestBody Categoria categoria) {
-        Categoria categoriaSalva = categoriaService.salvar(categoria);
-        return ResponseEntity.status(HttpStatus.CREATED).body(categoriaSalva);
+    public ResponseEntity<CategoriaResponseDTO> salvar(@Valid @RequestBody CategoriaRequestDTO categoriaRequestDTO) {
+        Categoria categoriaSalva = categoriaService.salvar(categoriaRequestDTO.converterParaEntidade());
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(CategoriaResponseDTO.converterParaCategoriaDTO(categoriaSalva));
     }
 
     // PUT - localhost:8080/categoria/{codigo}
     @ApiOperation(value = "Atualizar uma Categoria",
                   nickname = "atualizarCategoria")
     @PutMapping("/{codigo}")
-    public ResponseEntity<Categoria> atualizar(@PathVariable(name = "codigo") Long codigo,
-                                               @Valid @RequestBody Categoria categoria) {
-        return ResponseEntity.ok(categoriaService.atualizar(codigo, categoria));
+    public ResponseEntity<CategoriaResponseDTO> atualizar(@PathVariable(name = "codigo") Long codigo,
+                                                          @Valid @RequestBody CategoriaRequestDTO categoriaRequestDTO) {
+        return ResponseEntity.ok(
+                CategoriaResponseDTO.converterParaCategoriaDTO(
+                        categoriaService.atualizar(codigo, categoriaRequestDTO.converterParaEntidade(codigo))));
     }
 
     // DELETE - localhost:8080/categoria/{codigo}
