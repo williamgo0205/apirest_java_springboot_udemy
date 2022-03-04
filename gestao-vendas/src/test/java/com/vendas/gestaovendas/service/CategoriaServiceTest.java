@@ -1,6 +1,7 @@
 package com.vendas.gestaovendas.service;
 
 import com.vendas.gestaovendas.entity.Categoria;
+import com.vendas.gestaovendas.exception.RegraNegocioException;
 import com.vendas.gestaovendas.repository.CategoriaRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,15 +15,15 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class CategoriaServiceTest {
 
     private static final Long ID_CATEGORIA_1 = 1L;
-    private static final Long ID_CATEGORIA_2 = 1L;
+    private static final Long ID_CATEGORIA_2 = 2L;
     private static final String NOME_CATEGORIA_TECNOLOGIA = "Tecnologia";
     private static final String NOME_CATEGORIA_AUTOMOTIVA = "Automotiva";
 
@@ -45,7 +46,7 @@ public class CategoriaServiceTest {
 
         List<Categoria> categoriaListService = categoriaService.listarTodas();
 
-        verify(categoriaRepository, Mockito.times(1)).findAll();
+        verify(categoriaRepository, times(1)).findAll();
 
         assertEquals(categoriaListService.get(0).getCodigo(), categoriaTecnologia.getCodigo());
         assertEquals(categoriaListService.get(0).getNome(),   categoriaTecnologia.getNome());
@@ -63,7 +64,7 @@ public class CategoriaServiceTest {
 
         Optional<Categoria> categoriaListService = categoriaService.buscarPorCodigo(ID_CATEGORIA_1);
 
-        verify(categoriaRepository, Mockito.times(1)).findById(any());
+        verify(categoriaRepository, times(1)).findById(any());
 
         assertEquals(categoriaListService.get().getCodigo(), optCategoria.get().getCodigo());
         assertEquals(categoriaListService.get().getNome(),   optCategoria.get().getNome());
@@ -78,8 +79,8 @@ public class CategoriaServiceTest {
 
         Categoria categoriaSalva = categoriaService.salvar(categoria);
 
-        verify(categoriaRepository, Mockito.times(1)).findByNome(any());
-        verify(categoriaRepository, Mockito.times(1)).save(any());
+        verify(categoriaRepository, times(1)).findByNome(any());
+        verify(categoriaRepository, times(1)).save(any());
 
         assertEquals(categoria.getCodigo(), categoriaSalva.getCodigo());
         assertEquals(categoria.getNome(),   categoriaSalva.getNome());
@@ -92,13 +93,10 @@ public class CategoriaServiceTest {
 
         doReturn(categoriaExistente).when(categoriaRepository).findByNome(NOME_CATEGORIA_TECNOLOGIA);
 
-        Categoria categoriaSalva = categoriaService.salvar(categoriaNova);
+        assertThrows(RegraNegocioException.class, () -> categoriaService.salvar(categoriaNova));
 
-        verify(categoriaRepository, Mockito.times(1)).findByNome(any());
-        verify(categoriaRepository, Mockito.times(1)).save(any());
-
-//        assertEquals(categoria.getCodigo(), categoriaSalva.getCodigo());
-//        assertEquals(categoria.getNome(),   categoriaSalva.getNome());
+        verify(categoriaRepository, times(1)).findByNome(any());
+        verify(categoriaRepository, never()).save(any());
     }
 
     private Categoria createCategoria(Long codCategoria, String nome) {
