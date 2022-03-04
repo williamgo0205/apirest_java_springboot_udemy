@@ -1,6 +1,8 @@
 package com.vendas.gestaovendas.controller;
 
-import com.vendas.gestaovendas.dto.produto.ProdutoResponseDTO;
+import com.vendas.gestaovendas.dto.produto.mapper.ProdutoMapper;
+import com.vendas.gestaovendas.dto.produto.model.ProdutoRequestDTO;
+import com.vendas.gestaovendas.dto.produto.model.ProdutoResponseDTO;
 import com.vendas.gestaovendas.entity.Produto;
 import com.vendas.gestaovendas.service.ProdutoService;
 import io.swagger.annotations.Api;
@@ -25,51 +27,60 @@ public class ProdutoController {
 
     // GET - localhost:8080/categoria/{codigoCategoria}/produto
     @ApiOperation(value = "Listar Todos os Produtos Existentes de uma Determinada Categoria",
-                  nickname = "listarTodos")
+            nickname = "listarTodos")
     @GetMapping
     public List<ProdutoResponseDTO> listarTodos(@PathVariable(name = "codigoCategoria") Long codigoCategoria) {
         return produtoService.listarTodos(codigoCategoria)
                 .stream()
-                .map(produto -> ProdutoResponseDTO.converterParaProdutoDTO(produto))
+                .map(produto -> ProdutoMapper.converterParaProdutoDTO(produto))
                 .collect(Collectors.toList());
     }
 
     // GET - localhost:8080/categoria/{codigoCategoria}/produto/{codigo}
     @ApiOperation(value = "Listar o Produto Informado Pelo Codigo e Categoria Informados",
-                  nickname = "listarPorCodigoECategoria")
+            nickname = "listarPorCodigoECategoria")
     @GetMapping("/{codigo}")
     public ResponseEntity<ProdutoResponseDTO> listarPorCodigoECategoria(
             @PathVariable(name = "codigoCategoria") Long codigoCategoria,
             @PathVariable(name = "codigo") Long codigo) {
         Optional<Produto> optProduto = produtoService.buscaPorCodigoProduto(codigo, codigoCategoria);
         return optProduto.isPresent()
-                ? ResponseEntity.ok(ProdutoResponseDTO.converterParaProdutoDTO(optProduto.get()))
+                ? ResponseEntity.ok(ProdutoMapper.converterParaProdutoDTO(optProduto.get()))
                 : ResponseEntity.notFound().build();
     }
 
     // POST - localhost:8080/categoria/{codigoCategoria}/produto
     @ApiOperation(value = "Salvar/Criar um Produto",
-                  nickname = "salvarProduto")
+            nickname = "salvarProduto")
     @PostMapping
-    public ResponseEntity<Produto> salvar(@PathVariable(name = "codigoCategoria") Long codigoCategoria,
-                                          @Valid @RequestBody Produto produto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(produtoService.salvar(codigoCategoria, produto));
+    public ResponseEntity<ProdutoResponseDTO> salvar(@PathVariable(name = "codigoCategoria") Long codigoCategoria,
+                                                     @Valid @RequestBody ProdutoRequestDTO produtoRequestDTO) {
+        Produto produtoSalvar = produtoService.salvar(codigoCategoria,
+                ProdutoMapper.converterParaEntidade(codigoCategoria, produtoRequestDTO));
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ProdutoMapper.converterParaProdutoDTO(produtoSalvar));
     }
 
     // PUT - localhost:8080/categoria/{codigoCategoria}/produto/{codigoProduto}
     @ApiOperation(value = "Atualizar um Produto",
-                  nickname = "atualizarProduto")
+            nickname = "atualizarProduto")
     @PutMapping("/{codigoProduto}")
-    public ResponseEntity<Produto> atualizar(@PathVariable(name = "codigoCategoria") Long codigoCategoria,
-                                             @PathVariable(name = "codigoProduto") Long codigoProduto,
-                                             @Valid @RequestBody Produto produto) {
-        return ResponseEntity.ok(produtoService.atualizar(codigoCategoria, codigoProduto, produto));
+    public ResponseEntity<ProdutoResponseDTO> atualizar(@PathVariable(name = "codigoCategoria") Long codigoCategoria,
+                                                        @PathVariable(name = "codigoProduto") Long codigoProduto,
+                                                        @Valid @RequestBody ProdutoRequestDTO produtoRequestDTO) {
+        Produto produtoAtualizado = produtoService.atualizar(codigoCategoria, codigoProduto,
+                                            ProdutoMapper.converterParaEntidade(codigoCategoria,
+                                                                                codigoProduto,
+                                                                                produtoRequestDTO));
+
+        return ResponseEntity.ok(ProdutoMapper.converterParaProdutoDTO(produtoAtualizado));
     }
 
     // DELETE - localhost:8080/categoria/{codigoCategoria}/produto/{codigoProduto}
     // HttpStatus.NO_CONTENT (204) - Executado o metodo porém sem nada a retornar
     @ApiOperation(value = "Deletar um Produto",
-                  nickname = "deletarProduto")
+            nickname = "deletarProduto")
     @DeleteMapping("/{codigoProduto}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletar(@PathVariable(name = "codigoCategoria") Long codigoCategoria,

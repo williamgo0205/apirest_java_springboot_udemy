@@ -1,6 +1,5 @@
-package com.vendas.gestaovendas.dto.categoria;
+package com.vendas.gestaovendas.dto.categoria.model;
 
-import com.vendas.gestaovendas.entity.Categoria;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -20,12 +19,6 @@ public class CategoriaResponseDTO {
     public CategoriaResponseDTO(Long codigo, String nome) {
         this.codigo = codigo;
         this.nome = nome;
-    }
-
-    // Conversor responsavel pela conversao dos dados de Categoria para a CategoriaResponseDTO
-    // Mapper propriamente dito
-    public static CategoriaResponseDTO converterParaCategoriaDTO(Categoria categoria) {
-        return new CategoriaResponseDTO(categoria.getCodigo(), categoria.getNome());
     }
 
     public void setCodigo(Long codigo) {

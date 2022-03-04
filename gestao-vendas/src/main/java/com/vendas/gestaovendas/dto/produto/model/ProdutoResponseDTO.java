@@ -1,7 +1,6 @@
-package com.vendas.gestaovendas.dto.produto;
+package com.vendas.gestaovendas.dto.produto.model;
 
-import com.vendas.gestaovendas.dto.categoria.CategoriaResponseDTO;
-import com.vendas.gestaovendas.entity.Produto;
+import com.vendas.gestaovendas.dto.categoria.model.CategoriaResponseDTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -40,18 +39,6 @@ public class ProdutoResponseDTO {
         this.precoVenda = precoVenda;
         this.observacao = observacao;
         this.categoria = categoria;
-    }
-
-    // Metodo responsável pela conversão dos dados de Produto para ProdutoResponseDTO
-    // Mapper
-    public static ProdutoResponseDTO converterParaProdutoDTO(Produto produto) {
-        return new ProdutoResponseDTO(produto.getCodigo(),
-                produto.getDescricao(),
-                produto.getQuantidade(),
-                produto.getPrecoCusto(),
-                produto.getPrecoVenda(),
-                produto.getObservacao(),
-                CategoriaResponseDTO.converterParaCategoriaDTO(produto.getCategoria()));
     }
 
     public Long getCodigo() {
