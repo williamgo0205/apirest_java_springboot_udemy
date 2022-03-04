@@ -1,6 +1,6 @@
 package com.vendas.gestaovendas.controller;
 
-import com.vendas.gestaovendas.entities.Categoria;
+import com.vendas.gestaovendas.entity.Categoria;
 import com.vendas.gestaovendas.service.CategoriaService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

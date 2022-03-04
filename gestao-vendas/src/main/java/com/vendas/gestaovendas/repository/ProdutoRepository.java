@@ -1,6 +1,6 @@
 package com.vendas.gestaovendas.repository;
 
-import com.vendas.gestaovendas.entities.Produto;
+import com.vendas.gestaovendas.entity.Produto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

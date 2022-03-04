@@ -1,7 +1,6 @@
 package com.vendas.gestaovendas.service;
 
-import com.vendas.gestaovendas.entities.Categoria;
-import com.vendas.gestaovendas.entities.Produto;
+import com.vendas.gestaovendas.entity.Produto;
 import com.vendas.gestaovendas.exception.RegraNegocioException;
 import com.vendas.gestaovendas.repository.ProdutoRepository;
 import org.springframework.beans.BeanUtils;
@@ -10,7 +9,6 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 
 @Service

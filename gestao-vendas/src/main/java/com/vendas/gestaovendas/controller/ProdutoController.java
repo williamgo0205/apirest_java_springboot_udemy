@@ -1,6 +1,6 @@
 package com.vendas.gestaovendas.controller;
 
-import com.vendas.gestaovendas.entities.Produto;
+import com.vendas.gestaovendas.entity.Produto;
 import com.vendas.gestaovendas.service.ProdutoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

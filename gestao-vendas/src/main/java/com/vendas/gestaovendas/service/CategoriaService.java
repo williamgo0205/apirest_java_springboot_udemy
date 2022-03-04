@@ -1,6 +1,6 @@
 package com.vendas.gestaovendas.service;
 
-import com.vendas.gestaovendas.entities.Categoria;
+import com.vendas.gestaovendas.entity.Categoria;
 import com.vendas.gestaovendas.exception.RegraNegocioException;
 import com.vendas.gestaovendas.repository.CategoriaRepository;
 import org.springframework.beans.BeanUtils;

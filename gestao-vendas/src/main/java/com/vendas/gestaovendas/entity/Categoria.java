@@ -1,4 +1,4 @@
-package com.vendas.gestaovendas.entities;
+package com.vendas.gestaovendas.entity;
 
 import org.hibernate.validator.constraints.Length;
 
