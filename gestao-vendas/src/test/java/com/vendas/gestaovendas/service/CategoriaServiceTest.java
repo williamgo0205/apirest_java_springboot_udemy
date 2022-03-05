@@ -34,7 +34,7 @@ public class CategoriaServiceTest {
     private CategoriaRepository categoriaRepositoryMock;
 
     @Test
-    public void listarCategoriasTest() {
+    public void listarTodasCategoriasTest() {
         Categoria categoriaTecnologia = createCategoria(ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA);
         Categoria categoriaAutomotiva = createCategoria(ID_CATEGORIA_2, NOME_CATEGORIA_AUTOMOTIVA);
 
@@ -56,7 +56,7 @@ public class CategoriaServiceTest {
     }
 
     @Test
-    public void buscarPorCodigoTest() {
+    public void buscarPorCodigoCategoriaTest() {
         Optional<Categoria> optCategoria =
                 Optional.of(createCategoria(ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA));
 
