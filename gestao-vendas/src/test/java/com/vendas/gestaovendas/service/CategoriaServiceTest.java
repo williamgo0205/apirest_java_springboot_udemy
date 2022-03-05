@@ -31,7 +31,7 @@ public class CategoriaServiceTest {
     private CategoriaService categoriaService;
 
     @Mock
-    private CategoriaRepository categoriaRepository;
+    private CategoriaRepository categoriaRepositoryMock;
 
     @Test
     public void listarCategoriasTest() {
@@ -42,11 +42,11 @@ public class CategoriaServiceTest {
         categoriaList.add(categoriaTecnologia);
         categoriaList.add(categoriaAutomotiva);
 
-        doReturn(categoriaList).when(categoriaRepository).findAll();
+        doReturn(categoriaList).when(categoriaRepositoryMock).findAll();
 
         List<Categoria> categoriaListService = categoriaService.listarTodas();
 
-        verify(categoriaRepository, times(1)).findAll();
+        verify(categoriaRepositoryMock, times(1)).findAll();
 
         assertEquals(categoriaListService.get(0).getCodigo(), categoriaTecnologia.getCodigo());
         assertEquals(categoriaListService.get(0).getNome(),   categoriaTecnologia.getNome());
@@ -60,11 +60,11 @@ public class CategoriaServiceTest {
         Optional<Categoria> optCategoria =
                 Optional.of(createCategoria(ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA));
 
-        doReturn(optCategoria).when(categoriaRepository).findById(any());
+        doReturn(optCategoria).when(categoriaRepositoryMock).findById(any());
 
         Optional<Categoria> categoriaListService = categoriaService.buscarPorCodigo(ID_CATEGORIA_1);
 
-        verify(categoriaRepository, times(1)).findById(any());
+        verify(categoriaRepositoryMock, times(1)).findById(any());
 
         assertEquals(categoriaListService.get().getCodigo(), optCategoria.get().getCodigo());
         assertEquals(categoriaListService.get().getNome(),   optCategoria.get().getNome());
@@ -74,13 +74,13 @@ public class CategoriaServiceTest {
     public void salvarCategoriaTest() {
         Categoria categoria = createCategoria(ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA);
 
-        doReturn(null).when(categoriaRepository).findByNome(any());
-        doReturn(categoria).when(categoriaRepository).save(any());
+        doReturn(null).when(categoriaRepositoryMock).findByNome(any());
+        doReturn(categoria).when(categoriaRepositoryMock).save(any());
 
         Categoria categoriaSalva = categoriaService.salvar(categoria);
 
-        verify(categoriaRepository, times(1)).findByNome(any());
-        verify(categoriaRepository, times(1)).save(any());
+        verify(categoriaRepositoryMock, times(1)).findByNome(any());
+        verify(categoriaRepositoryMock, times(1)).save(any());
 
         assertEquals(categoria.getCodigo(), categoriaSalva.getCodigo());
         assertEquals(categoria.getNome(),   categoriaSalva.getNome());
@@ -91,27 +91,27 @@ public class CategoriaServiceTest {
         Categoria categoriaExistente = createCategoria(ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA);
         Categoria categoriaNova = createCategoria(ID_CATEGORIA_2, NOME_CATEGORIA_TECNOLOGIA);
 
-        doReturn(categoriaExistente).when(categoriaRepository).findByNome(NOME_CATEGORIA_TECNOLOGIA);
+        doReturn(categoriaExistente).when(categoriaRepositoryMock).findByNome(NOME_CATEGORIA_TECNOLOGIA);
 
         assertThrows(RegraNegocioException.class, () -> categoriaService.salvar(categoriaNova));
 
-        verify(categoriaRepository, times(1)).findByNome(any());
-        verify(categoriaRepository, never()).save(any());
+        verify(categoriaRepositoryMock, times(1)).findByNome(any());
+        verify(categoriaRepositoryMock, never()).save(any());
     }
 
     @Test
     public void atualizarCategoriaTest() {
         Categoria categoria = createCategoria(ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA);
 
-        doReturn(Optional.of(categoria)).when(categoriaRepository).findById(any());
-        doReturn(categoria).when(categoriaRepository).findByNome(any());
-        doReturn(categoria).when(categoriaRepository).save(any());
+        doReturn(Optional.of(categoria)).when(categoriaRepositoryMock).findById(any());
+        doReturn(categoria).when(categoriaRepositoryMock).findByNome(any());
+        doReturn(categoria).when(categoriaRepositoryMock).save(any());
 
         Categoria categoriaAtualizada = categoriaService.atualizar(ID_CATEGORIA_1, categoria);
 
-        verify(categoriaRepository, times(1)).findById(any());
-        verify(categoriaRepository, times(1)).findByNome(any());
-        verify(categoriaRepository, times(1)).save(any());
+        verify(categoriaRepositoryMock, times(1)).findById(any());
+        verify(categoriaRepositoryMock, times(1)).findByNome(any());
+        verify(categoriaRepositoryMock, times(1)).save(any());
 
         assertEquals(categoria.getCodigo(), categoriaAtualizada.getCodigo());
         assertEquals(categoria.getNome(),   categoriaAtualizada.getNome());
@@ -122,13 +122,13 @@ public class CategoriaServiceTest {
         Long codigoCategoriaInexistente = 3L;
         Categoria categoria = createCategoria(ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA);
 
-        doReturn(Optional.empty()).when(categoriaRepository).findById(any());
+        doReturn(Optional.empty()).when(categoriaRepositoryMock).findById(any());
 
         assertThrows(EmptyResultDataAccessException.class, () -> categoriaService.atualizar(codigoCategoriaInexistente, categoria));
 
-        verify(categoriaRepository, times(1)).findById(any());
-        verify(categoriaRepository, never()).findByNome(any());
-        verify(categoriaRepository, never()).save(any());
+        verify(categoriaRepositoryMock, times(1)).findById(any());
+        verify(categoriaRepositoryMock, never()).findByNome(any());
+        verify(categoriaRepositoryMock, never()).save(any());
     }
 
     @Test
@@ -136,14 +136,14 @@ public class CategoriaServiceTest {
         Categoria categoriaExistente = createCategoria(ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA);
         Categoria categoriaNova = createCategoria(ID_CATEGORIA_2, NOME_CATEGORIA_TECNOLOGIA);
 
-        doReturn(Optional.of(categoriaNova)).when(categoriaRepository).findById(any());
-        doReturn(categoriaExistente).when(categoriaRepository).findByNome(NOME_CATEGORIA_TECNOLOGIA);
+        doReturn(Optional.of(categoriaNova)).when(categoriaRepositoryMock).findById(any());
+        doReturn(categoriaExistente).when(categoriaRepositoryMock).findByNome(NOME_CATEGORIA_TECNOLOGIA);
 
         assertThrows(RegraNegocioException.class, () -> categoriaService.atualizar(ID_CATEGORIA_2, categoriaNova));
 
-        verify(categoriaRepository, times(1)).findByNome(any());
-        verify(categoriaRepository, times(1)).findById(any());
-        verify(categoriaRepository, never()).save(any());
+        verify(categoriaRepositoryMock, times(1)).findByNome(any());
+        verify(categoriaRepositoryMock, times(1)).findById(any());
+        verify(categoriaRepositoryMock, never()).save(any());
     }
 
     @Test
@@ -152,7 +152,7 @@ public class CategoriaServiceTest {
 
         categoriaService.deletar(ID_CATEGORIA_1);
 
-        verify(categoriaRepository, times(1)).deleteById(any());
+        verify(categoriaRepositoryMock, times(1)).deleteById(any());
     }
 
     private Categoria createCategoria(Long codCategoria, String nome) {
