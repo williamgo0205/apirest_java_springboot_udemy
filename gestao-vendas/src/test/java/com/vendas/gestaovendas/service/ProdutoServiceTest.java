@@ -235,6 +235,77 @@ public class ProdutoServiceTest {
         verify(produtoRepositoryMock, never()).save(any());
     }
 
+    @Test
+    public void erroAlterarProdutoCategoriaNulaTest() {
+        createCategoria(ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA);
+
+        Produto produto = createProduto(ID_PRODUTO_1, DESCRICAO_PRODUTO_1, QUANTIDADE_PRODUTO_1, PRECO_CUSTO_PRODUTO_1,
+                PRECO_VENDA_PRODUTO_1, OBSERVACAO_PRODUTO_1, new Categoria());
+
+        doReturn(Optional.of(produto))
+                .when(produtoRepositoryMock).buscaPorCodigoProduto(ID_PRODUTO_1, null);
+
+        assertThrows(RegraNegocioException.class, () ->
+                produtoService.atualizar(null, ID_PRODUTO_1, produto));
+
+        verify(produtoRepositoryMock, times(1)).buscaPorCodigoProduto(anyLong(), any());
+        verify(produtoRepositoryMock, never()).save(any());
+    }
+
+    @Test
+    public void erroAlterarProdutoCategoriaInexistenteTest() {
+        Long codigoCategoriaInexistente = 3L;
+        createCategoria(ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA);
+
+        Produto produto = createProduto(ID_PRODUTO_1, DESCRICAO_PRODUTO_1, QUANTIDADE_PRODUTO_1, PRECO_CUSTO_PRODUTO_1,
+                PRECO_VENDA_PRODUTO_1, OBSERVACAO_PRODUTO_1, new Categoria(codigoCategoriaInexistente));
+
+        doReturn(Optional.of(produto))
+                .when(produtoRepositoryMock).buscaPorCodigoProduto(ID_PRODUTO_1, codigoCategoriaInexistente);
+        doReturn(Optional.empty())
+                .when(categoriaServiceMock).buscarPorCodigo(codigoCategoriaInexistente);
+
+        assertThrows(RegraNegocioException.class, () ->
+                produtoService.atualizar(codigoCategoriaInexistente, ID_PRODUTO_1, produto));
+
+        verify(produtoRepositoryMock, times(1)).buscaPorCodigoProduto(anyLong(), anyLong());
+        verify(categoriaServiceMock, times(1)).buscarPorCodigo(anyLong());
+        verify(produtoRepositoryMock, never()).save(any());
+    }
+
+    @Test
+    public void deletarProdutoTest() {
+        Categoria categoria = createCategoria(ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA);
+
+        Produto produto = createProduto(ID_PRODUTO_1, DESCRICAO_PRODUTO_1, QUANTIDADE_PRODUTO_1, PRECO_CUSTO_PRODUTO_1,
+                PRECO_VENDA_PRODUTO_1, OBSERVACAO_PRODUTO_1, categoria);
+
+        doReturn(Optional.of(produto))
+                .when(produtoRepositoryMock).buscaPorCodigoProduto(ID_PRODUTO_1, ID_CATEGORIA_1);
+
+        produtoService.deletar(ID_CATEGORIA_1, ID_PRODUTO_1);
+
+        verify(produtoRepositoryMock, times(1)).delete(any());
+    }
+
+    @Test
+    public void erroDeletarProdutoInexistenteTest() {
+        Long codigoCategoriaInexistente = 3L;
+        Categoria categoria = createCategoria(ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA);
+
+        createProduto(ID_PRODUTO_1, DESCRICAO_PRODUTO_1, QUANTIDADE_PRODUTO_1, PRECO_CUSTO_PRODUTO_1,
+                PRECO_VENDA_PRODUTO_1, OBSERVACAO_PRODUTO_1, categoria);
+
+        doReturn(Optional.empty())
+                .when(produtoRepositoryMock).buscaPorCodigoProduto(ID_PRODUTO_1, codigoCategoriaInexistente);
+
+        assertThrows(EmptyResultDataAccessException.class, () ->
+                produtoService.deletar(codigoCategoriaInexistente, ID_PRODUTO_1));
+
+        verify(produtoRepositoryMock, never()).delete(any());
+    }
+
+
     private Categoria createCategoria(Long codCategoria, String nome) {
         Categoria categoriaCriada = new Categoria();
         categoriaCriada.setCodigo(codCategoria);
