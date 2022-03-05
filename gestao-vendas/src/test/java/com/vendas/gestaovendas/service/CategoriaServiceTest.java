@@ -7,8 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.dao.EmptyResultDataAccessException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -97,6 +97,62 @@ public class CategoriaServiceTest {
 
         verify(categoriaRepository, times(1)).findByNome(any());
         verify(categoriaRepository, never()).save(any());
+    }
+
+    @Test
+    public void atualizarCategoriaTest() {
+        Categoria categoria = createCategoria(ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA);
+
+        doReturn(Optional.of(categoria)).when(categoriaRepository).findById(any());
+        doReturn(categoria).when(categoriaRepository).findByNome(any());
+        doReturn(categoria).when(categoriaRepository).save(any());
+
+        Categoria categoriaAtualizada = categoriaService.atualizar(ID_CATEGORIA_1, categoria);
+
+        verify(categoriaRepository, times(1)).findById(any());
+        verify(categoriaRepository, times(1)).findByNome(any());
+        verify(categoriaRepository, times(1)).save(any());
+
+        assertEquals(categoria.getCodigo(), categoriaAtualizada.getCodigo());
+        assertEquals(categoria.getNome(),   categoriaAtualizada.getNome());
+    }
+
+    @Test
+    public void erroAtualizarCategoriaInexistenteTest() {
+        Long codigoCategoriaInexistente = 3L;
+        Categoria categoria = createCategoria(ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA);
+
+        doReturn(Optional.empty()).when(categoriaRepository).findById(any());
+
+        assertThrows(EmptyResultDataAccessException.class, () -> categoriaService.atualizar(codigoCategoriaInexistente, categoria));
+
+        verify(categoriaRepository, times(1)).findById(any());
+        verify(categoriaRepository, never()).findByNome(any());
+        verify(categoriaRepository, never()).save(any());
+    }
+
+    @Test
+    public void erroAtualizarCategoriaDuplicadaTest() {
+        Categoria categoriaExistente = createCategoria(ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA);
+        Categoria categoriaNova = createCategoria(ID_CATEGORIA_2, NOME_CATEGORIA_TECNOLOGIA);
+
+        doReturn(Optional.of(categoriaNova)).when(categoriaRepository).findById(any());
+        doReturn(categoriaExistente).when(categoriaRepository).findByNome(NOME_CATEGORIA_TECNOLOGIA);
+
+        assertThrows(RegraNegocioException.class, () -> categoriaService.atualizar(ID_CATEGORIA_2, categoriaNova));
+
+        verify(categoriaRepository, times(1)).findByNome(any());
+        verify(categoriaRepository, times(1)).findById(any());
+        verify(categoriaRepository, never()).save(any());
+    }
+
+    @Test
+    public void deletarCategoriaTest() {
+        createCategoria(ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA);
+
+        categoriaService.deletar(ID_CATEGORIA_1);
+
+        verify(categoriaRepository, times(1)).deleteById(any());
     }
 
     private Categoria createCategoria(Long codCategoria, String nome) {
