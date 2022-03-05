@@ -3,14 +3,12 @@ package com.vendas.gestaovendas.service;
 import com.vendas.gestaovendas.entity.Categoria;
 import com.vendas.gestaovendas.entity.Produto;
 import com.vendas.gestaovendas.exception.RegraNegocioException;
-import com.vendas.gestaovendas.repository.CategoriaRepository;
 import com.vendas.gestaovendas.repository.ProdutoRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 
 import java.math.BigDecimal;
@@ -18,8 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -104,7 +102,7 @@ public class ProdutoServiceTest {
         verify(produtoRepositoryMock, times(1)).buscaPorCodigoProduto(anyLong(), anyLong());
 
         assertEquals(optProduto.get().getCodigo(),     produto.getCodigo());
-        assertEquals(optProduto.get().getDescricao(),  produto.getDescricao());
+        assertEquals(optProduto.get().getDescricao(), produto.getDescricao());
         assertEquals(optProduto.get().getQuantidade(), produto.getQuantidade());
         assertEquals(optProduto.get().getPrecoCusto(), produto.getPrecoCusto());
         assertEquals(optProduto.get().getPrecoVenda(), produto.getPrecoVenda());
