@@ -1,7 +1,7 @@
 package com.vendas.gestaovendas.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.vendas.gestaovendas.config.CategoriaConfigTest;
+import com.vendas.gestaovendas.config.ConfigTest;
 import com.vendas.gestaovendas.dto.categoria.mapper.CategoriaMapper;
 import com.vendas.gestaovendas.dto.categoria.model.CategoriaRequestDTO;
 import com.vendas.gestaovendas.dto.categoria.model.CategoriaResponseDTO;
@@ -25,7 +25,7 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@CategoriaConfigTest
+@ConfigTest
 public class CategoriaControllerTest {
 
     private static final String GET_CATEGORIA_LISTAR_TODAS_PATH      = "/categoria";

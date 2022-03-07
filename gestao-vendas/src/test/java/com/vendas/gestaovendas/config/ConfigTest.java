@@ -13,5 +13,5 @@ import java.lang.annotation.Target;
 @AutoConfigureMockMvc(addFilters = false)
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface CategoriaConfigTest {
+public @interface ConfigTest {
 }
