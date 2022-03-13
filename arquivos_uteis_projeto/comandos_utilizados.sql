@@ -43,22 +43,28 @@ https://github.com/opentracing-contrib/java-jdbc
 -- ## ACTUATOR --
 -----------------
 
-Verificando se a aplicação está "de Pé" (local):
+-- Verificando se a aplicação está "de Pé" (local):
 http://localhost:8080/actuator/health
 
-Verificado as métricas do projeto:
+-- Verificado as métricas do projeto:
 http://localhost:8080/actuator/matrics
 
 -------------------
 -- ## PROMETHEUS --
 -------------------
 
-Obter métricas do projeto
+-- Documentação do projeto:
+https://prometheus.io/docs/introduction/overview/
+
+-- Obter métricas do projeto
 https://micrometer.io/docs/registry/prometheus
 
-Instalação Prometheus:
+-- Instalação Prometheus:
 https://micrometer.io/docs/registry/prometheus#_installing
 
+-- Endereço Local - Configurado no arquivo "prometheus.yml" 
+-- do projeto apontando para o endereço IP da maquina local
+http://localhost:9090/
 
 ----------------------
 -- ## CLONE PROJETO --
