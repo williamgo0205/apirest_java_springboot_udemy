@@ -3,8 +3,13 @@
 --------------------------------
 -- ## REFERNCIAS DOCUMENTACAO --
 --------------------------------
+
+-- Docker
 https://hub.docker.com/
 https://hub.docker.com/_/mysql
+
+-- SpringBoot
+https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/
 
 -----------------------
 -- ## PROJETO SPRING --
@@ -33,6 +38,27 @@ https://github.com/opentracing-contrib/java-spring-jaeger
 
 -- java-jdbc
 https://github.com/opentracing-contrib/java-jdbc
+
+-----------------
+-- ## ACTUATOR --
+-----------------
+
+Verificando se a aplicação está "de Pé" (local):
+http://localhost:8080/actuator/health
+
+Verificado as métricas do projeto:
+http://localhost:8080/actuator/matrics
+
+-------------------
+-- ## PROMETHEUS --
+-------------------
+
+Obter métricas do projeto
+https://micrometer.io/docs/registry/prometheus
+
+Instalação Prometheus:
+https://micrometer.io/docs/registry/prometheus#_installing
+
 
 ----------------------
 -- ## CLONE PROJETO --

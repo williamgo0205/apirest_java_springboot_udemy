@@ -18,6 +18,15 @@
 
 	<properties>
 		<java.version>11</java.version>
+		<spring-actuator.version>2.6.4</spring-actuator.version>
+		<springfox-swagger.version>2.9.2</springfox-swagger.version>
+		<opentracing-spring-jaeger.version>3.3.1</opentracing-spring-jaeger.version>
+		<opentracing-jdbc.version>0.2.15</opentracing-jdbc.version>
+		<log4j.version>2.17.2</log4j.version>
+		<flyway.version>8.4.4</flyway.version>
+		<micrometer.version>1.8.3</micrometer.version>
+		<mockito.version>3.3.3</mockito.version>
+		<powermock.version>2.0.2</powermock.version>
 	</properties>
 
 	<dependencies>
@@ -37,6 +46,13 @@
 			<artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-actuator -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+			<version>${spring-actuator.version}</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
@@ -54,35 +70,35 @@
 		<dependency>
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger2</artifactId>
-			<version>2.9.2</version>
+			<version>${springfox-swagger.version}</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/io.springfox/springfox-swagger-ui -->
 		<dependency>
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger-ui</artifactId>
-			<version>2.9.2</version>
+			<version>${springfox-swagger.version}</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/io.opentracing.contrib/opentracing-spring-jaeger-web-starter -->
 		<dependency>
 			<groupId>io.opentracing.contrib</groupId>
 			<artifactId>opentracing-spring-jaeger-web-starter</artifactId>
-			<version>3.3.1</version>
+			<version>${opentracing-spring-jaeger.version}</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/io.opentracing.contrib/opentracing-jdbc -->
 		<dependency>
 			<groupId>io.opentracing.contrib</groupId>
 			<artifactId>opentracing-jdbc</artifactId>
-			<version>0.2.15</version>
+			<version>${opentracing-jdbc.version}</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-slf4j-impl -->
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-slf4j-impl</artifactId>
-			<version>2.17.2</version>
+			<version>${log4j.version}</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -90,21 +106,23 @@
 		<dependency>
 			<groupId>org.flywaydb</groupId>
 			<artifactId>flyway-core</artifactId>
-			<version>8.4.4</version>
+			<version>${flyway.version}</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/org.flywaydb/flyway-mysql -->
 		<dependency>
 			<groupId>org.flywaydb</groupId>
 			<artifactId>flyway-mysql</artifactId>
-			<version>8.4.4</version>
+			<version>${flyway.version}</version>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/io.micrometer/micrometer-registry-prometheus -->
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
+			<groupId>io.micrometer</groupId>
+			<artifactId>micrometer-registry-prometheus</artifactId>
+			<version>${micrometer.version}</version>
 		</dependency>
+
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
@@ -112,23 +130,29 @@
 
 		<!-- Dependencias de Test - Inicio -->
 		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
-			<version>3.3.3</version>
+			<version>${mockito.version}</version>
 			<scope>test</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.powermock</groupId>
 			<artifactId>powermock-module-junit4</artifactId>
-			<version>2.0.2</version>
+			<version>${powermock.version}</version>
 			<scope>test</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.powermock</groupId>
 			<artifactId>powermock-api-mockito2</artifactId>
-			<version>2.0.2</version>
+			<version>${powermock.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<!-- Dependencias de Test - Fim -->
