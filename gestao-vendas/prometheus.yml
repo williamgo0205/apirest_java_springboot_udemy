@@ -1,0 +1,22 @@
+global:
+  # Intervalo de tempo de atualização
+  scrape_interval:     15s
+
+scrape_configs:
+   # Job prometheus
+  - job_name: 'prometheus'
+    # Intervalo de execução
+    scrape_interval: 5s
+    # endereço de acesso
+    static_configs:
+      - targets: ['localhost:9090']
+
+  # Job gestao-vendas
+  - job_name: 'gestao-vendas'
+    # Intervalo 5 segundos
+    scrape_interval: 5s
+    # Caminh de exposição de métricas
+    metrics_path: '/actuator/prometheus'
+    # Ip da máquina (ip Local)
+    static_configs:
+      - targets: ['192.168.1.72:8080']

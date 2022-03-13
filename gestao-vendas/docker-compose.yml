@@ -3,7 +3,7 @@ version: '3.8'
 
 services:
 
-# Configuration MySql version
+  # Configuração MySql version
   mysql:
     # Imagem a ser baixada
     image: mysql:8.0.28
@@ -21,7 +21,7 @@ services:
       # Nome do banco de dados
       MYSQL_DATABASE: vendas_db
 
-  # jaeger - Monitoramento da aplicacao
+  # Configuração Jaeger - Monitoramento da aplicacao
   # rastreamento para aplicacoes microservico
   jaeger:
     # Imagem jaeger
@@ -39,3 +39,20 @@ services:
       - 14268:14268
       - 14269:14269
       - 9411:9411
+
+  # Configuração Prometheus Projeto
+  # Obtenção de métricas no projeto de forma visual
+  prometheus:
+    # Imagem Prometheus
+    image: prom/prometheus:v2.34.0-rc.2
+    # Nome do container
+    container_name: prometheus
+    # Postas Configuradas
+    ports: 
+      - 9090:9090
+    # Volume do container  
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    # Executa um comando na criação do container  
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
