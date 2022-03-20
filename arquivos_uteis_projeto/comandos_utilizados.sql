@@ -66,6 +66,20 @@ https://micrometer.io/docs/registry/prometheus#_installing
 -- do projeto apontando para o endereço IP da maquina local
 http://localhost:9090/
 
+----------------
+-- ## GRAFANA --
+----------------
+
+-- Site Grafana
+https://grafana.com/
+https://grafana.com/grafana/
+
+-- Imagem do grafana pelo docker hub
+https://hub.docker.com/r/grafana/grafana/
+
+-- A versão mais atual do grafana pode ser obtida em
+https://hub.docker.com/r/grafana/grafana/tags
+
 ----------------------
 -- ## CLONE PROJETO --
 ----------------------

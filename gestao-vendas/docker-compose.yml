@@ -56,3 +56,14 @@ services:
     # Executa um comando na criação do container  
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
+
+  # Configuração Grafana
+  # Obtenção de métricas no projeto de forma visual com dashboards
+  grafana:
+    # Imagem Grafana
+    image: grafana/grafana:8.4.4
+    # Nome do container
+    container_name: grafana
+    # Postas Configuradas
+    ports: 
+      - 3000:3000
