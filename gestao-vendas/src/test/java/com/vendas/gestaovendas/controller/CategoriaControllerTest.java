@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,15 +56,13 @@ public class CategoriaControllerTest {
                 createCategoriaResponseDTO(ID_CATEGORIA_TECNOLOGIA, NOME_CATEGORIA_TECNOLOGIA);
         CategoriaResponseDTO categoriaResponseDTOAutomotiva =
                 createCategoriaResponseDTO(ID_CATEGORIA_AUTOMOTIVA, NOME_CATEGORIA_TECNOLOGIA_AUTOMOTIVA);
-        final List<CategoriaResponseDTO> categoriaResponseDTOList = new ArrayList<>();
-        categoriaResponseDTOList.add(categoriaResponseDTOTecnologia);
-        categoriaResponseDTOList.add(categoriaResponseDTOAutomotiva);
+        final List<CategoriaResponseDTO> categoriaResponseDTOList =
+                Arrays.asList(categoriaResponseDTOTecnologia, categoriaResponseDTOAutomotiva);
+
         // Create List Categoria
         final Categoria categoriaTecnologia = createCategoria(ID_CATEGORIA_TECNOLOGIA, NOME_CATEGORIA_TECNOLOGIA);
         final Categoria categoriaAutomotiva = createCategoria(ID_CATEGORIA_AUTOMOTIVA, NOME_CATEGORIA_TECNOLOGIA_AUTOMOTIVA);
-        List<Categoria> categoriaList = new ArrayList<>();
-        categoriaList.add(categoriaTecnologia);
-        categoriaList.add(categoriaAutomotiva);
+        List<Categoria> categoriaList = Arrays.asList(categoriaTecnologia, categoriaAutomotiva);
 
         when(this.categoriaServiceMock.listarTodas()).thenReturn(categoriaList);
 

@@ -18,6 +18,7 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -77,9 +78,9 @@ public class ProdutoControllerTest {
                 createProdutoResposeDTO(ID_PRODUTO_MONITOR, DESCRICAO_PRODUTO_MONITOR,
                         QUANTIDADE_PRODUTO_MONITOR, PRECO_CUSTO_PRODUTO_MONITOR,
                         PRECO_VENDA_PRODUTO_MONITOR, OBSERVACAO_PRODUTO_MONITOR);
-        final List<ProdutoResponseDTO> produtoResponseDTOList = new ArrayList<>();
-        produtoResponseDTOList.add(produtoResponseDTONotebook);
-        produtoResponseDTOList.add(produtoResponseDTOMonitor);
+        final List<ProdutoResponseDTO> produtoResponseDTOList =
+                Arrays.asList(produtoResponseDTONotebook, produtoResponseDTOMonitor);
+
         // Create List Produto
         final Produto produtoNotebook = createProduto(ID_PRODUTO_NOTEBOOK, DESCRICAO_PRODUTO_NOTEBOOK,
                 QUANTIDADE_PRODUTO_NOTEBOOK, PRECO_CUSTO_PRODUTO_NOTEBOOK,
@@ -87,9 +88,7 @@ public class ProdutoControllerTest {
         final Produto produtoMonitor  = createProduto(ID_PRODUTO_MONITOR, DESCRICAO_PRODUTO_MONITOR,
                 QUANTIDADE_PRODUTO_MONITOR, PRECO_CUSTO_PRODUTO_MONITOR,
                 PRECO_VENDA_PRODUTO_MONITOR, OBSERVACAO_PRODUTO_MONITOR);
-        List<Produto> produtoList = new ArrayList<>();
-        produtoList.add(produtoNotebook);
-        produtoList.add(produtoMonitor);
+        List<Produto> produtoList = Arrays.asList(produtoNotebook, produtoMonitor);
 
         when(this.produtoServiceMock.listarTodos(ID_CATEGORIA)).thenReturn(produtoList);
 

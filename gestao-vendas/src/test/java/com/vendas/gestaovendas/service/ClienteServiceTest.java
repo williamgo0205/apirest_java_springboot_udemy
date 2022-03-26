@@ -11,12 +11,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class ClientServiceTest {
+public class ClienteServiceTest {
 
     private static final Long    COD_CLIENTE_1         = 1L;
     private static final String  NOME_CLIENTE_1        = "Tony Stark";
@@ -108,6 +109,40 @@ public class ClientServiceTest {
                 segundoCliente.getEndereco().getCidade());
         assertEquals(clienteListService.get(1).getEndereco().getEstado(),
                 segundoCliente.getEndereco().getEstado());
+    }
+
+    @Test
+    public void buscarPorCodigoTest() {
+        Optional<Cliente> optCliente =
+                Optional.of(createCliente(COD_CLIENTE_1, NOME_CLIENTE_1, TELEFONE_CLIENTE_1, ATIVO_CLIENTE_1,
+                        LOGRADOURO_CLIENTE_1, NUMERO_CLIENTE_1, COMPLEMENTO_CLIENTE_1, BAIRRO_CLIENTE_1, CEP_CLIENTE_1,
+                        CIDADE_CLIENTE_1, ESTADO_CLIENTE_1));
+
+        doReturn(optCliente).when(clienteRepositoryMock).findById(any());
+
+        Optional<Cliente> clienteListService = clienteService.buscarPorCodigo(COD_CLIENTE_1);
+
+        verify(clienteRepositoryMock, times(1)).findById(any());
+
+        assertEquals(clienteListService.get().getCodigo(),   optCliente.get().getCodigo());
+        assertEquals(clienteListService.get().getNome(),     optCliente.get().getNome());
+        assertEquals(clienteListService.get().getTelefone(), optCliente.get().getTelefone());
+        assertEquals(clienteListService.get().getAtivo(),    optCliente.get().getAtivo());
+
+        assertEquals(clienteListService.get().getEndereco().getLogradouro(),
+                optCliente.get().getEndereco().getLogradouro());
+        assertEquals(clienteListService.get().getEndereco().getNumero(),
+                optCliente.get().getEndereco().getNumero());
+        assertEquals(clienteListService.get().getEndereco().getComplemento(),
+                optCliente.get().getEndereco().getComplemento());
+        assertEquals(clienteListService.get().getEndereco().getBairro(),
+                optCliente.get().getEndereco().getBairro());
+        assertEquals(clienteListService.get().getEndereco().getCep(),
+                optCliente.get().getEndereco().getCep());
+        assertEquals(clienteListService.get().getEndereco().getCidade(),
+                optCliente.get().getEndereco().getCidade());
+        assertEquals(clienteListService.get().getEndereco().getEstado(),
+                optCliente.get().getEndereco().getEstado());
     }
 
     private Cliente createCliente(Long codigo, String nome, String telefone, Boolean ativo, String logradouro,
