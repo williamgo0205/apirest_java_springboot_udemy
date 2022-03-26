@@ -27,7 +27,7 @@ public class ProdutoController {
 
     // GET - localhost:8080/categoria/{codigoCategoria}/produto
     @ApiOperation(value = "Listar Todos os Produtos Existentes de uma Determinada Categoria",
-            nickname = "listarTodos")
+            nickname = "listarTodosProdutos")
     @GetMapping
     public List<ProdutoResponseDTO> listarTodos(@PathVariable(name = "codigoCategoria") Long codigoCategoria) {
         return produtoService.listarTodos(codigoCategoria)
@@ -38,7 +38,7 @@ public class ProdutoController {
 
     // GET - localhost:8080/categoria/{codigoCategoria}/produto/{codigo}
     @ApiOperation(value = "Listar o Produto Informado Pelo Codigo e Categoria Informados",
-            nickname = "listarPorCodigoECategoria")
+            nickname = "listarPorCodigoECategoriaDeProduto")
     @GetMapping("/{codigo}")
     public ResponseEntity<ProdutoResponseDTO> listarPorCodigoECategoria(
             @PathVariable(name = "codigoCategoria") Long codigoCategoria,

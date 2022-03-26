@@ -27,7 +27,7 @@ public class CategoriaController {
 
     // GET - localhost:8080/categoria
     @ApiOperation(value = "Listar Todas as Categorias Existentes",
-                  nickname = "listarTodas")
+                  nickname = "listarTodasCategorias")
     @GetMapping
     public List<CategoriaResponseDTO> listarTodas() {
         return categoriaService.listarTodas()
@@ -38,7 +38,7 @@ public class CategoriaController {
 
     // GET - localhost:8080/categoria/{codigo}
     @ApiOperation(value = "Listar a Categoria Informada Pelo Código",
-                  nickname = "listarPorCodigo")
+                  nickname = "listarPorCodigoDeCategoria")
     @GetMapping("/{codigo}")
     public ResponseEntity<CategoriaResponseDTO> listarPorCodigo(@PathVariable(name = "codigo") Long codigo) {
         Optional<Categoria> optCategoria = categoriaService.buscarPorCodigo(codigo);
