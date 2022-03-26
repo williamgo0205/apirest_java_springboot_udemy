@@ -1,6 +1,8 @@
 package com.vendas.gestaovendas.controller;
 
 import com.vendas.gestaovendas.dto.categoria.mapper.CategoriaMapper;
+import com.vendas.gestaovendas.dto.cliente.mapper.ClienteMapper;
+import com.vendas.gestaovendas.dto.cliente.model.ClienteResponseDTO;
 import com.vendas.gestaovendas.entity.Cliente;
 import com.vendas.gestaovendas.service.ClienteService;
 import io.swagger.annotations.Api;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Api(tags = "Cliente")
 @RestController
@@ -25,20 +28,24 @@ public class ClienteController {
 
     // GET - localhost:8080/cliente
     @ApiOperation(value = "Listar Todos os Clientes Existentes",
-            nickname = "listarTodos")
+            nickname = "listarTodosClientes")
     @GetMapping
-    public List<Cliente> listarTodos() {
-        return clienteService.listarTodos();
+    public List<ClienteResponseDTO> listarTodos() {
+        return clienteService.listarTodos()
+                .stream()
+                .map(cliente -> ClienteMapper.converterParaClienteDTO(cliente))
+                .collect(Collectors.toList());
     }
 
     // GET - localhost:8080/cliente/{codigo}
     @ApiOperation(value = "Listar o Cliente Informado Pelo Código",
-            nickname = "listarPorCodigo")
+            nickname = "listarPorCodigoDeCliente")
     @GetMapping("/{codigo}")
-    public ResponseEntity<Cliente> listarPorCodigo(@PathVariable(name = "codigo") Long codigo) {
+    public ResponseEntity<ClienteResponseDTO> listarPorCodigo(@PathVariable(name = "codigo") Long codigo) {
         Optional<Cliente> optCliente = clienteService.buscarPorCodigo(codigo);
         return optCliente.isPresent()
-                ? ResponseEntity.ok(optCliente.get()) : ResponseEntity.notFound().build();
+                ? ResponseEntity.ok(ClienteMapper.converterParaClienteDTO(optCliente.get()))
+                : ResponseEntity.notFound().build();
     }
 
 }
