@@ -14,11 +14,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/categoria",
+							"raw": "{{localhost}}/categoria",
 							"host": [
-								"localhost"
+								"{{localhost}}"
 							],
-							"port": "8080",
 							"path": [
 								"categoria"
 							]
@@ -32,11 +31,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/categoria/1",
+							"raw": "{{localhost}}/categoria/1",
 							"host": [
-								"localhost"
+								"{{localhost}}"
 							],
-							"port": "8080",
 							"path": [
 								"categoria",
 								"1"
@@ -60,11 +58,10 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/categoria",
+							"raw": "{{localhost}}/categoria",
 							"host": [
-								"localhost"
+								"{{localhost}}"
 							],
-							"port": "8080",
 							"path": [
 								"categoria"
 							]
@@ -87,11 +84,10 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/categoria/50",
+							"raw": "{{localhost}}/categoria/50",
 							"host": [
-								"localhost"
+								"{{localhost}}"
 							],
-							"port": "8080",
 							"path": [
 								"categoria",
 								"50"
@@ -106,11 +102,10 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/categoria/6",
+							"raw": "{{localhost}}/categoria/6",
 							"host": [
-								"localhost"
+								"{{localhost}}"
 							],
-							"port": "8080",
 							"path": [
 								"categoria",
 								"6"
@@ -130,11 +125,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/categoria/1/produto",
+							"raw": "{{localhost}}/categoria/1/produto",
 							"host": [
-								"localhost"
+								"{{localhost}}"
 							],
-							"port": "8080",
 							"path": [
 								"categoria",
 								"1",
@@ -150,11 +144,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/categoria/1/produto/1",
+							"raw": "{{localhost}}/categoria/1/produto/1",
 							"host": [
-								"localhost"
+								"{{localhost}}"
 							],
-							"port": "8080",
 							"path": [
 								"categoria",
 								"1",
@@ -180,11 +173,10 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/categoria/1/produto",
+							"raw": "{{localhost}}/categoria/1/produto",
 							"host": [
-								"localhost"
+								"{{localhost}}"
 							],
-							"port": "8080",
 							"path": [
 								"categoria",
 								"1",
@@ -209,11 +201,10 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/categoria/1/produto/1",
+							"raw": "{{localhost}}/categoria/1/produto/1",
 							"host": [
-								"localhost"
+								"{{localhost}}"
 							],
-							"port": "8080",
 							"path": [
 								"categoria",
 								"1",
@@ -230,11 +221,10 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/categoria/1/produto/1",
+							"raw": "{{localhost}}/categoria/1/produto/1",
 							"host": [
-								"localhost"
+								"{{localhost}}"
 							],
-							"port": "8080",
 							"path": [
 								"categoria",
 								"1",
@@ -256,11 +246,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/actuator",
+							"raw": "{{localhost}}/actuator",
 							"host": [
-								"localhost"
+								"{{localhost}}"
 							],
-							"port": "8080",
 							"path": [
 								"actuator"
 							]
@@ -274,11 +263,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/actuator/health",
+							"raw": "{{localhost}}/actuator/health",
 							"host": [
-								"localhost"
+								"{{localhost}}"
 							],
-							"port": "8080",
 							"path": [
 								"actuator",
 								"health"
@@ -293,12 +281,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/actuator/prometheus",
-							"protocol": "http",
+							"raw": "{{localhost}}/actuator/prometheus",
 							"host": [
-								"localhost"
+								"{{localhost}}"
 							],
-							"port": "8080",
 							"path": [
 								"actuator",
 								"prometheus"
@@ -313,12 +299,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/actuator/metrics",
-							"protocol": "http",
+							"raw": "{{localhost}}/actuator/metrics",
 							"host": [
-								"localhost"
+								"{{localhost}}"
 							],
-							"port": "8080",
 							"path": [
 								"actuator",
 								"metrics"
@@ -333,16 +317,54 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/actuator/metrics/http.server.requests",
-							"protocol": "http",
+							"raw": "{{localhost}}/actuator/metrics/http.server.requests",
 							"host": [
-								"localhost"
+								"{{localhost}}"
 							],
-							"port": "8080",
 							"path": [
 								"actuator",
 								"metrics",
 								"http.server.requests"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Cliente",
+			"item": [
+				{
+					"name": "GET localhost:8080/cliente",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{localhost}}/categoria",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"categoria"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET localhost:8080/cliente/{codigo_cliente}",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{localhost}}/cliente/1",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"cliente",
+								"1"
 							]
 						}
 					},
