@@ -17,7 +17,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -290,7 +289,7 @@ public class ProdutoControllerTest {
              + ",\"quantidade\":".concat(valueOf(produtoResponseDTO.getQuantidade()))
              + ",\"precoCusto\":".concat(valueOf(produtoResponseDTO.getPrecoCusto()))
              + ",\"precoVenda\":".concat(valueOf(produtoResponseDTO.getPrecoVenda()))
-             + ",\"observacao\":\"".concat(valueOf(produtoResponseDTO.getObservacao())) + "\""
+                + ",\"observacao\":\"".concat(valueOf(produtoResponseDTO.getObservacao())) + "\""
              + ",\"categoria\":{\"codigo\":".concat(valueOf(produtoResponseDTO.getCategoria().getCodigo()))
              + ",\"nome\":\"".concat(valueOf(produtoResponseDTO.getCategoria().getNome())) + "\"}}";
     }

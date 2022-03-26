@@ -2,13 +2,10 @@ package com.vendas.gestaovendas.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vendas.gestaovendas.config.ConfigTest;
-import com.vendas.gestaovendas.dto.categoria.model.CategoriaResponseDTO;
 import com.vendas.gestaovendas.dto.cliente.model.ClienteResponseDTO;
 import com.vendas.gestaovendas.dto.endereco.model.EnderecoResponseDTO;
-import com.vendas.gestaovendas.entity.Categoria;
 import com.vendas.gestaovendas.entity.Cliente;
 import com.vendas.gestaovendas.entity.Endereco;
-import com.vendas.gestaovendas.service.CategoriaService;
 import com.vendas.gestaovendas.service.ClienteService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +14,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
