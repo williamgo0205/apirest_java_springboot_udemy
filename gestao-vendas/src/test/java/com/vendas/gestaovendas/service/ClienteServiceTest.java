@@ -1,7 +1,7 @@
 package com.vendas.gestaovendas.service;
 
 import com.vendas.gestaovendas.entity.Cliente;
-import com.vendas.gestaovendas.entity.Endereco;
+import com.vendas.gestaovendas.factory.ClienteMockFactory;
 import com.vendas.gestaovendas.repository.ClienteRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -51,12 +51,14 @@ public class ClienteServiceTest {
 
     @Test
     public void listarTodosClientesTest() {
-        Cliente primeiroCliente = createCliente(COD_CLIENTE_1, NOME_CLIENTE_1, TELEFONE_CLIENTE_1, ATIVO_CLIENTE_1,
-                LOGRADOURO_CLIENTE_1, NUMERO_CLIENTE_1, COMPLEMENTO_CLIENTE_1, BAIRRO_CLIENTE_1, CEP_CLIENTE_1,
-                CIDADE_CLIENTE_1, ESTADO_CLIENTE_1);
-        Cliente segundoCliente = createCliente(COD_CLIENTE_2, NOME_CLIENTE_2, TELEFONE_CLIENTE_2, ATIVO_CLIENTE_2,
-                LOGRADOURO_CLIENTE_2, NUMERO_CLIENTE_2, COMPLEMENTO_CLIENTE_2, BAIRRO_CLIENTE_2, CEP_CLIENTE_2,
-                CIDADE_CLIENTE_2, ESTADO_CLIENTE_2);
+        Cliente primeiroCliente =
+                ClienteMockFactory.createCliente(COD_CLIENTE_1, NOME_CLIENTE_1, TELEFONE_CLIENTE_1, ATIVO_CLIENTE_1,
+                        LOGRADOURO_CLIENTE_1, NUMERO_CLIENTE_1, COMPLEMENTO_CLIENTE_1, BAIRRO_CLIENTE_1, CEP_CLIENTE_1,
+                        CIDADE_CLIENTE_1, ESTADO_CLIENTE_1);
+        Cliente segundoCliente =
+                ClienteMockFactory.createCliente(COD_CLIENTE_2, NOME_CLIENTE_2, TELEFONE_CLIENTE_2, ATIVO_CLIENTE_2,
+                        LOGRADOURO_CLIENTE_2, NUMERO_CLIENTE_2, COMPLEMENTO_CLIENTE_2, BAIRRO_CLIENTE_2, CEP_CLIENTE_2,
+                        CIDADE_CLIENTE_2, ESTADO_CLIENTE_2);
 
         List<Cliente> clienteList = new ArrayList<>();
         clienteList.add(primeiroCliente);
@@ -114,9 +116,9 @@ public class ClienteServiceTest {
     @Test
     public void buscarPorCodigoTest() {
         Optional<Cliente> optCliente =
-                Optional.of(createCliente(COD_CLIENTE_1, NOME_CLIENTE_1, TELEFONE_CLIENTE_1, ATIVO_CLIENTE_1,
-                        LOGRADOURO_CLIENTE_1, NUMERO_CLIENTE_1, COMPLEMENTO_CLIENTE_1, BAIRRO_CLIENTE_1, CEP_CLIENTE_1,
-                        CIDADE_CLIENTE_1, ESTADO_CLIENTE_1));
+                Optional.of(ClienteMockFactory.createCliente(COD_CLIENTE_1, NOME_CLIENTE_1, TELEFONE_CLIENTE_1,
+                        ATIVO_CLIENTE_1, LOGRADOURO_CLIENTE_1, NUMERO_CLIENTE_1, COMPLEMENTO_CLIENTE_1,
+                        BAIRRO_CLIENTE_1, CEP_CLIENTE_1, CIDADE_CLIENTE_1, ESTADO_CLIENTE_1));
 
         doReturn(optCliente).when(clienteRepositoryMock).findById(any());
 
@@ -143,30 +145,5 @@ public class ClienteServiceTest {
                 optCliente.get().getEndereco().getCidade());
         assertEquals(clienteListService.get().getEndereco().getEstado(),
                 optCliente.get().getEndereco().getEstado());
-    }
-
-    private Cliente createCliente(Long codigo, String nome, String telefone, Boolean ativo, String logradouro,
-                                  Integer numero, String complemento, String bairro, String cep, String cidade,
-                                  String estado) {
-        Cliente clienteCriado = new Cliente();
-        clienteCriado.setCodigo(codigo);
-        clienteCriado.setNome(nome);
-        clienteCriado.setTelefone(telefone);
-        clienteCriado.setAtivo(ativo);
-        clienteCriado.setEndereco(createEndereco(logradouro, numero, complemento, bairro, cep, cidade, estado));
-        return  clienteCriado;
-    }
-
-    private Endereco createEndereco(String logradouro, Integer numero, String complemento, String bairro, String cep,
-                                    String cidade, String estado) {
-        Endereco endereco = new Endereco();
-        endereco.setLogradouro(logradouro);
-        endereco.setNumero(numero);
-        endereco.setComplemento(complemento);
-        endereco.setBairro(bairro);
-        endereco.setCep(cep);
-        endereco.setCidade(cidade);
-        endereco.setEstado(estado);
-        return endereco;
     }
 }

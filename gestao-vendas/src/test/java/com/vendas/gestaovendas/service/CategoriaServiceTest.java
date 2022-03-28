@@ -2,6 +2,7 @@ package com.vendas.gestaovendas.service;
 
 import com.vendas.gestaovendas.entity.Categoria;
 import com.vendas.gestaovendas.exception.RegraNegocioException;
+import com.vendas.gestaovendas.factory.CategoriaMockFactory;
 import com.vendas.gestaovendas.repository.CategoriaRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,8 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -35,8 +36,8 @@ public class CategoriaServiceTest {
 
     @Test
     public void listarTodasCategoriasTest() {
-        Categoria categoriaTecnologia = createCategoria(ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA);
-        Categoria categoriaAutomotiva = createCategoria(ID_CATEGORIA_2, NOME_CATEGORIA_AUTOMOTIVA);
+        Categoria categoriaTecnologia = CategoriaMockFactory.createCategoria(ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA);
+        Categoria categoriaAutomotiva = CategoriaMockFactory.createCategoria(ID_CATEGORIA_2, NOME_CATEGORIA_AUTOMOTIVA);
 
         List<Categoria> categoriaList = new ArrayList<>();
         categoriaList.add(categoriaTecnologia);
@@ -58,7 +59,7 @@ public class CategoriaServiceTest {
     @Test
     public void buscarPorCodigoCategoriaTest() {
         Optional<Categoria> optCategoria =
-                Optional.of(createCategoria(ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA));
+                Optional.of(CategoriaMockFactory.createCategoria(ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA));
 
         doReturn(optCategoria).when(categoriaRepositoryMock).findById(any());
 
@@ -72,7 +73,7 @@ public class CategoriaServiceTest {
 
     @Test
     public void salvarCategoriaTest() {
-        Categoria categoria = createCategoria(ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA);
+        Categoria categoria = CategoriaMockFactory.createCategoria(ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA);
 
         doReturn(null).when(categoriaRepositoryMock).findByNome(any());
         doReturn(categoria).when(categoriaRepositoryMock).save(any());
@@ -88,8 +89,8 @@ public class CategoriaServiceTest {
 
     @Test
     public void erroSalvarCategoriaDuplicadaTest() {
-        Categoria categoriaExistente = createCategoria(ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA);
-        Categoria categoriaNova = createCategoria(ID_CATEGORIA_2, NOME_CATEGORIA_TECNOLOGIA);
+        Categoria categoriaExistente = CategoriaMockFactory.createCategoria(ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA);
+        Categoria categoriaNova = CategoriaMockFactory.createCategoria(ID_CATEGORIA_2, NOME_CATEGORIA_TECNOLOGIA);
 
         doReturn(categoriaExistente).when(categoriaRepositoryMock).findByNome(NOME_CATEGORIA_TECNOLOGIA);
 
@@ -101,7 +102,7 @@ public class CategoriaServiceTest {
 
     @Test
     public void atualizarCategoriaTest() {
-        Categoria categoria = createCategoria(ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA);
+        Categoria categoria = CategoriaMockFactory.createCategoria(ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA);
 
         doReturn(Optional.of(categoria)).when(categoriaRepositoryMock).findById(any());
         doReturn(categoria).when(categoriaRepositoryMock).findByNome(any());
@@ -120,7 +121,7 @@ public class CategoriaServiceTest {
     @Test
     public void erroAtualizarCategoriaInexistenteTest() {
         Long codigoCategoriaInexistente = 3L;
-        Categoria categoria = createCategoria(ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA);
+        Categoria categoria = CategoriaMockFactory.createCategoria(ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA);
 
         doReturn(Optional.empty()).when(categoriaRepositoryMock).findById(any());
 
@@ -133,8 +134,8 @@ public class CategoriaServiceTest {
 
     @Test
     public void erroAtualizarCategoriaDuplicadaTest() {
-        Categoria categoriaExistente = createCategoria(ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA);
-        Categoria categoriaNova = createCategoria(ID_CATEGORIA_2, NOME_CATEGORIA_TECNOLOGIA);
+        Categoria categoriaExistente = CategoriaMockFactory.createCategoria(ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA);
+        Categoria categoriaNova = CategoriaMockFactory.createCategoria(ID_CATEGORIA_2, NOME_CATEGORIA_TECNOLOGIA);
 
         doReturn(Optional.of(categoriaNova)).when(categoriaRepositoryMock).findById(any());
         doReturn(categoriaExistente).when(categoriaRepositoryMock).findByNome(NOME_CATEGORIA_TECNOLOGIA);
@@ -148,17 +149,10 @@ public class CategoriaServiceTest {
 
     @Test
     public void deletarCategoriaTest() {
-        createCategoria(ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA);
+        CategoriaMockFactory.createCategoria(ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA);
 
         categoriaService.deletar(ID_CATEGORIA_1);
 
         verify(categoriaRepositoryMock, times(1)).deleteById(any());
-    }
-
-    private Categoria createCategoria(Long codCategoria, String nome) {
-        Categoria categoriaCriada = new Categoria();
-        categoriaCriada.setCodigo(codCategoria);
-        categoriaCriada.setNome(nome);
-        return  categoriaCriada;
     }
 }

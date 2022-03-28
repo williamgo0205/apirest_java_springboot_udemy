@@ -6,6 +6,7 @@ import com.vendas.gestaovendas.dto.categoria.mapper.CategoriaMapper;
 import com.vendas.gestaovendas.dto.categoria.model.CategoriaRequestDTO;
 import com.vendas.gestaovendas.dto.categoria.model.CategoriaResponseDTO;
 import com.vendas.gestaovendas.entity.Categoria;
+import com.vendas.gestaovendas.factory.CategoriaMockFactory;
 import com.vendas.gestaovendas.service.CategoriaService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,15 +53,17 @@ public class CategoriaControllerTest {
     public void listarTodas() throws Exception {
         // Create List CategoriaResponseDTO
         CategoriaResponseDTO categoriaResponseDTOTecnologia =
-                createCategoriaResponseDTO(ID_CATEGORIA_TECNOLOGIA, NOME_CATEGORIA_TECNOLOGIA);
+                CategoriaMockFactory.createCategoriaResponseDTO(ID_CATEGORIA_TECNOLOGIA, NOME_CATEGORIA_TECNOLOGIA);
         CategoriaResponseDTO categoriaResponseDTOAutomotiva =
-                createCategoriaResponseDTO(ID_CATEGORIA_AUTOMOTIVA, NOME_CATEGORIA_TECNOLOGIA_AUTOMOTIVA);
+                CategoriaMockFactory.createCategoriaResponseDTO(ID_CATEGORIA_AUTOMOTIVA, NOME_CATEGORIA_TECNOLOGIA_AUTOMOTIVA);
         final List<CategoriaResponseDTO> categoriaResponseDTOList =
                 Arrays.asList(categoriaResponseDTOTecnologia, categoriaResponseDTOAutomotiva);
 
         // Create List Categoria
-        final Categoria categoriaTecnologia = createCategoria(ID_CATEGORIA_TECNOLOGIA, NOME_CATEGORIA_TECNOLOGIA);
-        final Categoria categoriaAutomotiva = createCategoria(ID_CATEGORIA_AUTOMOTIVA, NOME_CATEGORIA_TECNOLOGIA_AUTOMOTIVA);
+        final Categoria categoriaTecnologia =
+                CategoriaMockFactory.createCategoria(ID_CATEGORIA_TECNOLOGIA, NOME_CATEGORIA_TECNOLOGIA);
+        final Categoria categoriaAutomotiva =
+                CategoriaMockFactory.createCategoria(ID_CATEGORIA_AUTOMOTIVA, NOME_CATEGORIA_TECNOLOGIA_AUTOMOTIVA);
         List<Categoria> categoriaList = Arrays.asList(categoriaTecnologia, categoriaAutomotiva);
 
         when(this.categoriaServiceMock.listarTodas()).thenReturn(categoriaList);
@@ -78,9 +81,10 @@ public class CategoriaControllerTest {
     public void listarPorCodigoRetornoSucesso_HttpStatus_200() throws Exception {
         // Create CategoriaResponseDTO
         final CategoriaResponseDTO categoriaResponseDTO =
-                createCategoriaResponseDTO(ID_CATEGORIA_TECNOLOGIA, NOME_CATEGORIA_TECNOLOGIA);
+                CategoriaMockFactory.createCategoriaResponseDTO(ID_CATEGORIA_TECNOLOGIA, NOME_CATEGORIA_TECNOLOGIA);
         // Create List Categoria
-        final Categoria categoria = createCategoria(ID_CATEGORIA_TECNOLOGIA, NOME_CATEGORIA_TECNOLOGIA);
+        final Categoria categoria =
+                CategoriaMockFactory.createCategoria(ID_CATEGORIA_TECNOLOGIA, NOME_CATEGORIA_TECNOLOGIA);
 
         when(categoriaServiceMock.buscarPorCodigo(ID_CATEGORIA_TECNOLOGIA)).thenReturn(Optional.of(categoria));
 
@@ -97,9 +101,9 @@ public class CategoriaControllerTest {
     public void listarPorCodigoRetornoErroNotFound_HttpStatus_404() throws Exception {
         // Create CategoriaResponseDTO
         final CategoriaResponseDTO categoriaResponseDTO =
-                createCategoriaResponseDTO(ID_CATEGORIA_TECNOLOGIA, NOME_CATEGORIA_TECNOLOGIA);
+                CategoriaMockFactory.createCategoriaResponseDTO(ID_CATEGORIA_TECNOLOGIA, NOME_CATEGORIA_TECNOLOGIA);
         // Create List Categoria
-        createCategoria(ID_CATEGORIA_TECNOLOGIA, NOME_CATEGORIA_TECNOLOGIA);
+        CategoriaMockFactory.createCategoria(ID_CATEGORIA_TECNOLOGIA, NOME_CATEGORIA_TECNOLOGIA);
 
         when(categoriaServiceMock.buscarPorCodigo(ID_CATEGORIA_TECNOLOGIA)).thenReturn(Optional.empty());
 
@@ -116,12 +120,13 @@ public class CategoriaControllerTest {
     public void salvarCategoriaSucesso() throws Exception {
         // Create CategoriaResponseDTO
         final CategoriaResponseDTO categoriaResponseDTO =
-                createCategoriaResponseDTO(ID_CATEGORIA_TECNOLOGIA, NOME_CATEGORIA_TECNOLOGIA);
+                CategoriaMockFactory.createCategoriaResponseDTO(ID_CATEGORIA_TECNOLOGIA, NOME_CATEGORIA_TECNOLOGIA);
         // Create Categoria
-        final Categoria categoria = createCategoria(ID_CATEGORIA_TECNOLOGIA, NOME_CATEGORIA_TECNOLOGIA);
+        final Categoria categoria =
+                CategoriaMockFactory.createCategoria(ID_CATEGORIA_TECNOLOGIA, NOME_CATEGORIA_TECNOLOGIA);
         // Create CategoriaRequestDTO
         final CategoriaRequestDTO categoriaRequestDTO =
-                createCategoriaRequestDTO(NOME_CATEGORIA_TECNOLOGIA);
+                CategoriaMockFactory.createCategoriaRequestDTO(NOME_CATEGORIA_TECNOLOGIA);
 
         when(categoriaServiceMock.salvar(CategoriaMapper.converterParaEntidade(categoriaRequestDTO)))
                 .thenReturn(categoria);
@@ -142,13 +147,15 @@ public class CategoriaControllerTest {
 
         // Create CategoriaResponseDTO
         final CategoriaResponseDTO categoriaResponseDTO =
-                createCategoriaResponseDTO(ID_CATEGORIA_TECNOLOGIA, nomeCategoriaAtualizada);
+                CategoriaMockFactory.createCategoriaResponseDTO(ID_CATEGORIA_TECNOLOGIA, nomeCategoriaAtualizada);
         // Create Categoria e CategoriaAtualizada
-        final Categoria categoria = createCategoria(ID_CATEGORIA_TECNOLOGIA, NOME_CATEGORIA_TECNOLOGIA);
-        final Categoria categoriaAtualizada = createCategoria(categoria.getCodigo(), nomeCategoriaAtualizada);
+        final Categoria categoria =
+                CategoriaMockFactory.createCategoria(ID_CATEGORIA_TECNOLOGIA, NOME_CATEGORIA_TECNOLOGIA);
+        final Categoria categoriaAtualizada =
+                CategoriaMockFactory.createCategoria(categoria.getCodigo(), nomeCategoriaAtualizada);
         // Create CategoriaRequestDTO
         final CategoriaRequestDTO categoriaRequestDTO =
-                createCategoriaRequestDTO(nomeCategoriaAtualizada);
+                CategoriaMockFactory.createCategoriaRequestDTO(nomeCategoriaAtualizada);
 
         doReturn(categoriaAtualizada)
                 .when(categoriaServiceMock).atualizar(categoria.getCodigo(),
@@ -166,7 +173,7 @@ public class CategoriaControllerTest {
 
     @Test
     public void deletarCategoriaSucesso() throws Exception {
-        createCategoria(ID_CATEGORIA_TECNOLOGIA, NOME_CATEGORIA_TECNOLOGIA);
+        CategoriaMockFactory.createCategoria(ID_CATEGORIA_TECNOLOGIA, NOME_CATEGORIA_TECNOLOGIA);
 
         mvc.perform(delete(String.format(DELETE_CATEGORIA_DELETAR_PATH, ID_CATEGORIA_TECNOLOGIA))
                         .contentType(MediaType.APPLICATION_JSON))
@@ -174,23 +181,6 @@ public class CategoriaControllerTest {
                 .andReturn();
 
         verify(categoriaServiceMock, times(1)).deletar(anyLong());
-    }
-
-    private CategoriaResponseDTO createCategoriaResponseDTO(Long codigo, String nome) {
-        return new CategoriaResponseDTO(codigo, nome);
-    }
-
-    private CategoriaRequestDTO createCategoriaRequestDTO(String nome) {
-        CategoriaRequestDTO categoriaRequestDTO = new CategoriaRequestDTO();
-        categoriaRequestDTO.setNome(nome);
-        return categoriaRequestDTO;
-    }
-
-    private Categoria createCategoria(Long codCategoria, String nome) {
-        Categoria categoriaCriada = new Categoria();
-        categoriaCriada.setCodigo(codCategoria);
-        categoriaCriada.setNome(nome);
-        return categoriaCriada;
     }
 
     private String createCategoriaJSON(CategoriaResponseDTO categoriaResponseDTO) {

@@ -2,12 +2,13 @@ package com.vendas.gestaovendas.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vendas.gestaovendas.config.ConfigTest;
-import com.vendas.gestaovendas.dto.categoria.model.CategoriaResponseDTO;
 import com.vendas.gestaovendas.dto.produto.mapper.ProdutoMapper;
 import com.vendas.gestaovendas.dto.produto.model.ProdutoRequestDTO;
 import com.vendas.gestaovendas.dto.produto.model.ProdutoResponseDTO;
 import com.vendas.gestaovendas.entity.Categoria;
 import com.vendas.gestaovendas.entity.Produto;
+import com.vendas.gestaovendas.factory.CategoriaMockFactory;
+import com.vendas.gestaovendas.factory.ProdutoMockFactory;
 import com.vendas.gestaovendas.service.ProdutoService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,26 +68,27 @@ public class ProdutoControllerTest {
     @Test
     public void listarTodos() throws Exception {
         // Create Categoria
-        final Categoria categoriaTecnologia = createCategoria();
+        final Categoria categoriaTecnologia =
+                CategoriaMockFactory.createCategoria(ID_CATEGORIA, NOME_CATEGORIA_TECNOLOGIA);
         // Create List ProdutoResponseDTO
         final ProdutoResponseDTO produtoResponseDTONotebook =
-                createProdutoResposeDTO(ID_PRODUTO_NOTEBOOK, DESCRICAO_PRODUTO_NOTEBOOK,
-                        QUANTIDADE_PRODUTO_NOTEBOOK, PRECO_CUSTO_PRODUTO_NOTEBOOK,
-                        PRECO_VENDA_PRODUTO_NOTEBOOK, OBSERVACAO_PRODUTO_NOTEBOOK);
+                ProdutoMockFactory.createProdutoResposeDTO(ID_PRODUTO_NOTEBOOK, DESCRICAO_PRODUTO_NOTEBOOK,
+                        QUANTIDADE_PRODUTO_NOTEBOOK, PRECO_CUSTO_PRODUTO_NOTEBOOK, PRECO_VENDA_PRODUTO_NOTEBOOK,
+                        OBSERVACAO_PRODUTO_NOTEBOOK, ID_CATEGORIA, NOME_CATEGORIA_TECNOLOGIA);
         final ProdutoResponseDTO produtoResponseDTOMonitor =
-                createProdutoResposeDTO(ID_PRODUTO_MONITOR, DESCRICAO_PRODUTO_MONITOR,
-                        QUANTIDADE_PRODUTO_MONITOR, PRECO_CUSTO_PRODUTO_MONITOR,
-                        PRECO_VENDA_PRODUTO_MONITOR, OBSERVACAO_PRODUTO_MONITOR);
+                ProdutoMockFactory.createProdutoResposeDTO(ID_PRODUTO_MONITOR, DESCRICAO_PRODUTO_MONITOR,
+                        QUANTIDADE_PRODUTO_MONITOR, PRECO_CUSTO_PRODUTO_MONITOR, PRECO_VENDA_PRODUTO_MONITOR,
+                        OBSERVACAO_PRODUTO_MONITOR, ID_CATEGORIA, NOME_CATEGORIA_TECNOLOGIA);
         final List<ProdutoResponseDTO> produtoResponseDTOList =
                 Arrays.asList(produtoResponseDTONotebook, produtoResponseDTOMonitor);
 
         // Create List Produto
-        final Produto produtoNotebook = createProduto(ID_PRODUTO_NOTEBOOK, DESCRICAO_PRODUTO_NOTEBOOK,
-                QUANTIDADE_PRODUTO_NOTEBOOK, PRECO_CUSTO_PRODUTO_NOTEBOOK,
-                PRECO_VENDA_PRODUTO_NOTEBOOK, OBSERVACAO_PRODUTO_NOTEBOOK);
-        final Produto produtoMonitor  = createProduto(ID_PRODUTO_MONITOR, DESCRICAO_PRODUTO_MONITOR,
-                QUANTIDADE_PRODUTO_MONITOR, PRECO_CUSTO_PRODUTO_MONITOR,
-                PRECO_VENDA_PRODUTO_MONITOR, OBSERVACAO_PRODUTO_MONITOR);
+        final Produto produtoNotebook = ProdutoMockFactory.createProduto(ID_PRODUTO_NOTEBOOK, DESCRICAO_PRODUTO_NOTEBOOK,
+                QUANTIDADE_PRODUTO_NOTEBOOK, PRECO_CUSTO_PRODUTO_NOTEBOOK, PRECO_VENDA_PRODUTO_NOTEBOOK,
+                OBSERVACAO_PRODUTO_NOTEBOOK, ID_CATEGORIA, NOME_CATEGORIA_TECNOLOGIA);
+        final Produto produtoMonitor  = ProdutoMockFactory.createProduto(ID_PRODUTO_MONITOR, DESCRICAO_PRODUTO_MONITOR,
+                QUANTIDADE_PRODUTO_MONITOR, PRECO_CUSTO_PRODUTO_MONITOR, PRECO_VENDA_PRODUTO_MONITOR,
+                OBSERVACAO_PRODUTO_MONITOR, ID_CATEGORIA, NOME_CATEGORIA_TECNOLOGIA);
         List<Produto> produtoList = Arrays.asList(produtoNotebook, produtoMonitor);
 
         when(this.produtoServiceMock.listarTodos(ID_CATEGORIA)).thenReturn(produtoList);
@@ -103,16 +105,17 @@ public class ProdutoControllerTest {
     @Test
     public void listarPorCodigoECategoriaRetornoSucesso_HttpStatus_200() throws Exception {
         // Create Categoria
-        final Categoria categoriaTecnologia = createCategoria();
+        final Categoria categoriaTecnologia =
+                CategoriaMockFactory.createCategoria(ID_CATEGORIA, NOME_CATEGORIA_TECNOLOGIA);
         // Create ProdutoResponseDTO
         final ProdutoResponseDTO produtoResponseDTO =
-                createProdutoResposeDTO(ID_PRODUTO_NOTEBOOK, DESCRICAO_PRODUTO_NOTEBOOK,
-                        QUANTIDADE_PRODUTO_NOTEBOOK, PRECO_CUSTO_PRODUTO_NOTEBOOK,
-                        PRECO_VENDA_PRODUTO_NOTEBOOK, OBSERVACAO_PRODUTO_NOTEBOOK);
+                ProdutoMockFactory.createProdutoResposeDTO(ID_PRODUTO_NOTEBOOK, DESCRICAO_PRODUTO_NOTEBOOK,
+                        QUANTIDADE_PRODUTO_NOTEBOOK, PRECO_CUSTO_PRODUTO_NOTEBOOK, PRECO_VENDA_PRODUTO_NOTEBOOK,
+                        OBSERVACAO_PRODUTO_NOTEBOOK, ID_CATEGORIA, NOME_CATEGORIA_TECNOLOGIA);
         // Create Produto
-        final Produto produto = createProduto(ID_PRODUTO_NOTEBOOK, DESCRICAO_PRODUTO_NOTEBOOK,
-                QUANTIDADE_PRODUTO_NOTEBOOK, PRECO_CUSTO_PRODUTO_NOTEBOOK,
-                PRECO_VENDA_PRODUTO_NOTEBOOK, OBSERVACAO_PRODUTO_NOTEBOOK);
+        final Produto produto = ProdutoMockFactory.createProduto(ID_PRODUTO_NOTEBOOK, DESCRICAO_PRODUTO_NOTEBOOK,
+                QUANTIDADE_PRODUTO_NOTEBOOK, PRECO_CUSTO_PRODUTO_NOTEBOOK, PRECO_VENDA_PRODUTO_NOTEBOOK,
+                OBSERVACAO_PRODUTO_NOTEBOOK, ID_CATEGORIA, NOME_CATEGORIA_TECNOLOGIA);
 
         when(this.produtoServiceMock.buscaPorCodigoProduto(ID_PRODUTO_NOTEBOOK, ID_CATEGORIA))
                 .thenReturn(Optional.of(produto));
@@ -130,12 +133,13 @@ public class ProdutoControllerTest {
     @Test
     public void listarPorCodigoECategoriaRetornoErroNotFound_HttpStatus_404() throws Exception {
         // Create Categoria
-        final Categoria categoriaTecnologia = createCategoria();
+        final Categoria categoriaTecnologia =
+                CategoriaMockFactory.createCategoria(ID_CATEGORIA, NOME_CATEGORIA_TECNOLOGIA);
         // Create ProdutoResponseDTO
         final ProdutoResponseDTO produtoResponseDTO =
-                createProdutoResposeDTO(ID_PRODUTO_NOTEBOOK, DESCRICAO_PRODUTO_NOTEBOOK,
-                        QUANTIDADE_PRODUTO_NOTEBOOK, PRECO_CUSTO_PRODUTO_NOTEBOOK,
-                        PRECO_VENDA_PRODUTO_NOTEBOOK, OBSERVACAO_PRODUTO_NOTEBOOK);
+                ProdutoMockFactory.createProdutoResposeDTO(ID_PRODUTO_NOTEBOOK, DESCRICAO_PRODUTO_NOTEBOOK,
+                        QUANTIDADE_PRODUTO_NOTEBOOK, PRECO_CUSTO_PRODUTO_NOTEBOOK, PRECO_VENDA_PRODUTO_NOTEBOOK,
+                        OBSERVACAO_PRODUTO_NOTEBOOK, ID_CATEGORIA, NOME_CATEGORIA_TECNOLOGIA);
 
         when(this.produtoServiceMock.buscaPorCodigoProduto(ID_PRODUTO_NOTEBOOK, ID_CATEGORIA))
                 .thenReturn(Optional.empty());
@@ -153,18 +157,21 @@ public class ProdutoControllerTest {
     @Test
     public void salvarProdutoSucesso() throws Exception {
         // Create Categoria
-        final Categoria categoriaTecnologia = createCategoria();
+        final Categoria categoriaTecnologia =
+                CategoriaMockFactory.createCategoria(ID_CATEGORIA, NOME_CATEGORIA_TECNOLOGIA);
         // Create ProdutoResponseDTO
         final ProdutoResponseDTO produtoResponseDTO =
-                createProdutoResposeDTO(ID_PRODUTO_NOTEBOOK, DESCRICAO_PRODUTO_NOTEBOOK,
-                        QUANTIDADE_PRODUTO_NOTEBOOK, PRECO_CUSTO_PRODUTO_NOTEBOOK,
-                        PRECO_VENDA_PRODUTO_NOTEBOOK, OBSERVACAO_PRODUTO_NOTEBOOK);
+                ProdutoMockFactory.createProdutoResposeDTO(ID_PRODUTO_NOTEBOOK, DESCRICAO_PRODUTO_NOTEBOOK,
+                        QUANTIDADE_PRODUTO_NOTEBOOK, PRECO_CUSTO_PRODUTO_NOTEBOOK, PRECO_VENDA_PRODUTO_NOTEBOOK,
+                        OBSERVACAO_PRODUTO_NOTEBOOK, ID_CATEGORIA, NOME_CATEGORIA_TECNOLOGIA);
         // Create Produto
-        final Produto produto = createProduto(ID_PRODUTO_NOTEBOOK, DESCRICAO_PRODUTO_NOTEBOOK,
-                QUANTIDADE_PRODUTO_NOTEBOOK, PRECO_CUSTO_PRODUTO_NOTEBOOK,
-                PRECO_VENDA_PRODUTO_NOTEBOOK, OBSERVACAO_PRODUTO_NOTEBOOK);
+        final Produto produto =
+                ProdutoMockFactory.createProduto(ID_PRODUTO_NOTEBOOK, DESCRICAO_PRODUTO_NOTEBOOK,
+                        QUANTIDADE_PRODUTO_NOTEBOOK, PRECO_CUSTO_PRODUTO_NOTEBOOK, PRECO_VENDA_PRODUTO_NOTEBOOK,
+                        OBSERVACAO_PRODUTO_NOTEBOOK, ID_CATEGORIA, NOME_CATEGORIA_TECNOLOGIA);
         // Create ProdutoRequestDTO
-        final ProdutoRequestDTO produtoRequestDTO = createProdutoRequestDTO(DESCRICAO_PRODUTO_NOTEBOOK,
+        final ProdutoRequestDTO produtoRequestDTO =
+                ProdutoMockFactory.createProdutoRequestDTO(DESCRICAO_PRODUTO_NOTEBOOK,
                 QUANTIDADE_PRODUTO_NOTEBOOK, PRECO_CUSTO_PRODUTO_NOTEBOOK,
                 PRECO_VENDA_PRODUTO_NOTEBOOK, OBSERVACAO_PRODUTO_NOTEBOOK);
 
@@ -187,23 +194,26 @@ public class ProdutoControllerTest {
         String descricaoProdutoAtualizado = "Notebook Atualizado";
 
         // Create Categoria
-        final Categoria categoriaTecnologia = createCategoria();
+        final Categoria categoriaTecnologia = CategoriaMockFactory.createCategoria(ID_CATEGORIA, NOME_CATEGORIA_TECNOLOGIA);
         // Create ProdutoResponseDTO
         final ProdutoResponseDTO produtoResponseDTO =
-                createProdutoResposeDTO(ID_PRODUTO_NOTEBOOK, descricaoProdutoAtualizado,
+                ProdutoMockFactory.createProdutoResposeDTO(ID_PRODUTO_NOTEBOOK, descricaoProdutoAtualizado,
+                        QUANTIDADE_PRODUTO_NOTEBOOK, PRECO_CUSTO_PRODUTO_NOTEBOOK, PRECO_VENDA_PRODUTO_NOTEBOOK,
+                        OBSERVACAO_PRODUTO_NOTEBOOK, ID_CATEGORIA, NOME_CATEGORIA_TECNOLOGIA);
+        // Create Produto
+        final Produto produto =
+                ProdutoMockFactory.createProduto(ID_PRODUTO_NOTEBOOK, DESCRICAO_PRODUTO_NOTEBOOK,
+                        QUANTIDADE_PRODUTO_NOTEBOOK, PRECO_CUSTO_PRODUTO_NOTEBOOK, PRECO_VENDA_PRODUTO_NOTEBOOK,
+                        OBSERVACAO_PRODUTO_NOTEBOOK, ID_CATEGORIA, NOME_CATEGORIA_TECNOLOGIA);
+        final Produto produtoAtualizado =
+                ProdutoMockFactory.createProduto(ID_PRODUTO_NOTEBOOK, descricaoProdutoAtualizado,
+                        QUANTIDADE_PRODUTO_NOTEBOOK, PRECO_CUSTO_PRODUTO_NOTEBOOK, PRECO_VENDA_PRODUTO_NOTEBOOK,
+                        OBSERVACAO_PRODUTO_NOTEBOOK, ID_CATEGORIA, NOME_CATEGORIA_TECNOLOGIA);
+        // Create ProdutoRequestDTO
+        final ProdutoRequestDTO produtoRequestDTO =
+                ProdutoMockFactory.createProdutoRequestDTO(descricaoProdutoAtualizado,
                         QUANTIDADE_PRODUTO_NOTEBOOK, PRECO_CUSTO_PRODUTO_NOTEBOOK,
                         PRECO_VENDA_PRODUTO_NOTEBOOK, OBSERVACAO_PRODUTO_NOTEBOOK);
-        // Create Produto
-        final Produto produto = createProduto(ID_PRODUTO_NOTEBOOK, DESCRICAO_PRODUTO_NOTEBOOK,
-                QUANTIDADE_PRODUTO_NOTEBOOK, PRECO_CUSTO_PRODUTO_NOTEBOOK,
-                PRECO_VENDA_PRODUTO_NOTEBOOK, OBSERVACAO_PRODUTO_NOTEBOOK);
-        final Produto produtoAtualizado = createProduto(ID_PRODUTO_NOTEBOOK, descricaoProdutoAtualizado,
-                QUANTIDADE_PRODUTO_NOTEBOOK, PRECO_CUSTO_PRODUTO_NOTEBOOK,
-                PRECO_VENDA_PRODUTO_NOTEBOOK, OBSERVACAO_PRODUTO_NOTEBOOK);
-        // Create ProdutoRequestDTO
-        final ProdutoRequestDTO produtoRequestDTO = createProdutoRequestDTO(descricaoProdutoAtualizado,
-                QUANTIDADE_PRODUTO_NOTEBOOK, PRECO_CUSTO_PRODUTO_NOTEBOOK,
-                PRECO_VENDA_PRODUTO_NOTEBOOK, OBSERVACAO_PRODUTO_NOTEBOOK);
 
         doReturn(produtoAtualizado)
                 .when(produtoServiceMock).atualizar(ID_CATEGORIA, ID_PRODUTO_NOTEBOOK,
@@ -223,11 +233,12 @@ public class ProdutoControllerTest {
     @Test
     public void deletarProdutoSucesso() throws Exception {
         // Create Categoria
-        final Categoria categoriaTecnologia = createCategoria();
+        final Categoria categoriaTecnologia = CategoriaMockFactory.createCategoria(ID_CATEGORIA, NOME_CATEGORIA_TECNOLOGIA);
         // Create Produto
-        final Produto produto = createProduto(ID_PRODUTO_NOTEBOOK, DESCRICAO_PRODUTO_NOTEBOOK,
-                QUANTIDADE_PRODUTO_NOTEBOOK, PRECO_CUSTO_PRODUTO_NOTEBOOK,
-                PRECO_VENDA_PRODUTO_NOTEBOOK, OBSERVACAO_PRODUTO_NOTEBOOK);
+        final Produto produto =
+                ProdutoMockFactory.createProduto(ID_PRODUTO_NOTEBOOK, DESCRICAO_PRODUTO_NOTEBOOK,
+                        QUANTIDADE_PRODUTO_NOTEBOOK, PRECO_CUSTO_PRODUTO_NOTEBOOK, PRECO_VENDA_PRODUTO_NOTEBOOK,
+                        OBSERVACAO_PRODUTO_NOTEBOOK, ID_CATEGORIA, NOME_CATEGORIA_TECNOLOGIA);
 
         mvc.perform(delete(String.format(DELETE_PRODUTO_DELETAR_PATH,
                                          categoriaTecnologia.getCodigo(), produto.getCodigo()))
@@ -236,51 +247,6 @@ public class ProdutoControllerTest {
                 .andReturn();
 
         verify(produtoServiceMock, times(1)).deletar(anyLong(), anyLong());
-    }
-
-    private CategoriaResponseDTO createCategoriaResponseDTO() {
-        return new CategoriaResponseDTO(ID_CATEGORIA, NOME_CATEGORIA_TECNOLOGIA);
-    }
-
-    private Categoria createCategoria() {
-        Categoria categoriaCriada = new Categoria();
-        categoriaCriada.setCodigo(ID_CATEGORIA);
-        categoriaCriada.setNome(NOME_CATEGORIA_TECNOLOGIA);
-        return  categoriaCriada;
-    }
-
-    private ProdutoResponseDTO createProdutoResposeDTO(Long codigo, String descricao, Integer quantidade,
-                                                       BigDecimal precoCusto, BigDecimal precoVenda,
-                                                       String observacao) {
-        return new ProdutoResponseDTO(codigo, descricao, quantidade, precoCusto, precoVenda, observacao,
-                createCategoriaResponseDTO());
-    }
-
-    private ProdutoRequestDTO createProdutoRequestDTO(String descricao, Integer quantidade,
-                                                      BigDecimal precoCusto, BigDecimal precoVenda,
-                                                      String observacao) {
-        ProdutoRequestDTO produtoRequestDTO = new ProdutoRequestDTO();
-        produtoRequestDTO.setDescricao(descricao);
-        produtoRequestDTO.setQuantidade(quantidade);
-        produtoRequestDTO.setPrecoCusto(precoCusto);
-        produtoRequestDTO.setPrecoVenda(precoVenda);
-        produtoRequestDTO.setObservacao(observacao);
-
-        return produtoRequestDTO;
-    }
-
-    private Produto createProduto(Long codigo, String descricao, Integer quantidade,
-                                  BigDecimal precoCusto, BigDecimal precoVenda,
-                                  String observacao) {
-        Produto produtoCriado = new Produto();
-        produtoCriado.setCodigo(codigo);
-        produtoCriado.setDescricao(descricao);
-        produtoCriado.setQuantidade(quantidade);
-        produtoCriado.setPrecoCusto(precoCusto);
-        produtoCriado.setPrecoVenda(precoVenda);
-        produtoCriado.setObservacao(observacao);
-        produtoCriado.setCategoria(createCategoria());
-        return  produtoCriado;
     }
 
     private String createProdutoJSON(ProdutoResponseDTO produtoResponseDTO) {

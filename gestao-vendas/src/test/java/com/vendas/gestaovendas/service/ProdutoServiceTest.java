@@ -3,6 +3,8 @@ package com.vendas.gestaovendas.service;
 import com.vendas.gestaovendas.entity.Categoria;
 import com.vendas.gestaovendas.entity.Produto;
 import com.vendas.gestaovendas.exception.RegraNegocioException;
+import com.vendas.gestaovendas.factory.CategoriaMockFactory;
+import com.vendas.gestaovendas.factory.ProdutoMockFactory;
 import com.vendas.gestaovendas.repository.ProdutoRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,8 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -52,12 +54,16 @@ public class ProdutoServiceTest {
 
     @Test
     public void listarTodosProdutosTest() {
-        Categoria categoria = createCategoria(ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA);
+        Categoria categoria = CategoriaMockFactory.createCategoria(ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA);
 
-        Produto produto1 = createProduto(ID_PRODUTO_1, DESCRICAO_PRODUTO_1, QUANTIDADE_PRODUTO_1, PRECO_CUSTO_PRODUTO_1,
-                PRECO_VENDA_PRODUTO_1, OBSERVACAO_PRODUTO_1, categoria);
-        Produto produto2 = createProduto(ID_PRODUTO_2, DESCRICAO_PRODUTO_2, QUANTIDADE_PRODUTO_2, PRECO_CUSTO_PRODUTO_2,
-                PRECO_VENDA_PRODUTO_2, OBSERVACAO_PRODUTO_2, categoria);
+        Produto produto1 =
+                ProdutoMockFactory.createProduto(ID_PRODUTO_1, DESCRICAO_PRODUTO_1, QUANTIDADE_PRODUTO_1,
+                        PRECO_CUSTO_PRODUTO_1, PRECO_VENDA_PRODUTO_1, OBSERVACAO_PRODUTO_1,
+                        ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA);
+        Produto produto2 =
+                ProdutoMockFactory.createProduto(ID_PRODUTO_2, DESCRICAO_PRODUTO_2, QUANTIDADE_PRODUTO_2,
+                        PRECO_CUSTO_PRODUTO_2, PRECO_VENDA_PRODUTO_2, OBSERVACAO_PRODUTO_2,
+                        ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA);
 
         List<Produto> produtoList = new ArrayList<>();
         produtoList.add(produto1);
@@ -90,10 +96,12 @@ public class ProdutoServiceTest {
 
     @Test
     public void buscaPorCodigoProdutoTest() {
-        Categoria categoria = createCategoria(ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA);
+        Categoria categoria =  CategoriaMockFactory.createCategoria(ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA);
 
-        Produto produto = createProduto(ID_PRODUTO_1, DESCRICAO_PRODUTO_1, QUANTIDADE_PRODUTO_1, PRECO_CUSTO_PRODUTO_1,
-                PRECO_VENDA_PRODUTO_1, OBSERVACAO_PRODUTO_1, categoria);
+        Produto produto =
+                ProdutoMockFactory.createProduto(ID_PRODUTO_1, DESCRICAO_PRODUTO_1, QUANTIDADE_PRODUTO_1,
+                        PRECO_CUSTO_PRODUTO_1, PRECO_VENDA_PRODUTO_1, OBSERVACAO_PRODUTO_1,
+                        ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA);
 
         doReturn(Optional.of(produto)).when(produtoRepositoryMock).buscaPorCodigoProduto(ID_PRODUTO_1, ID_CATEGORIA_1);
 
@@ -113,10 +121,12 @@ public class ProdutoServiceTest {
 
     @Test
     public void salvarProdutoTest() {
-        Categoria categoria = createCategoria(ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA);
+        Categoria categoria =  CategoriaMockFactory.createCategoria(ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA);
 
-        Produto produto = createProduto(ID_PRODUTO_1, DESCRICAO_PRODUTO_1, QUANTIDADE_PRODUTO_1, PRECO_CUSTO_PRODUTO_1,
-                PRECO_VENDA_PRODUTO_1, OBSERVACAO_PRODUTO_1, categoria);
+        Produto produto =
+                ProdutoMockFactory.createProduto(ID_PRODUTO_1, DESCRICAO_PRODUTO_1, QUANTIDADE_PRODUTO_1,
+                        PRECO_CUSTO_PRODUTO_1, PRECO_VENDA_PRODUTO_1, OBSERVACAO_PRODUTO_1,
+                        ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA);
 
         doReturn(Optional.of(categoria)).when(categoriaServiceMock).buscarPorCodigo(ID_CATEGORIA_1);
         doReturn(Optional.of(produto)).when(produtoRepositoryMock)
@@ -142,10 +152,12 @@ public class ProdutoServiceTest {
 
     @Test
     public void erroSalvarProdutoCategoriaNulaTest() {
-        Categoria categoria = createCategoria(ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA);
+        Categoria categoria =  CategoriaMockFactory.createCategoria(ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA);
 
-        Produto produto = createProduto(ID_PRODUTO_1, DESCRICAO_PRODUTO_1, QUANTIDADE_PRODUTO_1, PRECO_CUSTO_PRODUTO_1,
-                PRECO_VENDA_PRODUTO_1, OBSERVACAO_PRODUTO_1, categoria);
+        Produto produto =
+                ProdutoMockFactory.createProduto(ID_PRODUTO_1, DESCRICAO_PRODUTO_1, QUANTIDADE_PRODUTO_1,
+                        PRECO_CUSTO_PRODUTO_1, PRECO_VENDA_PRODUTO_1, OBSERVACAO_PRODUTO_1,
+                        ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA);
 
         assertThrows(RegraNegocioException.class, () -> produtoService.salvar(null, produto));
 
@@ -155,10 +167,12 @@ public class ProdutoServiceTest {
     @Test
     public void erroSalvarProdutoCategoriaInexistenteTest() {
         Long codigoCategoriaInexistente = 3L;
-        Categoria categoria = createCategoria(ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA);
+        Categoria categoria =  CategoriaMockFactory.createCategoria(ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA);
 
-        Produto produto = createProduto(ID_PRODUTO_1, DESCRICAO_PRODUTO_1, QUANTIDADE_PRODUTO_1, PRECO_CUSTO_PRODUTO_1,
-                PRECO_VENDA_PRODUTO_1, OBSERVACAO_PRODUTO_1, categoria);
+        Produto produto =
+                ProdutoMockFactory.createProduto(ID_PRODUTO_1, DESCRICAO_PRODUTO_1, QUANTIDADE_PRODUTO_1,
+                        PRECO_CUSTO_PRODUTO_1, PRECO_VENDA_PRODUTO_1, OBSERVACAO_PRODUTO_1,
+                        ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA);
 
         assertThrows(RegraNegocioException.class, () -> produtoService.salvar(codigoCategoriaInexistente, produto));
 
@@ -168,12 +182,16 @@ public class ProdutoServiceTest {
 
     @Test
     public void erroSalvarProdutoDuplicadoTest() {
-        Categoria categoria = createCategoria(ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA);
+        Categoria categoria = CategoriaMockFactory.createCategoria(ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA);
 
-        Produto produtoExistente = createProduto(ID_PRODUTO_1, DESCRICAO_PRODUTO_1, QUANTIDADE_PRODUTO_1,
-                PRECO_CUSTO_PRODUTO_1, PRECO_VENDA_PRODUTO_1, OBSERVACAO_PRODUTO_1, categoria);
-        Produto produtoNovo = createProduto(ID_PRODUTO_2, DESCRICAO_PRODUTO_1, QUANTIDADE_PRODUTO_1,
-                PRECO_CUSTO_PRODUTO_1, PRECO_VENDA_PRODUTO_1, OBSERVACAO_PRODUTO_1, categoria);
+        Produto produtoExistente =
+                ProdutoMockFactory.createProduto(ID_PRODUTO_1, DESCRICAO_PRODUTO_1, QUANTIDADE_PRODUTO_1,
+                        PRECO_CUSTO_PRODUTO_1, PRECO_VENDA_PRODUTO_1, OBSERVACAO_PRODUTO_1,
+                        ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA);
+        Produto produtoNovo =
+                ProdutoMockFactory.createProduto(ID_PRODUTO_2, DESCRICAO_PRODUTO_1, QUANTIDADE_PRODUTO_1,
+                        PRECO_CUSTO_PRODUTO_1, PRECO_VENDA_PRODUTO_1, OBSERVACAO_PRODUTO_1,
+                        ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA);
 
         doReturn(Optional.of(categoria)).when(categoriaServiceMock).buscarPorCodigo(ID_CATEGORIA_1);
         doReturn(Optional.of(produtoExistente)).when(produtoRepositoryMock)
@@ -189,10 +207,12 @@ public class ProdutoServiceTest {
 
     @Test
     public void atualizarProdutoTest() {
-        Categoria categoria = createCategoria(ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA);
+        Categoria categoria =  CategoriaMockFactory.createCategoria(ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA);
 
-        Produto produto = createProduto(ID_PRODUTO_1, DESCRICAO_PRODUTO_1, QUANTIDADE_PRODUTO_1, PRECO_CUSTO_PRODUTO_1,
-                PRECO_VENDA_PRODUTO_1, OBSERVACAO_PRODUTO_1, categoria);
+        Produto produto =
+                ProdutoMockFactory.createProduto(ID_PRODUTO_1, DESCRICAO_PRODUTO_1, QUANTIDADE_PRODUTO_1,
+                        PRECO_CUSTO_PRODUTO_1, PRECO_VENDA_PRODUTO_1, OBSERVACAO_PRODUTO_1,
+                        ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA);
 
         doReturn(Optional.of(produto)).when(produtoRepositoryMock).buscaPorCodigoProduto(ID_PRODUTO_1, ID_CATEGORIA_1);
         doReturn(Optional.of(categoria)).when(categoriaServiceMock).buscarPorCodigo(ID_CATEGORIA_1);
@@ -220,10 +240,12 @@ public class ProdutoServiceTest {
 
     @Test
     public void erroAtualizarProdutoInexistenteTest() {
-        Categoria categoria = createCategoria(ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA);
+        Categoria categoria =  CategoriaMockFactory.createCategoria(ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA);
 
-        Produto produto = createProduto(ID_PRODUTO_1, DESCRICAO_PRODUTO_1, QUANTIDADE_PRODUTO_1, PRECO_CUSTO_PRODUTO_1,
-                PRECO_VENDA_PRODUTO_1, OBSERVACAO_PRODUTO_1, categoria);
+        Produto produto =
+                ProdutoMockFactory.createProduto(ID_PRODUTO_1, DESCRICAO_PRODUTO_1, QUANTIDADE_PRODUTO_1,
+                        PRECO_CUSTO_PRODUTO_1, PRECO_VENDA_PRODUTO_1, OBSERVACAO_PRODUTO_1,
+                        ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA);
 
         doReturn(Optional.empty())
                 .when(produtoRepositoryMock).buscaPorCodigoProduto(ID_PRODUTO_1, ID_CATEGORIA_1);
@@ -237,10 +259,12 @@ public class ProdutoServiceTest {
 
     @Test
     public void erroAlterarProdutoCategoriaNulaTest() {
-        createCategoria(ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA);
+        CategoriaMockFactory.createCategoria(ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA);
 
-        Produto produto = createProduto(ID_PRODUTO_1, DESCRICAO_PRODUTO_1, QUANTIDADE_PRODUTO_1, PRECO_CUSTO_PRODUTO_1,
-                PRECO_VENDA_PRODUTO_1, OBSERVACAO_PRODUTO_1, new Categoria());
+        Produto produto =
+                ProdutoMockFactory.createProduto(ID_PRODUTO_1, DESCRICAO_PRODUTO_1, QUANTIDADE_PRODUTO_1,
+                        PRECO_CUSTO_PRODUTO_1, PRECO_VENDA_PRODUTO_1, OBSERVACAO_PRODUTO_1,
+                        ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA);
 
         doReturn(Optional.of(produto))
                 .when(produtoRepositoryMock).buscaPorCodigoProduto(ID_PRODUTO_1, null);
@@ -255,10 +279,11 @@ public class ProdutoServiceTest {
     @Test
     public void erroAlterarProdutoCategoriaInexistenteTest() {
         Long codigoCategoriaInexistente = 3L;
-        createCategoria(ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA);
+        CategoriaMockFactory.createCategoria(ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA);
 
-        Produto produto = createProduto(ID_PRODUTO_1, DESCRICAO_PRODUTO_1, QUANTIDADE_PRODUTO_1, PRECO_CUSTO_PRODUTO_1,
-                PRECO_VENDA_PRODUTO_1, OBSERVACAO_PRODUTO_1, new Categoria(codigoCategoriaInexistente));
+        Produto produto = ProdutoMockFactory.createProduto(ID_PRODUTO_1, DESCRICAO_PRODUTO_1, QUANTIDADE_PRODUTO_1,
+                PRECO_CUSTO_PRODUTO_1, PRECO_VENDA_PRODUTO_1, OBSERVACAO_PRODUTO_1,
+                codigoCategoriaInexistente, NOME_CATEGORIA_TECNOLOGIA);
 
         doReturn(Optional.of(produto))
                 .when(produtoRepositoryMock).buscaPorCodigoProduto(ID_PRODUTO_1, codigoCategoriaInexistente);
@@ -275,10 +300,12 @@ public class ProdutoServiceTest {
 
     @Test
     public void deletarProdutoTest() {
-        Categoria categoria = createCategoria(ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA);
+        Categoria categoria =  CategoriaMockFactory.createCategoria(ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA);
 
-        Produto produto = createProduto(ID_PRODUTO_1, DESCRICAO_PRODUTO_1, QUANTIDADE_PRODUTO_1, PRECO_CUSTO_PRODUTO_1,
-                PRECO_VENDA_PRODUTO_1, OBSERVACAO_PRODUTO_1, categoria);
+        Produto produto =
+                ProdutoMockFactory.createProduto(ID_PRODUTO_1, DESCRICAO_PRODUTO_1, QUANTIDADE_PRODUTO_1,
+                        PRECO_CUSTO_PRODUTO_1, PRECO_VENDA_PRODUTO_1, OBSERVACAO_PRODUTO_1,
+                        ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA);
 
         doReturn(Optional.of(produto))
                 .when(produtoRepositoryMock).buscaPorCodigoProduto(ID_PRODUTO_1, ID_CATEGORIA_1);
@@ -291,10 +318,10 @@ public class ProdutoServiceTest {
     @Test
     public void erroDeletarProdutoInexistenteTest() {
         Long codigoCategoriaInexistente = 3L;
-        Categoria categoria = createCategoria(ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA);
+        Categoria categoria =  CategoriaMockFactory.createCategoria(ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA);
 
-        createProduto(ID_PRODUTO_1, DESCRICAO_PRODUTO_1, QUANTIDADE_PRODUTO_1, PRECO_CUSTO_PRODUTO_1,
-                PRECO_VENDA_PRODUTO_1, OBSERVACAO_PRODUTO_1, categoria);
+        ProdutoMockFactory.createProduto(ID_PRODUTO_1, DESCRICAO_PRODUTO_1, QUANTIDADE_PRODUTO_1, PRECO_CUSTO_PRODUTO_1,
+                PRECO_VENDA_PRODUTO_1, OBSERVACAO_PRODUTO_1, ID_CATEGORIA_1, NOME_CATEGORIA_TECNOLOGIA);
 
         doReturn(Optional.empty())
                 .when(produtoRepositoryMock).buscaPorCodigoProduto(ID_PRODUTO_1, codigoCategoriaInexistente);
@@ -303,26 +330,5 @@ public class ProdutoServiceTest {
                 produtoService.deletar(codigoCategoriaInexistente, ID_PRODUTO_1));
 
         verify(produtoRepositoryMock, never()).delete(any());
-    }
-
-
-    private Categoria createCategoria(Long codCategoria, String nome) {
-        Categoria categoriaCriada = new Categoria();
-        categoriaCriada.setCodigo(codCategoria);
-        categoriaCriada.setNome(nome);
-        return  categoriaCriada;
-    }
-
-    private Produto createProduto(Long codProduto, String descricao, Integer quantidade, BigDecimal precoCusto,
-                                  BigDecimal precoVenda, String observacao, Categoria categoria) {
-        Produto produtoCriado = new Produto();
-        produtoCriado.setCodigo(codProduto);
-        produtoCriado.setDescricao(descricao);
-        produtoCriado.setQuantidade(quantidade);
-        produtoCriado.setPrecoCusto(precoCusto);
-        produtoCriado.setPrecoVenda(precoVenda);
-        produtoCriado.setObservacao(observacao);
-        produtoCriado.setCategoria(categoria);
-        return  produtoCriado;
     }
 }
