@@ -6,7 +6,7 @@ import com.vendas.gestaovendas.entity.Produto;
 
 import java.math.BigDecimal;
 
-public class ProdutoMockFactory {
+public abstract class ProdutoMockFactory {
 
     public static ProdutoResponseDTO createProdutoResposeDTO(Long codigo, String descricao, Integer quantidade,
                                                        BigDecimal precoCusto, BigDecimal precoVenda,

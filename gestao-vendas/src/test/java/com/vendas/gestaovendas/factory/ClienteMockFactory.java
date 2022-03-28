@@ -3,7 +3,7 @@ package com.vendas.gestaovendas.factory;
 import com.vendas.gestaovendas.dto.cliente.model.ClienteResponseDTO;
 import com.vendas.gestaovendas.entity.Cliente;
 
-public class ClienteMockFactory {
+public abstract class ClienteMockFactory {
 
     public static Cliente createCliente(Long codigo, String nome, String telefone, Boolean ativo, String logradouro,
                                   Integer numero, String complemento, String bairro, String cep, String cidade,
