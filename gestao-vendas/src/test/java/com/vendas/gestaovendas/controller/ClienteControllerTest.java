@@ -2,10 +2,13 @@ package com.vendas.gestaovendas.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vendas.gestaovendas.config.ConfigTest;
+import com.vendas.gestaovendas.dto.cliente.mapper.ClienteMapper;
+import com.vendas.gestaovendas.dto.cliente.model.ClienteRequestDTO;
 import com.vendas.gestaovendas.dto.cliente.model.ClienteResponseDTO;
 import com.vendas.gestaovendas.entity.Cliente;
 import com.vendas.gestaovendas.factory.ClienteMockFactory;
 import com.vendas.gestaovendas.service.ClienteService;
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -22,6 +25,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ConfigTest
@@ -29,6 +33,7 @@ public class ClienteControllerTest {
 
     private static final String GET_CLIENTE_LISTAR_TODOS_PATH      = "/cliente";
     private static final String GET_CLIENTE_LISTAR_POR_CODIGO_PATH = "/cliente/%s";
+    private static final String POST_ClIENTE_SALVAR_PATH           = "/cliente";
 
     private static final Long    COD_CLIENTE_1         = 1L;
     private static final String  NOME_CLIENTE_1        = "Tony Stark";
@@ -130,9 +135,10 @@ public class ClienteControllerTest {
                         BAIRRO_CLIENTE_1, CEP_CLIENTE_1, CIDADE_CLIENTE_1, ESTADO_CLIENTE_1);
 
         // Create List Cliente
-        final Cliente cliente = ClienteMockFactory.createCliente(COD_CLIENTE_1, NOME_CLIENTE_1, TELEFONE_CLIENTE_1,
-                ATIVO_CLIENTE_1, LOGRADOURO_CLIENTE_1, NUMERO_CLIENTE_1, COMPLEMENTO_CLIENTE_1, BAIRRO_CLIENTE_1,
-                CEP_CLIENTE_1, CIDADE_CLIENTE_1, ESTADO_CLIENTE_1);
+        final Cliente cliente =
+                ClienteMockFactory.createCliente(COD_CLIENTE_1, NOME_CLIENTE_1, TELEFONE_CLIENTE_1, ATIVO_CLIENTE_1,
+                        LOGRADOURO_CLIENTE_1, NUMERO_CLIENTE_1, COMPLEMENTO_CLIENTE_1, BAIRRO_CLIENTE_1, CEP_CLIENTE_1,
+                        CIDADE_CLIENTE_1, ESTADO_CLIENTE_1);
 
         when(clienteServiceMock.buscarPorCodigo(COD_CLIENTE_1)).thenReturn(Optional.empty());
 
@@ -143,6 +149,105 @@ public class ClienteControllerTest {
 
         verify(clienteServiceMock, times(1)).buscarPorCodigo(anyLong());
         assertThat(result.getResponse().getContentAsString(), is(""));
+    }
+
+    @Test
+    public void salvarClienteSucesso() throws Exception {
+        // Create ClienteRequestDTO
+        final ClienteRequestDTO createClienteRequestDTO =
+                ClienteMockFactory.createClienteRequestDTO(NOME_CLIENTE_1, TELEFONE_CLIENTE_1, ATIVO_CLIENTE_1,
+                        LOGRADOURO_CLIENTE_1, NUMERO_CLIENTE_1, COMPLEMENTO_CLIENTE_1, BAIRRO_CLIENTE_1, CEP_CLIENTE_1,
+                        CIDADE_CLIENTE_1, ESTADO_CLIENTE_1);
+        // Create Cliente
+        final Cliente cliente =
+                ClienteMockFactory.createCliente(COD_CLIENTE_1, NOME_CLIENTE_1, TELEFONE_CLIENTE_1, ATIVO_CLIENTE_1,
+                        LOGRADOURO_CLIENTE_1, NUMERO_CLIENTE_1, COMPLEMENTO_CLIENTE_1, BAIRRO_CLIENTE_1, CEP_CLIENTE_1,
+                        CIDADE_CLIENTE_1, ESTADO_CLIENTE_1);
+        // Create ClienteResponseDTO
+        final ClienteResponseDTO clienteResponseDTO =
+                ClienteMockFactory.createClienteResponseDTO(COD_CLIENTE_1, NOME_CLIENTE_1, TELEFONE_CLIENTE_1,
+                        ATIVO_CLIENTE_1, LOGRADOURO_CLIENTE_1, NUMERO_CLIENTE_1, COMPLEMENTO_CLIENTE_1,
+                        BAIRRO_CLIENTE_1, CEP_CLIENTE_1, CIDADE_CLIENTE_1, ESTADO_CLIENTE_1);
+
+        when(clienteServiceMock.salvar(ClienteMapper.converterParaEntidade(createClienteRequestDTO)))
+                .thenReturn(cliente);
+
+        final MvcResult result = mvc.perform(post(String.format(POST_ClIENTE_SALVAR_PATH))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(createClienteRequestDTO)))
+                .andExpect(status().isCreated())
+                .andReturn();
+
+        verify(clienteServiceMock, times(1)).salvar(any());
+        assertThat(result.getResponse().getContentAsString(), is(createClienteJSON(clienteResponseDTO)));
+    }
+
+    @Test
+    public void erroSalvarClienteTelefoneFormatoInvalido_ValidationPattern() throws Exception {
+        // Formato Telefone correto (00)00000-0000
+        String telefoneFormatoInvalido = "00000000000";
+
+        // Create ClienteRequestDTO
+        final ClienteRequestDTO createClienteRequestDTO =
+                ClienteMockFactory.createClienteRequestDTO(NOME_CLIENTE_1, telefoneFormatoInvalido, ATIVO_CLIENTE_1,
+                        LOGRADOURO_CLIENTE_1, NUMERO_CLIENTE_1, COMPLEMENTO_CLIENTE_1, BAIRRO_CLIENTE_1, CEP_CLIENTE_1,
+                        CIDADE_CLIENTE_1, ESTADO_CLIENTE_1);
+        // Create Cliente
+        final Cliente cliente =
+                ClienteMockFactory.createCliente(COD_CLIENTE_1, NOME_CLIENTE_1, telefoneFormatoInvalido,
+                        ATIVO_CLIENTE_1, LOGRADOURO_CLIENTE_1, NUMERO_CLIENTE_1, COMPLEMENTO_CLIENTE_1,
+                        BAIRRO_CLIENTE_1, CEP_CLIENTE_1, CIDADE_CLIENTE_1, ESTADO_CLIENTE_1);
+        // Create ClienteResponseDTO
+        final ClienteResponseDTO clienteResponseDTO =
+                ClienteMockFactory.createClienteResponseDTO(COD_CLIENTE_1, NOME_CLIENTE_1, telefoneFormatoInvalido,
+                        ATIVO_CLIENTE_1, LOGRADOURO_CLIENTE_1, NUMERO_CLIENTE_1, COMPLEMENTO_CLIENTE_1,
+                        BAIRRO_CLIENTE_1, CEP_CLIENTE_1, CIDADE_CLIENTE_1, ESTADO_CLIENTE_1);
+
+        when(clienteServiceMock.salvar(ClienteMapper.converterParaEntidade(createClienteRequestDTO)))
+                .thenReturn(cliente);
+
+        final MvcResult result = mvc.perform(post(String.format(POST_ClIENTE_SALVAR_PATH))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(createClienteRequestDTO)))
+                .andExpect(status().isBadRequest())
+                .andReturn();
+
+        Assert.assertTrue(String.valueOf(result.getResponse().getContentAsString()
+                .contains("Telefone está com formato inválido.")), true);
+    }
+
+    @Test
+    public void erroSalvarClienteCepFormatoInvalido_ValidationPattern() throws Exception {
+        // Formato Cep correto 00000-000
+        String cepFormatoInvalido = "00000000";
+
+        // Create ClienteRequestDTO
+        final ClienteRequestDTO createClienteRequestDTO =
+                ClienteMockFactory.createClienteRequestDTO(NOME_CLIENTE_1, TELEFONE_CLIENTE_1, ATIVO_CLIENTE_1,
+                        LOGRADOURO_CLIENTE_1, NUMERO_CLIENTE_1, COMPLEMENTO_CLIENTE_1, BAIRRO_CLIENTE_1,
+                        cepFormatoInvalido, CIDADE_CLIENTE_1, ESTADO_CLIENTE_1);
+        // Create Cliente
+        final Cliente cliente =
+                ClienteMockFactory.createCliente(COD_CLIENTE_1, NOME_CLIENTE_1, TELEFONE_CLIENTE_1,
+                        ATIVO_CLIENTE_1, LOGRADOURO_CLIENTE_1, NUMERO_CLIENTE_1, COMPLEMENTO_CLIENTE_1,
+                        BAIRRO_CLIENTE_1, cepFormatoInvalido, CIDADE_CLIENTE_1, ESTADO_CLIENTE_1);
+        // Create ClienteResponseDTO
+        final ClienteResponseDTO clienteResponseDTO =
+                ClienteMockFactory.createClienteResponseDTO(COD_CLIENTE_1, NOME_CLIENTE_1, TELEFONE_CLIENTE_1,
+                        ATIVO_CLIENTE_1, LOGRADOURO_CLIENTE_1, NUMERO_CLIENTE_1, COMPLEMENTO_CLIENTE_1,
+                        BAIRRO_CLIENTE_1, cepFormatoInvalido, CIDADE_CLIENTE_1, ESTADO_CLIENTE_1);
+
+        when(clienteServiceMock.salvar(ClienteMapper.converterParaEntidade(createClienteRequestDTO)))
+                .thenReturn(cliente);
+
+        final MvcResult result = mvc.perform(post(String.format(POST_ClIENTE_SALVAR_PATH))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(createClienteRequestDTO)))
+                .andExpect(status().isBadRequest())
+                .andReturn();
+
+        Assert.assertTrue(String.valueOf(result.getResponse().getContentAsString()
+                .contains("Cep está com formato inválido.")), true);
     }
 
     private String createClienteJSON(ClienteResponseDTO clienteResponseDTO) {
