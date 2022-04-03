@@ -14,10 +14,12 @@ public class CategoriaMapper {
         return new CategoriaResponseDTO(categoria.getCodigo(), categoria.getNome());
     }
 
+    // Conversor responsável pela conversao dos dados de CategoriaRequestDTO para a entidade Categoria
     public static Categoria converterParaEntidade(CategoriaRequestDTO categoriaRequestDTO) {
         return new Categoria(categoriaRequestDTO.getNome());
     }
 
+    // Conversor responsável pela conversao dos dados de CategoriaRequestDTO para a entidade Categoria
     public static Categoria converterParaEntidade(Long codigo, CategoriaRequestDTO categoriaRequestDTO) {
         return new Categoria(codigo, categoriaRequestDTO.getNome());
     }
