@@ -1,6 +1,5 @@
 package com.vendas.gestaovendas.controller;
 
-import com.vendas.gestaovendas.dto.categoria.mapper.CategoriaMapper;
 import com.vendas.gestaovendas.dto.cliente.mapper.ClienteMapper;
 import com.vendas.gestaovendas.dto.cliente.model.ClienteResponseDTO;
 import com.vendas.gestaovendas.entity.Cliente;
@@ -8,12 +7,11 @@ import com.vendas.gestaovendas.service.ClienteService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -46,6 +44,15 @@ public class ClienteController {
         return optCliente.isPresent()
                 ? ResponseEntity.ok(ClienteMapper.converterParaClienteDTO(optCliente.get()))
                 : ResponseEntity.notFound().build();
+    }
+
+    // POST - localhost:8080/cliente
+    @ApiOperation(value = "Salvar/Criar um Cliente",
+            nickname = "salvarCliente")
+    @PostMapping
+    public ResponseEntity<ClienteResponseDTO> salvar(@Valid @RequestBody Cliente cliente) {
+        Cliente clienteSalvo = clienteService.salvar(cliente);
+        return ResponseEntity.status(HttpStatus.CREATED).body(ClienteMapper.converterParaClienteDTO(clienteSalvo));
     }
 
 }
