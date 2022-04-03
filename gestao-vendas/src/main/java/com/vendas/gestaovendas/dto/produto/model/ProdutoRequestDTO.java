@@ -12,20 +12,20 @@ import java.math.BigDecimal;
 public class ProdutoRequestDTO {
 
     @ApiModelProperty(value = "Descrição")
-    @NotBlank(message= "Descrição")
+    @NotBlank(message = "Descrição")
     @Length(min = 3, max = 100, message = "Descrição")
     private String descricao;
 
     @ApiModelProperty(value = "Quantidade")
-    @NotNull(message= "Quantidade")
+    @NotNull(message = "Quantidade")
     private Integer quantidade;
 
     @ApiModelProperty(value = "Preço de Custo")
-    @NotNull(message= "Preço de Custo")
+    @NotNull(message = "Preço de Custo")
     private BigDecimal precoCusto;
 
     @ApiModelProperty(value = "Preço de Venda")
-    @NotNull(message= "Preço de Venda")
+    @NotNull(message = "Preço de Venda")
     private BigDecimal precoVenda;
 
     @ApiModelProperty(value = "Oservação")

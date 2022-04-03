@@ -25,6 +25,7 @@ public class GestaoVendasExceptionHandler extends ResponseEntityExceptionHandler
     public static final String CONSTANT_VALIDATION_NOT_BLANK = "NotBlank";
     public static final String CONSTANT_VALIDATION_NOT_NULL = "NotNull";
     public static final String CONSTANT_VALIDATION_LENGTH = "Length";
+    public static final String CONSTANT_VALIDATION_PATTERN = "Pattern";
 
     /**
      *  Classe de extensao ResponseEntityExceptionHandler consegue tratar as seguintes classes de erro
@@ -120,6 +121,10 @@ public class GestaoVendasExceptionHandler extends ResponseEntityExceptionHandler
             log.error("Erro na validação do tamanho do campo.");
             return fildError.getDefaultMessage().concat(String.format(" deve ter entre %s e %s caracteres.",
                     fildError.getArguments()[2], fildError.getArguments()[1]));
+        }
+        if (fildError.getCode().equals(CONSTANT_VALIDATION_PATTERN)) {
+            log.error("Erro de validação: campo com formato inválido");
+            return fildError.getDefaultMessage().concat(" está com formato inválido.");
         }
         return fildError.toString();
     }
