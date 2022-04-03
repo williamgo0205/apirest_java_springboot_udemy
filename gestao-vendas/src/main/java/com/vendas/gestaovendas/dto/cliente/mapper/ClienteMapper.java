@@ -1,11 +1,10 @@
 package com.vendas.gestaovendas.dto.cliente.mapper;
 
-import com.vendas.gestaovendas.dto.categoria.mapper.CategoriaMapper;
+import com.vendas.gestaovendas.dto.cliente.model.ClienteRequestDTO;
 import com.vendas.gestaovendas.dto.cliente.model.ClienteResponseDTO;
 import com.vendas.gestaovendas.dto.endereco.model.EnderecoResponseDTO;
-import com.vendas.gestaovendas.dto.produto.model.ProdutoResponseDTO;
 import com.vendas.gestaovendas.entity.Cliente;
-import com.vendas.gestaovendas.entity.Produto;
+import com.vendas.gestaovendas.entity.Endereco;
 
 public class ClienteMapper {
 
@@ -26,5 +25,22 @@ public class ClienteMapper {
                 cliente.getTelefone(),
                 cliente.getAtivo(),
                 enderecoResponseDTO);
+    }
+
+    // Conversor responsavel pela conversao dos dados de ClienteRequestDTO para a Cliente
+    public static Cliente converterParaEntidade(ClienteRequestDTO clienteRequestDTO) {
+        Endereco endereco =
+                new Endereco(clienteRequestDTO.getEnderecoRequestDTO().getLogradouro(),
+                        clienteRequestDTO.getEnderecoRequestDTO().getNumero(),
+                        clienteRequestDTO.getEnderecoRequestDTO().getComplemento(),
+                        clienteRequestDTO.getEnderecoRequestDTO().getBairro(),
+                        clienteRequestDTO.getEnderecoRequestDTO().getCep(),
+                        clienteRequestDTO.getEnderecoRequestDTO().getCidade(),
+                        clienteRequestDTO.getEnderecoRequestDTO().getEstado());
+
+        return new Cliente(clienteRequestDTO.getNome(),
+                clienteRequestDTO.getTelefone(),
+                clienteRequestDTO.getAtivo(),
+                endereco);
     }
 }

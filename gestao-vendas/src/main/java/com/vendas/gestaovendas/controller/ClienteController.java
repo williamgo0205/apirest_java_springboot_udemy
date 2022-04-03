@@ -1,6 +1,7 @@
 package com.vendas.gestaovendas.controller;
 
 import com.vendas.gestaovendas.dto.cliente.mapper.ClienteMapper;
+import com.vendas.gestaovendas.dto.cliente.model.ClienteRequestDTO;
 import com.vendas.gestaovendas.dto.cliente.model.ClienteResponseDTO;
 import com.vendas.gestaovendas.entity.Cliente;
 import com.vendas.gestaovendas.service.ClienteService;
@@ -50,8 +51,8 @@ public class ClienteController {
     @ApiOperation(value = "Salvar/Criar um Cliente",
             nickname = "salvarCliente")
     @PostMapping
-    public ResponseEntity<ClienteResponseDTO> salvar(@Valid @RequestBody Cliente cliente) {
-        Cliente clienteSalvo = clienteService.salvar(cliente);
+    public ResponseEntity<ClienteResponseDTO> salvar(@Valid @RequestBody ClienteRequestDTO clienteRequestDTO) {
+        Cliente clienteSalvo = clienteService.salvar(ClienteMapper.converterParaEntidade(clienteRequestDTO));
         return ResponseEntity.status(HttpStatus.CREATED).body(ClienteMapper.converterParaClienteDTO(clienteSalvo));
     }
 

@@ -7,15 +7,7 @@ public abstract class EnderecoMockFactory {
 
     public static Endereco createEndereco(String logradouro, Integer numero, String complemento, String bairro,
                                           String cep, String cidade, String estado) {
-        Endereco endereco = new Endereco();
-        endereco.setLogradouro(logradouro);
-        endereco.setNumero(numero);
-        endereco.setComplemento(complemento);
-        endereco.setBairro(bairro);
-        endereco.setCep(cep);
-        endereco.setCidade(cidade);
-        endereco.setEstado(estado);
-        return endereco;
+        return new Endereco(logradouro, numero, complemento, bairro, cep, cidade, estado);
     }
 
     public static EnderecoResponseDTO createEnderecoResponseDTO(String logradouro, Integer numero, String complemento,
