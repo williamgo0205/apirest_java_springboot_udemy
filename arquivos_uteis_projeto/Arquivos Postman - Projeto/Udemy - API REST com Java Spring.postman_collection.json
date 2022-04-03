@@ -125,12 +125,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{localhost}}/categoria",
+							"raw": "{{localhost}}/cliente",
 							"host": [
 								"{{localhost}}"
 							],
 							"path": [
-								"categoria"
+								"cliente"
 							]
 						}
 					},
@@ -161,7 +161,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"ativo\": true,\r\n  \"endereco\": {\r\n    \"bairro\": \"Jardim Amanda\",\r\n    \"cep\": \"13188000\",\r\n    \"cidade\": \"Hortolandia\",\r\n    \"complemento\": \"rua\",\r\n    \"estado\": \"SP\",\r\n    \"logradouro\": \"Rua 1\",\r\n    \"numero\": 0\r\n  },\r\n  \"nome\": \"Peter Parker\",\r\n  \"telefone\": \"(19)98765-4321\"\r\n}",
+							"raw": "{\r\n  \"ativo\": true,\r\n  \"enderecoRequestDTO\": {\r\n    \"bairro\": \"Centro\",\r\n    \"cep\": \"13188-560\",\r\n    \"cidade\": \"Campinas\",\r\n    \"estado\": \"SP\",\r\n    \"logradouro\": \"Rua Teste\",\r\n    \"numero\": 789\r\n  },\r\n  \"nome\": \"Will Oliveira\",\r\n  \"telefone\": \"(19)98888-7777\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"

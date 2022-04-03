@@ -80,6 +80,18 @@ https://hub.docker.com/r/grafana/grafana/
 -- A versão mais atual do grafana pode ser obtida em
 https://hub.docker.com/r/grafana/grafana/tags
 
+-- Endereço local grafana
+http://localhost:3000/login
+username: admin
+password: admin
+
+------------------------------------
+-- ## FORMATAÇÃO DE CAMPOS - JAVA --
+------------------------------------
+
+-- regexr
+https://regexr.com/
+
 ----------------------
 -- ## CLONE PROJETO --
 ----------------------
