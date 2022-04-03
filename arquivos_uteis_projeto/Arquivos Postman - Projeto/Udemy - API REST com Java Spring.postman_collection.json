@@ -117,6 +117,72 @@
 			]
 		},
 		{
+			"name": "Cliente",
+			"item": [
+				{
+					"name": "GET localhost:8080/cliente",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{localhost}}/categoria",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"categoria"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET localhost:8080/cliente/{codigo_cliente}",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{localhost}}/cliente/1",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"cliente",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST localhost:8080/cliente",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"ativo\": true,\r\n  \"endereco\": {\r\n    \"bairro\": \"Jardim Amanda\",\r\n    \"cep\": \"13188000\",\r\n    \"cidade\": \"Hortolandia\",\r\n    \"complemento\": \"rua\",\r\n    \"estado\": \"SP\",\r\n    \"logradouro\": \"Rua 1\",\r\n    \"numero\": 0\r\n  },\r\n  \"nome\": \"Peter Parker\",\r\n  \"telefone\": \"(19)98765-4321\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{localhost}}/cliente",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"cliente"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "Produto",
 			"item": [
 				{
@@ -325,46 +391,6 @@
 								"actuator",
 								"metrics",
 								"http.server.requests"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Cliente",
-			"item": [
-				{
-					"name": "GET localhost:8080/cliente",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{localhost}}/categoria",
-							"host": [
-								"{{localhost}}"
-							],
-							"path": [
-								"categoria"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "GET localhost:8080/cliente/{codigo_cliente}",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{localhost}}/cliente/1",
-							"host": [
-								"{{localhost}}"
-							],
-							"path": [
-								"cliente",
-								"1"
 							]
 						}
 					},
