@@ -68,4 +68,12 @@ public class ClienteController {
         return ResponseEntity.ok(ClienteMapper.converterParaClienteDTO(clienteAtualizado));
     }
 
+    // DELETE - localhost:8080/cliente/{codigo}
+    @ApiOperation(value = "Deletar um Cliente",
+            nickname = "deletarCliente")
+    @DeleteMapping("/{codigo}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletar(@PathVariable(name = "codigo") Long codigo) {
+        clienteService.deletar(codigo);
+    }
 }

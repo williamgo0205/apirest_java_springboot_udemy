@@ -33,7 +33,7 @@ public class ClienteService {
         return clienteRepository.save(cliente);
     }
 
-    //Metodo para atualizar de Cliente  no banco de dados
+    //Metodo para atualizar um Cliente  no banco de dados
     public Cliente atualizar(Long codigo, Cliente cliente) {
         Cliente clienteAtualizar = validaClienteExiste(codigo);
         validarClienteDuplicado(cliente);
@@ -45,6 +45,11 @@ public class ClienteService {
 
         // Persiste a entidade no banco de dados
         return clienteRepository.save(clienteAtualizar);
+    }
+
+    //Metodo para deletar um Cliente  no banco de dados
+    public void deletar(Long codigo) {
+        clienteRepository.deleteById(codigo);
     }
 
     private Cliente validaClienteExiste(Long codigo) {
