@@ -43,4 +43,22 @@ public class ClienteMapper {
                 clienteRequestDTO.getAtivo(),
                 endereco);
     }
+
+    // Conversor responsavel pela conversao dos dados de ClienteRequestDTO para a Cliente
+    public static Cliente converterParaEntidade(Long codigo, ClienteRequestDTO clienteRequestDTO) {
+        Endereco endereco =
+                new Endereco(clienteRequestDTO.getEnderecoRequestDTO().getLogradouro(),
+                        clienteRequestDTO.getEnderecoRequestDTO().getNumero(),
+                        clienteRequestDTO.getEnderecoRequestDTO().getComplemento(),
+                        clienteRequestDTO.getEnderecoRequestDTO().getBairro(),
+                        clienteRequestDTO.getEnderecoRequestDTO().getCep(),
+                        clienteRequestDTO.getEnderecoRequestDTO().getCidade(),
+                        clienteRequestDTO.getEnderecoRequestDTO().getEstado());
+
+        return new Cliente(codigo,
+                clienteRequestDTO.getNome(),
+                clienteRequestDTO.getTelefone(),
+                clienteRequestDTO.getAtivo(),
+                endereco);
+    }
 }

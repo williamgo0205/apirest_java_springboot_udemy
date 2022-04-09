@@ -39,7 +39,7 @@ public class ProdutoService {
 
     // Metodo para Atualizar um produto no banco de dados
     public Produto atualizar(Long codigoCategoria, Long codigoProduto, Produto produto) {
-        Produto produtoSalvar = validarSeProdutoExiste(codigoProduto, codigoCategoria);
+        Produto produtoAtualizar = validarSeProdutoExiste(codigoProduto, codigoCategoria);
         validarSeCategoriaDoProdutoExiste(produto.getCategoria().getCodigo());
         validarProdutoDuplicado(produto);
 
@@ -47,10 +47,10 @@ public class ProdutoService {
           > SOURCE = entidade a ser salva (recebida por parametro)
           > TARGET = entidade do banco de dados
           > Terceiro parâmetro = campo que não deve ser modificado nessa acao*/
-        BeanUtils.copyProperties(produto, produtoSalvar, "codigo");
+        BeanUtils.copyProperties(produto, produtoAtualizar, "codigo");
 
         // Persiste a entidade no banco de dados
-        return produtoRepository.save(produtoSalvar);
+        return produtoRepository.save(produtoAtualizar);
     }
 
     // Método para deletar um Produto no banco de dados

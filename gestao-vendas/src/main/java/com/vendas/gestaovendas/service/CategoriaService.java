@@ -33,20 +33,20 @@ public class CategoriaService {
         validarCategoriaDuplicada(categoria);
         return categoriaRepository.save(categoria);
     }
-    
+
     // Método para atualizar a Categoria no banco de dados
     public Categoria atualizar(Long codigo, Categoria categoria){
-        Categoria categoriaSalvar = validarCategoriaExiste(codigo);
+        Categoria categoriaAtualizar = validarCategoriaExiste(codigo);
         validarCategoriaDuplicada(categoria);
 
         /* BeanUtils substitui a entidade recebida via parametro no banco de dados
           > SOURCE = entidade a ser salva (recebida por parametro)
           > TARGET = entidade do banco de dados
           > Terceiro parâmetro = campo que não deve ser modificado nessa acao*/
-        BeanUtils.copyProperties(categoria, categoriaSalvar, "codigo");
+        BeanUtils.copyProperties(categoria, categoriaAtualizar, "codigo");
 
         // Persiste a entidade no banco de dados
-        return categoriaRepository.save(categoriaSalvar);
+        return categoriaRepository.save(categoriaAtualizar);
     }
 
     // Método para deletar a Categoria no banco de dados

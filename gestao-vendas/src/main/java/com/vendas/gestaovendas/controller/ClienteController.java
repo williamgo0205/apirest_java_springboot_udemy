@@ -56,4 +56,16 @@ public class ClienteController {
         return ResponseEntity.status(HttpStatus.CREATED).body(ClienteMapper.converterParaClienteDTO(clienteSalvo));
     }
 
+    // PUT - localhost:8080/cliente/{codigo}
+    @ApiOperation(value = "Atualizar um Cliente",
+            nickname = "atualizarCliente")
+    @PutMapping("/{codigo}")
+    public ResponseEntity<ClienteResponseDTO> atualizar(@PathVariable(name = "codigo") Long codigo,
+                                                        @Valid @RequestBody ClienteRequestDTO clienteRequestDTO) {
+        Cliente clienteAtualizado = clienteService.atualizar(codigo,
+                ClienteMapper.converterParaEntidade(codigo, clienteRequestDTO));
+
+        return ResponseEntity.ok(ClienteMapper.converterParaClienteDTO(clienteAtualizado));
+    }
+
 }
