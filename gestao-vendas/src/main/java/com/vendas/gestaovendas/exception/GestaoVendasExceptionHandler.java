@@ -110,21 +110,21 @@ public class GestaoVendasExceptionHandler extends ResponseEntityExceptionHandler
 
     private String tratarMensagemDeErroParaUsuario(FieldError fildError) {
         if (fildError.getCode().equals(CONSTANT_VALIDATION_NOT_BLANK)) {
-            log.error("Erro de validação: campo obrigatório não informado.");
-            return fildError.getDefaultMessage().concat(" é um campo obrigatório.");
+            log.error("Erro de validacao: campo obrigatorio nao informado.");
+            return fildError.getDefaultMessage().concat(" e um campo obrigatorio.");
         }
         if (fildError.getCode().equals(CONSTANT_VALIDATION_NOT_NULL)) {
-            log.error("Erro de validação: campo obrigatório não pode ser nulo.");
-            return fildError.getDefaultMessage().concat(" é um campo obrigatório.");
+            log.error("Erro de validacao: campo obrigatorio nao pode ser nulo.");
+            return fildError.getDefaultMessage().concat(" e um campo obrigatorio.");
         }
         if (fildError.getCode().equals(CONSTANT_VALIDATION_LENGTH)) {
-            log.error("Erro na validação do tamanho do campo.");
+            log.error("Erro na validacao do tamanho do campo.");
             return fildError.getDefaultMessage().concat(String.format(" deve ter entre %s e %s caracteres.",
                     fildError.getArguments()[2], fildError.getArguments()[1]));
         }
         if (fildError.getCode().equals(CONSTANT_VALIDATION_PATTERN)) {
-            log.error("Erro de validação: campo com formato inválido");
-            return fildError.getDefaultMessage().concat(" está com formato inválido.");
+            log.error("Erro de validacao: campo com formato invalido");
+            return fildError.getDefaultMessage().concat(" esta com formato invalido.");
         }
         return fildError.toString();
     }

@@ -1,18 +1,15 @@
 package com.vendas.gestaovendas.service;
 
-import com.vendas.gestaovendas.entity.Categoria;
 import com.vendas.gestaovendas.entity.Cliente;
-import com.vendas.gestaovendas.entity.Produto;
 import com.vendas.gestaovendas.exception.RegraNegocioException;
-import com.vendas.gestaovendas.factory.CategoriaMockFactory;
 import com.vendas.gestaovendas.factory.ClienteMockFactory;
-import com.vendas.gestaovendas.factory.ProdutoMockFactory;
 import com.vendas.gestaovendas.repository.ClienteRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.dao.EmptyResultDataAccessException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -198,5 +195,87 @@ public class ClienteServiceTest {
 
         verify(clienteRepositoryMock, times(1)).findByNome(any());
         verify(clienteRepositoryMock, never()).save(any());
+    }
+
+    @Test
+    public void atualizarClienteTest() {
+        Cliente cliente =
+                ClienteMockFactory.createCliente(COD_CLIENTE_1, NOME_CLIENTE_1, TELEFONE_CLIENTE_1,
+                        ATIVO_CLIENTE_1, LOGRADOURO_CLIENTE_1, NUMERO_CLIENTE_1, COMPLEMENTO_CLIENTE_1,
+                        BAIRRO_CLIENTE_1, CEP_CLIENTE_1, CIDADE_CLIENTE_1, ESTADO_CLIENTE_1);
+
+        doReturn(Optional.of(cliente)).when(clienteRepositoryMock).findById(any());
+        doReturn(cliente).when(clienteRepositoryMock).findByNome(any());
+        doReturn(cliente).when(clienteRepositoryMock).save(any());
+
+        Cliente clienteAtualizado = clienteService.atualizar(COD_CLIENTE_1, cliente);
+
+        verify(clienteRepositoryMock, times(1)).findById(any());
+        verify(clienteRepositoryMock, times(1)).findByNome(any());
+        verify(clienteRepositoryMock, times(1)).save(any());
+
+        assertEquals(cliente.getCodigo(),   clienteAtualizado.getCodigo());
+        assertEquals(cliente.getNome(),     clienteAtualizado.getNome());
+        assertEquals(cliente.getTelefone(), clienteAtualizado.getTelefone());
+        assertEquals(cliente.getAtivo(),    clienteAtualizado.getAtivo());
+
+        assertEquals(cliente.getEndereco().getLogradouro(),  clienteAtualizado.getEndereco().getLogradouro());
+        assertEquals(cliente.getEndereco().getNumero(),      clienteAtualizado.getEndereco().getNumero());
+        assertEquals(cliente.getEndereco().getComplemento(), clienteAtualizado.getEndereco().getComplemento());
+        assertEquals(cliente.getEndereco().getBairro(),      clienteAtualizado.getEndereco().getBairro());
+        assertEquals(cliente.getEndereco().getCep(),         clienteAtualizado.getEndereco().getCep());
+        assertEquals(cliente.getEndereco().getCidade(),      clienteAtualizado.getEndereco().getCidade());
+        assertEquals(cliente.getEndereco().getEstado(),      clienteAtualizado.getEndereco().getEstado());
+    }
+
+    @Test
+    public void erroAtualizarClienteInexistenteTest() {
+        Long codigoClienteInexistente = 3L;
+        Cliente cliente =
+                ClienteMockFactory.createCliente(COD_CLIENTE_1, NOME_CLIENTE_1, TELEFONE_CLIENTE_1,
+                        ATIVO_CLIENTE_1, LOGRADOURO_CLIENTE_1, NUMERO_CLIENTE_1, COMPLEMENTO_CLIENTE_1,
+                        BAIRRO_CLIENTE_1, CEP_CLIENTE_1, CIDADE_CLIENTE_1, ESTADO_CLIENTE_1);
+
+        doReturn(Optional.empty()).when(clienteRepositoryMock).findById(any());
+
+        assertThrows(EmptyResultDataAccessException.class, () ->
+                clienteService.atualizar(codigoClienteInexistente, cliente));
+
+        verify(clienteRepositoryMock, times(1)).findById(any());
+        verify(clienteRepositoryMock, never()).findByNome(any());
+        verify(clienteRepositoryMock, never()).save(any());
+    }
+
+    @Test
+    public void erroAtualizarClienteDuplicadaTest() {
+        Cliente clienteExistente =
+                ClienteMockFactory.createCliente(COD_CLIENTE_1, NOME_CLIENTE_1, TELEFONE_CLIENTE_1,
+                        ATIVO_CLIENTE_1, LOGRADOURO_CLIENTE_1, NUMERO_CLIENTE_1, COMPLEMENTO_CLIENTE_1,
+                        BAIRRO_CLIENTE_1, CEP_CLIENTE_1, CIDADE_CLIENTE_1, ESTADO_CLIENTE_1);
+        Cliente clienteNovo =
+                ClienteMockFactory.createCliente(COD_CLIENTE_2, NOME_CLIENTE_1, TELEFONE_CLIENTE_1,
+                        ATIVO_CLIENTE_1, LOGRADOURO_CLIENTE_1, NUMERO_CLIENTE_1, COMPLEMENTO_CLIENTE_1,
+                        BAIRRO_CLIENTE_1, CEP_CLIENTE_1, CIDADE_CLIENTE_1, ESTADO_CLIENTE_1);
+
+        doReturn(Optional.of(clienteNovo)).when(clienteRepositoryMock).findById(any());
+        doReturn(clienteExistente).when(clienteRepositoryMock).findByNome(NOME_CLIENTE_1);
+
+        assertThrows(RegraNegocioException.class, () -> clienteService.atualizar(COD_CLIENTE_2, clienteNovo));
+
+        verify(clienteRepositoryMock, times(1)).findByNome(any());
+        verify(clienteRepositoryMock, times(1)).findById(any());
+        verify(clienteRepositoryMock, never()).save(any());
+    }
+
+    @Test
+    public void deletarCategoriaTest() {
+        Cliente cliente =
+                ClienteMockFactory.createCliente(COD_CLIENTE_1, NOME_CLIENTE_1, TELEFONE_CLIENTE_1,
+                        ATIVO_CLIENTE_1, LOGRADOURO_CLIENTE_1, NUMERO_CLIENTE_1, COMPLEMENTO_CLIENTE_1,
+                        BAIRRO_CLIENTE_1, CEP_CLIENTE_1, CIDADE_CLIENTE_1, ESTADO_CLIENTE_1);
+
+        clienteService.deletar(COD_CLIENTE_1);
+
+        verify(clienteRepositoryMock, times(1)).deleteById(any());
     }
 }
