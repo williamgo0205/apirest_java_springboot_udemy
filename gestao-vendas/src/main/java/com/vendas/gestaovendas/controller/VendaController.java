@@ -25,6 +25,6 @@ public class VendaController {
     @GetMapping("/cliente/{codigoCliente}")
     public ResponseEntity<ClienteVendaResponseDTO> listarVendasPorCliente(
             @PathVariable(name = "codigoCliente") Long codigoCliente) {
-        return ResponseEntity.ok(vendaService.listarVendaPorCliente(codigoCliente));
+        return ResponseEntity.ok(vendaService.listarVendasPorCliente(codigoCliente));
     }
 }

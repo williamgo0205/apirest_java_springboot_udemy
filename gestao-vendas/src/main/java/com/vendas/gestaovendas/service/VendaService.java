@@ -31,7 +31,7 @@ public class VendaService {
         this.itemVendaRepository = itemVendaRepository;
     }
 
-    public ClienteVendaResponseDTO listarVendaPorCliente(Long codigoCliente) {
+    public ClienteVendaResponseDTO listarVendasPorCliente(Long codigoCliente) {
         Cliente cliente = validarClienteVendaExiste(codigoCliente);
         List<VendaResponseDTO> vendaResponseDTOList =
                 vendaRepository.findByClienteCodigo(codigoCliente)
