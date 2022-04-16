@@ -349,6 +349,30 @@
 			]
 		},
 		{
+			"name": "Venda",
+			"item": [
+				{
+					"name": "GET localhost:8080/venda/cliente/{codigoCliente}",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{localhost}}/venda/cliente/1",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"venda",
+								"cliente",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "Actuator",
 			"item": [
 				{
