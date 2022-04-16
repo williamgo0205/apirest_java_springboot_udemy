@@ -1,0 +1,30 @@
+package com.vendas.gestaovendas.controller;
+
+import com.vendas.gestaovendas.dto.venda.model.ClienteVendaResponseDTO;
+import com.vendas.gestaovendas.service.VendaService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@Api(tags = "Venda")
+@RestController
+@RequestMapping("/venda")
+public class VendaController {
+
+    @Autowired
+    private VendaService vendaService;
+
+    // GET - localhost:8080/venda/cliente/{codigoCliente}
+    @ApiOperation(value = "Listar vendas pelo codigo do cliente",
+            nickname = "listarVendasPorCodigoCliente")
+    @GetMapping("/cliente/{codigoCliente}")
+    public ResponseEntity<ClienteVendaResponseDTO> listarVendasPorCliente(
+            @PathVariable(name = "codigoCliente") Long codigoCliente) {
+        return ResponseEntity.ok(vendaService.listarVendaPorCliente(codigoCliente));
+    }
+}
