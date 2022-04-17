@@ -12,6 +12,7 @@ import com.vendas.gestaovendas.repository.VendaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -39,6 +40,19 @@ public class VendaService {
                         .map(this::criandoVendaResponseDTO)
                         .collect(Collectors.toList());
         return  new ClienteVendaResponseDTO(cliente.getNome(), vendaResponseDTOList);
+    }
+
+    public ClienteVendaResponseDTO listarVendaPorCodigo(Long codigoVenda) {
+        Venda venda = validarVendaExiste(codigoVenda);
+        return new ClienteVendaResponseDTO(venda.getCliente().getNome(), Arrays.asList(criandoVendaResponseDTO(venda)));
+    }
+
+    private Venda validarVendaExiste(Long codigoVenda) {
+        Optional<Venda> venda = vendaRepository.findById(codigoVenda);
+        if(venda.isEmpty()) {
+            throw new RegraNegocioException(String.format("Venda de codigo %s não encontrada", codigoVenda));
+        }
+        return venda.get();
     }
 
     private Cliente validarClienteVendaExiste(Long codigoCliente) {
