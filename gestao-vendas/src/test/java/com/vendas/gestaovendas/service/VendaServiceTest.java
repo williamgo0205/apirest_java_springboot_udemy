@@ -5,6 +5,7 @@ import com.vendas.gestaovendas.entity.Cliente;
 import com.vendas.gestaovendas.entity.ItemVenda;
 import com.vendas.gestaovendas.entity.Produto;
 import com.vendas.gestaovendas.entity.Venda;
+import com.vendas.gestaovendas.exception.RegraNegocioException;
 import com.vendas.gestaovendas.factory.ClienteMockFactory;
 import com.vendas.gestaovendas.factory.ProdutoMockFactory;
 import com.vendas.gestaovendas.factory.VendaMockFactory;
@@ -22,8 +23,10 @@ import java.util.Arrays;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -115,5 +118,35 @@ public class VendaServiceTest {
                 .getItemVendaResponseDTO().get(0).getCodProduto(),  itemVenda.getProduto().getCodigo());
         assertEquals(clienteVendaResponseDTO.getVendaResponseDTO().get(0)
                 .getItemVendaResponseDTO().get(0).getProdutoDescricao(),  itemVenda.getProduto().getDescricao());
+    }
+
+    @Test
+    public void errorListarVendasPorCliente_ClienteInexistente() {
+        final Long codigoClienteInexistente = 777L;
+
+        // Criando Cliente
+        Cliente cliente =
+                ClienteMockFactory.createCliente(COD_CLIENTE, NOME_CLIENTE, TELEFONE_CLIENTE, ATIVO_CLIENTE,
+                        LOGRADOURO_CLIENTE, NUMERO_CLIENTE, COMPLEMENTO_CLIENTE, BAIRRO_CLIENTE, CEP_CLIENTE,
+                        CIDADE_CLIENTE, ESTADO_CLIENTE);
+        // Criando Produto
+        Produto produto =
+                ProdutoMockFactory.createProduto(ID_PRODUTO, DESCRICAO_PRODUTO, QUANTIDADE_PRODUTO,
+                        PRECO_CUSTO_PRODUTO, PRECO_VENDA_PRODUTO, OBSERVACAO_PRODUTO,
+                        ID_CATEGORIA, NOME_CATEGORIA);
+        // Criando Venda
+        Venda venda =
+                VendaMockFactory.createVenda(COD_VENDA, DATA_VENDA, cliente);
+        // Criando Item Venda
+        ItemVenda itemVenda =
+                VendaMockFactory.createItemVenda(COD_ITEM_VENDA, QUANTIDADE, PRECO_VENDIDO, produto, venda);
+
+        doReturn(Optional.empty()).when(clienteServiceMock).buscarPorCodigo(COD_CLIENTE);
+
+        assertThrows(RegraNegocioException.class, () -> vendaService.listarVendasPorCliente(COD_CLIENTE));
+
+        verify(clienteServiceMock, times(1)).buscarPorCodigo(anyLong());
+        verify(vendaRepositoryMock, never()).findByClienteCodigo(anyLong());
+        verify(itemVendaRepositoryMock, never()).findByVendaCodigo(anyLong());
     }
 }

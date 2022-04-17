@@ -1,23 +1,23 @@
 package com.vendas.gestaovendas.factory;
 
+import com.vendas.gestaovendas.dto.venda.model.ClienteVendaResponseDTO;
 import com.vendas.gestaovendas.dto.venda.model.ItemVendaResponseDTO;
+import com.vendas.gestaovendas.dto.venda.model.VendaResponseDTO;
 import com.vendas.gestaovendas.entity.Cliente;
 import com.vendas.gestaovendas.entity.ItemVenda;
 import com.vendas.gestaovendas.entity.Produto;
 import com.vendas.gestaovendas.entity.Venda;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 public abstract class VendaMockFactory {
 
-    public static Venda createVenda(Long codigo, LocalDate data, Cliente cliente) {
+    // Cria uma venda
+    public static Venda createVenda(Long codigo,
+                                    LocalDate data,
+                                    Cliente cliente) {
         Venda venda = new Venda();
         venda.setCodigo(codigo);
         venda.setData(data);
@@ -25,8 +25,12 @@ public abstract class VendaMockFactory {
         return venda;
     }
 
-    public static ItemVenda createItemVenda(Long codigo, Integer quantidade, BigDecimal precoVendido,
-                                            Produto produto, Venda venda) {
+    // Cria os itens da venda
+    public static ItemVenda createItemVenda(Long codigo,
+                                            Integer quantidade,
+                                            BigDecimal precoVendido,
+                                            Produto produto,
+                                            Venda venda) {
         ItemVenda itemVenda = new ItemVenda();
         itemVenda.setCodigo(codigo);
         itemVenda.setQuantidade(quantidade);
@@ -36,6 +40,21 @@ public abstract class VendaMockFactory {
         return itemVenda;
     }
 
+    // Cria o ClienteVendaResponseDTO
+    public static ClienteVendaResponseDTO createClienteVendaResponseDTO(String nome,
+                                                                        List<VendaResponseDTO> vendaResponseDTOList) {
+        return new ClienteVendaResponseDTO(nome, vendaResponseDTOList);
+    }
+
+    //Cria a VendaResponseDTO
+    public static VendaResponseDTO createVendaResponseDTO(Long codigo,
+                                                          LocalDate data,
+                                                          List<ItemVendaResponseDTO> itemVendaResponseDTOList) {
+        return new VendaResponseDTO(codigo, data, itemVendaResponseDTOList);
+
+    }
+
+    //Cria o ItemVendaResponseDTO
     public static ItemVendaResponseDTO createItensVendaResponseDTO(ItemVenda itemVenda) {
         return new ItemVendaResponseDTO(itemVenda.getCodigo(),
                 itemVenda.getQuantidade(),
