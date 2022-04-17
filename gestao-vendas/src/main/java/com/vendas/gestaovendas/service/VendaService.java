@@ -18,7 +18,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class VendaService {
+public class VendaService extends AbstractVendaService {
 
     private ClienteService clienteService;
     private VendaRepository vendaRepository;
@@ -37,14 +37,17 @@ public class VendaService {
         List<VendaResponseDTO> vendaResponseDTOList =
                 vendaRepository.findByClienteCodigo(codigoCliente)
                         .stream()
-                        .map(this::criandoVendaResponseDTO)
+                        .map(venda -> criandoVendaResponseDTO(venda,
+                                      itemVendaRepository.findByVendaCodigo(venda.getCodigo())))
                         .collect(Collectors.toList());
         return  new ClienteVendaResponseDTO(cliente.getNome(), vendaResponseDTOList);
     }
 
     public ClienteVendaResponseDTO listarVendaPorCodigo(Long codigoVenda) {
         Venda venda = validarVendaExiste(codigoVenda);
-        return new ClienteVendaResponseDTO(venda.getCliente().getNome(), Arrays.asList(criandoVendaResponseDTO(venda)));
+        List<ItemVenda> itensVenda = itemVendaRepository.findByVendaCodigo(venda.getCodigo());
+        return new ClienteVendaResponseDTO(venda.getCliente().getNome(),
+                Arrays.asList(criandoVendaResponseDTO(venda, itensVenda)));
     }
 
     private Venda validarVendaExiste(Long codigoVenda) {
@@ -61,26 +64,5 @@ public class VendaService {
             throw new RegraNegocioException(String.format("O Cliente de código %s nao esta cadastrado", codigoCliente));
         }
         return cliente.get();
-    }
-
-    // Metodo de conversao da Venda para VendaResponseDTO
-    private VendaResponseDTO criandoVendaResponseDTO(Venda venda) {
-        // Utilizando Lambda para realizar a conversao "itemVendaRepository.findByVendaCodigo"
-        // para os ItemVendaResponseDTO
-        List<ItemVendaResponseDTO> itemVendaList = itemVendaRepository.findByVendaCodigo(venda.getCodigo())
-                .stream()
-                .map(this::criandoItensVendaResponseDTO)
-                .collect(Collectors.toList());
-
-        return  new VendaResponseDTO(venda.getCodigo(), venda.getData(), itemVendaList);
-    }
-
-    // Metodo de conversao da ItemVenda para ItemVendaResponseDTO
-    private ItemVendaResponseDTO criandoItensVendaResponseDTO(ItemVenda itemVenda) {
-        return new ItemVendaResponseDTO(itemVenda.getCodigo(),
-                itemVenda.getQuantidade(),
-                itemVenda.getPrecoVendido(),
-                itemVenda.getProduto().getCodigo(),
-                itemVenda.getProduto().getDescricao());
     }
 }

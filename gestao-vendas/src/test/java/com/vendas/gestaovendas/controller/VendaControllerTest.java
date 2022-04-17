@@ -67,7 +67,7 @@ public class VendaControllerTest {
     private static final BigDecimal PRECO_CUSTO_PRODUTO = new BigDecimal("2000");
     private static final BigDecimal PRECO_VENDA_PRODUTO = new BigDecimal("3000");
     private static final String     OBSERVACAO_PRODUTO  = "Notebook Dell Inspiron 15 polegadas";
-    
+
     @MockBean
     private VendaService vendaServiceMock;
 
