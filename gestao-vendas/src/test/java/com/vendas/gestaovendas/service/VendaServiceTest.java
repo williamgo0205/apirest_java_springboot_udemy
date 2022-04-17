@@ -11,6 +11,7 @@ import com.vendas.gestaovendas.factory.ProdutoMockFactory;
 import com.vendas.gestaovendas.factory.VendaMockFactory;
 import com.vendas.gestaovendas.repository.ItemVendaRepository;
 import com.vendas.gestaovendas.repository.VendaRepository;
+import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -122,8 +123,17 @@ public class VendaServiceTest {
 
     @Test
     public void errorListarVendasPorCliente_ClienteInexistente() {
-        final Long codigoClienteInexistente = 777L;
+        doReturn(Optional.empty()).when(clienteServiceMock).buscarPorCodigo(COD_CLIENTE);
 
+        assertThrows(RegraNegocioException.class, () -> vendaService.listarVendasPorCliente(COD_CLIENTE));
+
+        verify(clienteServiceMock, times(1)).buscarPorCodigo(anyLong());
+        verify(vendaRepositoryMock, never()).findByClienteCodigo(anyLong());
+        verify(itemVendaRepositoryMock, never()).findByVendaCodigo(anyLong());
+    }
+
+    @Test
+    public void listarVendasPorCodigo() {
         // Criando Cliente
         Cliente cliente =
                 ClienteMockFactory.createCliente(COD_CLIENTE, NOME_CLIENTE, TELEFONE_CLIENTE, ATIVO_CLIENTE,
@@ -141,12 +151,39 @@ public class VendaServiceTest {
         ItemVenda itemVenda =
                 VendaMockFactory.createItemVenda(COD_ITEM_VENDA, QUANTIDADE, PRECO_VENDIDO, produto, venda);
 
-        doReturn(Optional.empty()).when(clienteServiceMock).buscarPorCodigo(COD_CLIENTE);
+        doReturn(Optional.of(venda)).when(vendaRepositoryMock).findById(COD_VENDA);
+        doReturn(Arrays.asList(itemVenda)).when(itemVendaRepositoryMock).findByVendaCodigo(COD_VENDA);
 
-        assertThrows(RegraNegocioException.class, () -> vendaService.listarVendasPorCliente(COD_CLIENTE));
+        ClienteVendaResponseDTO clienteVendaResponseDTO = vendaService.listarVendaPorCodigo(COD_VENDA);
 
-        verify(clienteServiceMock, times(1)).buscarPorCodigo(anyLong());
-        verify(vendaRepositoryMock, never()).findByClienteCodigo(anyLong());
+        verify(vendaRepositoryMock, times(1)).findById(anyLong());
+        verify(itemVendaRepositoryMock, times(1)).findByVendaCodigo(anyLong());
+
+        // Nome do cliente
+        assertEquals(clienteVendaResponseDTO.getNome(),                                cliente.getNome());
+        // Dados Venda
+        assertEquals(clienteVendaResponseDTO.getVendaResponseDTO().get(0).getCodigo(), venda.getCodigo());
+        assertEquals(clienteVendaResponseDTO.getVendaResponseDTO().get(0).getData(),   venda.getData());
+        // Dados Itens da Venda
+        assertEquals(clienteVendaResponseDTO.getVendaResponseDTO().get(0)
+                .getItemVendaResponseDTO().get(0).getCodigo(),  itemVenda.getCodigo());
+        assertEquals(clienteVendaResponseDTO.getVendaResponseDTO().get(0)
+                .getItemVendaResponseDTO().get(0).getQuantidade(),  itemVenda.getQuantidade());
+        assertEquals(clienteVendaResponseDTO.getVendaResponseDTO().get(0)
+                .getItemVendaResponseDTO().get(0).getPrecoVendido(),  itemVenda.getPrecoVendido());
+        assertEquals(clienteVendaResponseDTO.getVendaResponseDTO().get(0)
+                .getItemVendaResponseDTO().get(0).getCodProduto(),  itemVenda.getProduto().getCodigo());
+        assertEquals(clienteVendaResponseDTO.getVendaResponseDTO().get(0)
+                .getItemVendaResponseDTO().get(0).getProdutoDescricao(),  itemVenda.getProduto().getDescricao());
+    }
+
+    @Test
+    public void errolistarVendasPorCodigo_codigoVendaInexistente() {
+        doReturn(Optional.empty()).when(vendaRepositoryMock).findById(COD_VENDA);
+
+        assertThrows(RegraNegocioException.class, () -> vendaService.listarVendaPorCodigo(COD_VENDA));
+
+        verify(vendaRepositoryMock, times(1)).findById(anyLong());
         verify(itemVendaRepositoryMock, never()).findByVendaCodigo(anyLong());
     }
 }

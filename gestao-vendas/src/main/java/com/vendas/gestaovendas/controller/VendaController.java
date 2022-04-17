@@ -23,8 +23,8 @@ public class VendaController {
     @ApiOperation(value = "Listar vendas pelo codigo do cliente",
             nickname = "listarVendasPorCodigoCliente")
     @GetMapping("/cliente/{codigoCliente}")
-    public ResponseEntity<ClienteVendaResponseDTO> listarVendasPorCliente(
-            @PathVariable(name = "codigoCliente") Long codigoCliente) {
+    public ResponseEntity<ClienteVendaResponseDTO> listarVendasPorCliente(@PathVariable(name = "codigoCliente")
+                                                                                        Long codigoCliente) {
         return ResponseEntity.ok(vendaService.listarVendasPorCliente(codigoCliente));
     }
 
@@ -32,8 +32,8 @@ public class VendaController {
     @ApiOperation(value = "Listar venda pelo codigo da Venda",
             nickname = "listarVendaPorCodigo")
     @GetMapping("/{codigoVenda}")
-    public ResponseEntity<ClienteVendaResponseDTO> listarVendaPorCodigo(
-            @PathVariable(name = "codigoVenda") Long codigoVenda) {
+    public ResponseEntity<ClienteVendaResponseDTO> listarVendaPorCodigo(@PathVariable(name = "codigoVenda")
+                                                                                      Long codigoVenda) {
         return ResponseEntity.ok(vendaService.listarVendaPorCodigo(codigoVenda));
     }
 }

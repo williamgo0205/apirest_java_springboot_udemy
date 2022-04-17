@@ -38,6 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class VendaControllerTest {
 
     private static final String GET_LISTAR_VENDAS_POR_CLIENTE_PATH  = "/venda/cliente/%s";
+    private static final String GET_LISTAR_VENDA_POR_CODIGO_PATH    = "/venda/%s";
 
     private static final Long       COD_VENDA           = 1L;
     private static final LocalDate  DATA_VENDA          = LocalDate.of(2022, 04, 27);
@@ -66,8 +67,7 @@ public class VendaControllerTest {
     private static final BigDecimal PRECO_CUSTO_PRODUTO = new BigDecimal("2000");
     private static final BigDecimal PRECO_VENDA_PRODUTO = new BigDecimal("3000");
     private static final String     OBSERVACAO_PRODUTO  = "Notebook Dell Inspiron 15 polegadas";
-
-
+    
     @MockBean
     private VendaService vendaServiceMock;
 
@@ -114,10 +114,50 @@ public class VendaControllerTest {
                 .andReturn();
 
         verify(vendaServiceMock, times(1)).listarVendasPorCliente(anyLong());
-        assertThat(result.getResponse().getContentAsString(), is(createVendasJSON(clienteVendaResponseDTO)));
+        assertThat(result.getResponse().getContentAsString(), is(createVendaJSON(clienteVendaResponseDTO)));
     }
 
-    private String createVendasJSON(ClienteVendaResponseDTO clienteVendaResponseDTO) {
+    @Test
+    public void listarVendaPorCodigo() throws Exception {
+        // Criando Cliente
+        final Cliente cliente =
+                ClienteMockFactory.createCliente(COD_CLIENTE, NOME_CLIENTE, TELEFONE_CLIENTE, ATIVO_CLIENTE,
+                        LOGRADOURO_CLIENTE, NUMERO_CLIENTE, COMPLEMENTO_CLIENTE, BAIRRO_CLIENTE, CEP_CLIENTE,
+                        CIDADE_CLIENTE, ESTADO_CLIENTE);
+        // Criando Produto
+        final Produto produto =
+                ProdutoMockFactory.createProduto(ID_PRODUTO, DESCRICAO_PRODUTO, QUANTIDADE_PRODUTO,
+                        PRECO_CUSTO_PRODUTO, PRECO_VENDA_PRODUTO, OBSERVACAO_PRODUTO,
+                        ID_CATEGORIA, NOME_CATEGORIA);
+        // Criando Venda
+        final Venda venda =
+                VendaMockFactory.createVenda(COD_VENDA, DATA_VENDA, cliente);
+        // Criando Item Venda
+        final ItemVenda itemVenda =
+                VendaMockFactory.createItemVenda(COD_ITEM_VENDA, QUANTIDADE, PRECO_VENDIDO, produto, venda);
+
+        // Criando createItensVendaResponseDTO
+        final ItemVendaResponseDTO itensVendaResponseDTO =
+                VendaMockFactory.createItensVendaResponseDTO(itemVenda);
+        // Criando createVendaResponseDTO
+        final VendaResponseDTO vendaResponseDTO =
+                VendaMockFactory.createVendaResponseDTO(COD_VENDA, DATA_VENDA, Arrays.asList(itensVendaResponseDTO));
+        // Criando ClienteVendaResponseDTO
+        final ClienteVendaResponseDTO clienteVendaResponseDTO =
+                VendaMockFactory.createClienteVendaResponseDTO(NOME_CLIENTE, Arrays.asList(vendaResponseDTO));
+
+        when(this.vendaServiceMock.listarVendaPorCodigo(COD_VENDA)).thenReturn(clienteVendaResponseDTO);
+
+        final MvcResult result = mvc.perform(get(String.format(GET_LISTAR_VENDA_POR_CODIGO_PATH, COD_VENDA))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        verify(vendaServiceMock, times(1)).listarVendaPorCodigo(anyLong());
+        assertThat(result.getResponse().getContentAsString(), is(createVendaJSON(clienteVendaResponseDTO)));
+    }
+
+    private String createVendaJSON(ClienteVendaResponseDTO clienteVendaResponseDTO) {
         return "{\"nome\":\"".concat(valueOf(clienteVendaResponseDTO.getNome()))+ "\""
              + ",\"vendaResponseDTO\":[{"
                 + "\"codigo\":".concat(valueOf(clienteVendaResponseDTO.getVendaResponseDTO().get(0).getCodigo()))
