@@ -10,8 +10,6 @@ import java.util.stream.Collectors;
 
 public abstract class AbstractVendaService {
 
-//    itemVendaRepository.findByVendaCodigo(venda.getCodigo())
-
     // Metodo de conversao da Venda para VendaResponseDTO
     protected VendaResponseDTO criandoVendaResponseDTO(Venda venda, List<ItemVenda> itensVendaList) {
         // Utilizando Lambda para realizar a conversao "itemVendaRepository.findByVendaCodigo"
