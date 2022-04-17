@@ -1,7 +1,6 @@
 package com.vendas.gestaovendas.service;
 
 import com.vendas.gestaovendas.dto.venda.model.ClienteVendaResponseDTO;
-import com.vendas.gestaovendas.dto.venda.model.ItemVendaResponseDTO;
 import com.vendas.gestaovendas.dto.venda.model.VendaResponseDTO;
 import com.vendas.gestaovendas.entity.Cliente;
 import com.vendas.gestaovendas.entity.ItemVenda;
