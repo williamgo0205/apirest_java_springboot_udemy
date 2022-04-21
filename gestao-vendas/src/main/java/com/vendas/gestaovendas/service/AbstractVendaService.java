@@ -1,8 +1,10 @@
 package com.vendas.gestaovendas.service;
 
+import com.vendas.gestaovendas.dto.venda.model.ItemVendaRequestDTO;
 import com.vendas.gestaovendas.dto.venda.model.ItemVendaResponseDTO;
 import com.vendas.gestaovendas.dto.venda.model.VendaResponseDTO;
 import com.vendas.gestaovendas.entity.ItemVenda;
+import com.vendas.gestaovendas.entity.Produto;
 import com.vendas.gestaovendas.entity.Venda;
 
 import java.util.List;
@@ -29,5 +31,13 @@ public abstract class AbstractVendaService {
                 itemVenda.getPrecoVendido(),
                 itemVenda.getProduto().getCodigo(),
                 itemVenda.getProduto().getDescricao());
+    }
+
+    // Metodo de conversao da itemVendaRequestDTO e Venda para ItemVenda
+    protected ItemVenda criandoItemVenda(ItemVendaRequestDTO itemVendaRequestDTO, Venda venda) {
+        return new ItemVenda(itemVendaRequestDTO.getQuantidade(),
+                itemVendaRequestDTO.getPrecoVendido(),
+                new Produto(itemVendaRequestDTO.getCodigoProduto()),
+                venda);
     }
 }

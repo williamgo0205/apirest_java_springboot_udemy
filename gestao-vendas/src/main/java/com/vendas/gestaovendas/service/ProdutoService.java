@@ -82,7 +82,7 @@ public class ProdutoService {
         }
     }
 
-    // Método para validar se um produto existe
+    // Método para validar se um produto existe pelo codigo e categoria do produto
     private Produto validarSeProdutoExiste(Long codigoProduto, Long codigoCategoria) {
         Optional<Produto> optProduto = buscaPorCodigoProduto(codigoProduto, codigoCategoria);
         if (optProduto.isEmpty()) {
@@ -90,4 +90,15 @@ public class ProdutoService {
         }
         return optProduto.get();
     }
+
+    // Método para validar se um produto existe apenas pelo codigo do produto
+    protected Produto validarSeProdutoExiste(Long codigoProduto) {
+        Optional<Produto> optProduto = produtoRepository.findById(codigoProduto);
+        if (optProduto.isEmpty()) {
+            throw new RegraNegocioException(String.format("Produto de codigo %s não encontrado.", codigoProduto));
+        }
+        return optProduto.get();
+    }
+
+
 }

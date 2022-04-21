@@ -1,6 +1,7 @@
 package com.vendas.gestaovendas.service;
 
 import com.vendas.gestaovendas.dto.venda.model.ClienteVendaResponseDTO;
+import com.vendas.gestaovendas.dto.venda.model.VendaRequestDTO;
 import com.vendas.gestaovendas.entity.Cliente;
 import com.vendas.gestaovendas.entity.ItemVenda;
 import com.vendas.gestaovendas.entity.Produto;
@@ -11,12 +12,12 @@ import com.vendas.gestaovendas.factory.ProdutoMockFactory;
 import com.vendas.gestaovendas.factory.VendaMockFactory;
 import com.vendas.gestaovendas.repository.ItemVendaRepository;
 import com.vendas.gestaovendas.repository.VendaRepository;
-import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -25,8 +26,10 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -69,10 +72,16 @@ public class VendaServiceTest {
     private ClienteService clienteServiceMock;
 
     @Mock
+    private ProdutoService produtoServiceMock;
+
+    @Mock
     private VendaRepository vendaRepositoryMock;
 
     @Mock
     private ItemVendaRepository itemVendaRepositoryMock;
+
+    @Autowired
+    private AbstractVendaService abstractVendaService;
 
     @Test
     public void listarVendasPorCliente() {
@@ -185,5 +194,94 @@ public class VendaServiceTest {
 
         verify(vendaRepositoryMock, times(1)).findById(anyLong());
         verify(itemVendaRepositoryMock, never()).findByVendaCodigo(anyLong());
+    }
+
+    @Test
+    public void salvar() {
+        // Criando Cliente
+        Cliente cliente =
+                ClienteMockFactory.createCliente(COD_CLIENTE, NOME_CLIENTE, TELEFONE_CLIENTE, ATIVO_CLIENTE,
+                        LOGRADOURO_CLIENTE, NUMERO_CLIENTE, COMPLEMENTO_CLIENTE, BAIRRO_CLIENTE, CEP_CLIENTE,
+                        CIDADE_CLIENTE, ESTADO_CLIENTE);
+        // Criando Produto
+        Produto produto =
+                ProdutoMockFactory.createProduto(ID_PRODUTO, DESCRICAO_PRODUTO, QUANTIDADE_PRODUTO,
+                        PRECO_CUSTO_PRODUTO, PRECO_VENDA_PRODUTO, OBSERVACAO_PRODUTO,
+                        ID_CATEGORIA, NOME_CATEGORIA);
+        // Criando Venda
+        Venda venda =
+                VendaMockFactory.createVenda(COD_VENDA, DATA_VENDA, cliente);
+        // Criando Item Venda
+        ItemVenda itemVenda =
+                VendaMockFactory.createItemVenda(COD_ITEM_VENDA, QUANTIDADE, PRECO_VENDIDO, produto, venda);
+        // Criando VendaRequestDTO
+        VendaRequestDTO vendaRequestDTO =
+                VendaMockFactory.createVendaRequestDTO(DATA_VENDA,
+                        Arrays.asList(VendaMockFactory.createItemVendaRequestDTO(itemVenda)));
+
+        doReturn(Optional.of(cliente)).when(clienteServiceMock).buscarPorCodigo(COD_CLIENTE);
+        doReturn(venda).when(vendaRepositoryMock)
+                .save(new Venda(vendaRequestDTO.getData(), cliente));
+
+        ClienteVendaResponseDTO clienteVendaResponseDTO = vendaService.salvar(COD_CLIENTE, vendaRequestDTO);
+
+        verify(clienteServiceMock, times(1)).buscarPorCodigo(anyLong());
+        verify(produtoServiceMock, times(1)).validarSeProdutoExiste(anyLong());
+        verify(vendaRepositoryMock, times(1)).save(any());
+        verify(itemVendaRepositoryMock, times(1)).save(any());
+
+        // Nome do cliente
+        assertEquals(clienteVendaResponseDTO.getNome(),                                cliente.getNome());
+        // Dados Venda
+        assertEquals(clienteVendaResponseDTO.getVendaResponseDTO().get(0).getCodigo(), venda.getCodigo());
+        assertEquals(clienteVendaResponseDTO.getVendaResponseDTO().get(0).getData(),   venda.getData());
+  }
+
+    @Test
+    public void erroSalvar_ClienteInexistente() {
+        Long codigoClienteInexistente = 3L;
+
+        doReturn(Optional.empty()).when(clienteServiceMock).buscarPorCodigo(codigoClienteInexistente);
+
+        assertThrows(RegraNegocioException.class, () -> vendaService.salvar(codigoClienteInexistente, any()));
+
+        verify(clienteServiceMock, times(1)).buscarPorCodigo(anyLong());
+        verify(produtoServiceMock, never()).validarSeProdutoExiste(anyLong());
+        verify(vendaRepositoryMock, never()).save(any());
+        verify(itemVendaRepositoryMock, never()).save(any());
+    }
+
+    @Test
+    public void erroSalvar_ProdutoInexistente() {
+        // Criando Cliente
+        Cliente cliente =
+                ClienteMockFactory.createCliente(COD_CLIENTE, NOME_CLIENTE, TELEFONE_CLIENTE, ATIVO_CLIENTE,
+                        LOGRADOURO_CLIENTE, NUMERO_CLIENTE, COMPLEMENTO_CLIENTE, BAIRRO_CLIENTE, CEP_CLIENTE,
+                        CIDADE_CLIENTE, ESTADO_CLIENTE);
+        // Criando Produto
+        Produto produto =
+                ProdutoMockFactory.createProduto(ID_PRODUTO, DESCRICAO_PRODUTO, QUANTIDADE_PRODUTO,
+                        PRECO_CUSTO_PRODUTO, PRECO_VENDA_PRODUTO, OBSERVACAO_PRODUTO,
+                        ID_CATEGORIA, NOME_CATEGORIA);
+        // Criando Venda
+        Venda venda =
+                VendaMockFactory.createVenda(COD_VENDA, DATA_VENDA, cliente);
+        // Criando Item Venda
+        ItemVenda itemVenda =
+                VendaMockFactory.createItemVenda(COD_ITEM_VENDA, QUANTIDADE, PRECO_VENDIDO, produto, venda);
+        // Criando VendaRequestDTO
+        VendaRequestDTO vendaRequestDTO =
+                VendaMockFactory.createVendaRequestDTO(DATA_VENDA,
+                        Arrays.asList(VendaMockFactory.createItemVendaRequestDTO(itemVenda)));
+
+        doReturn(Optional.of(cliente)).when(clienteServiceMock).buscarPorCodigo(COD_CLIENTE);
+        doThrow(RegraNegocioException.class).when(produtoServiceMock).validarSeProdutoExiste(ID_PRODUTO);
+
+        assertThrows(RegraNegocioException.class, () -> vendaService.salvar(COD_CLIENTE, vendaRequestDTO));
+
+        verify(clienteServiceMock, times(1)).buscarPorCodigo(anyLong());
+        verify(produtoServiceMock, times(1)).validarSeProdutoExiste(anyLong());
+        verify(vendaRepositoryMock, never()).save(any());
+        verify(itemVendaRepositoryMock, never()).save(any());
     }
 }

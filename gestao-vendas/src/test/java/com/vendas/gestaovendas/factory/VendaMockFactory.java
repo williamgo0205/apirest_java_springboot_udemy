@@ -1,7 +1,9 @@
 package com.vendas.gestaovendas.factory;
 
 import com.vendas.gestaovendas.dto.venda.model.ClienteVendaResponseDTO;
+import com.vendas.gestaovendas.dto.venda.model.ItemVendaRequestDTO;
 import com.vendas.gestaovendas.dto.venda.model.ItemVendaResponseDTO;
+import com.vendas.gestaovendas.dto.venda.model.VendaRequestDTO;
 import com.vendas.gestaovendas.dto.venda.model.VendaResponseDTO;
 import com.vendas.gestaovendas.entity.Cliente;
 import com.vendas.gestaovendas.entity.ItemVenda;
@@ -61,5 +63,23 @@ public abstract class VendaMockFactory {
                 itemVenda.getPrecoVendido(),
                 itemVenda.getProduto().getCodigo(),
                 itemVenda.getProduto().getDescricao());
+    }
+
+    //Cria a VendaRequestDTO
+    public static VendaRequestDTO createVendaRequestDTO(LocalDate data,
+                                                        List<ItemVendaRequestDTO> itemVendaRequestDTOList) {
+        VendaRequestDTO vendaRequestDTO = new VendaRequestDTO();
+        vendaRequestDTO.setData(data);
+        vendaRequestDTO.setItensVendaRequestDTO(itemVendaRequestDTOList);
+        return  vendaRequestDTO;
+    }
+
+    //Cria a ItemVendaRequestDTO
+    public static ItemVendaRequestDTO createItemVendaRequestDTO(ItemVenda itemVenda) {
+        ItemVendaRequestDTO itemVendaRequestDTO = new ItemVendaRequestDTO();
+        itemVendaRequestDTO.setCodigoProduto(itemVenda.getProduto().getCodigo());
+        itemVendaRequestDTO.setQuantidade(itemVenda.getQuantidade());
+        itemVendaRequestDTO.setPrecoVendido(itemVenda.getPrecoVendido());
+        return itemVendaRequestDTO;
     }
 }

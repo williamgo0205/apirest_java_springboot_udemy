@@ -331,4 +331,41 @@ public class ProdutoServiceTest {
 
         verify(produtoRepositoryMock, never()).delete(any());
     }
+
+    @Test
+    public void validarSeProdutoExiste() {
+         Produto produto =
+                ProdutoMockFactory.createProduto(ID_PRODUTO_1, DESCRICAO_PRODUTO_1, QUANTIDADE_PRODUTO_1,
+                        PRECO_CUSTO_PRODUTO_1, PRECO_VENDA_PRODUTO_1, OBSERVACAO_PRODUTO_1, ID_CATEGORIA_1,
+                        NOME_CATEGORIA_TECNOLOGIA);
+
+        doReturn(Optional.of(produto))
+                .when(produtoRepositoryMock).findById(ID_PRODUTO_1);
+
+        Produto produtoValidado = produtoService.validarSeProdutoExiste(ID_PRODUTO_1);
+
+        verify(produtoRepositoryMock, times(1)).findById(any());
+
+        assertEquals(produto.getCodigo(),     produtoValidado.getCodigo());
+        assertEquals(produto.getDescricao(),  produtoValidado.getDescricao());
+        assertEquals(produto.getQuantidade(), produtoValidado.getQuantidade());
+        assertEquals(produto.getPrecoCusto(), produtoValidado.getPrecoCusto());
+        assertEquals(produto.getPrecoVenda(), produtoValidado.getPrecoVenda());
+        assertEquals(produto.getObservacao(), produtoValidado.getObservacao());
+        assertEquals(produto.getCategoria().getCodigo(), produtoValidado.getCategoria().getCodigo());
+        assertEquals(produto.getCategoria().getNome(),   produtoValidado.getCategoria().getNome());
+    }
+
+    @Test
+    public void erroValidarSeProdutoExiste_CodigoProdutoInexistente() {
+        Long codigoProdutoInexistente = 3L;
+
+        doReturn(Optional.empty())
+                .when(produtoRepositoryMock).findById(codigoProdutoInexistente);
+
+        assertThrows(RegraNegocioException.class, () ->
+                produtoService.validarSeProdutoExiste(codigoProdutoInexistente));
+
+        verify(produtoRepositoryMock, times(1)).findById(any());
+    }
 }
