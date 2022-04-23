@@ -32,7 +32,7 @@ public class ClienteControllerTest {
 
     private static final String GET_CLIENTE_LISTAR_TODOS_PATH      = "/cliente";
     private static final String GET_CLIENTE_LISTAR_POR_CODIGO_PATH = "/cliente/%s";
-    private static final String POST_ClIENTE_SALVAR_PATH           = "/cliente";
+    private static final String POST_CLIENTE_SALVAR_PATH           = "/cliente";
     private static final String PUT_CLIENTE_ATUALIZAR_PATH         = "/cliente/%s";
     private static final String DELETE_CLIENTE_DELETAR_PATH        = "/cliente/%s";
 
@@ -178,7 +178,7 @@ public class ClienteControllerTest {
         when(clienteServiceMock.salvar(ClienteMapper.converterParaEntidade(createClienteRequestDTO)))
                 .thenReturn(cliente);
 
-        final MvcResult result = mvc.perform(post(String.format(POST_ClIENTE_SALVAR_PATH))
+        final MvcResult result = mvc.perform(post(String.format(POST_CLIENTE_SALVAR_PATH))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(createClienteRequestDTO)))
                 .andExpect(status().isCreated())
@@ -212,7 +212,7 @@ public class ClienteControllerTest {
         when(clienteServiceMock.salvar(ClienteMapper.converterParaEntidade(createClienteRequestDTO)))
                 .thenReturn(cliente);
 
-        final MvcResult result = mvc.perform(post(String.format(POST_ClIENTE_SALVAR_PATH))
+        final MvcResult result = mvc.perform(post(String.format(POST_CLIENTE_SALVAR_PATH))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(createClienteRequestDTO)))
                 .andExpect(status().isBadRequest())
@@ -245,7 +245,7 @@ public class ClienteControllerTest {
         when(clienteServiceMock.salvar(ClienteMapper.converterParaEntidade(createClienteRequestDTO)))
                 .thenReturn(cliente);
 
-        final MvcResult result = mvc.perform(post(String.format(POST_ClIENTE_SALVAR_PATH))
+        final MvcResult result = mvc.perform(post(String.format(POST_CLIENTE_SALVAR_PATH))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(createClienteRequestDTO)))
                 .andExpect(status().isBadRequest())
@@ -278,7 +278,7 @@ public class ClienteControllerTest {
         when(clienteServiceMock.salvar(ClienteMapper.converterParaEntidade(createClienteRequestDTO)))
                 .thenReturn(cliente);
 
-        final MvcResult result = mvc.perform(post(String.format(POST_ClIENTE_SALVAR_PATH))
+        final MvcResult result = mvc.perform(post(String.format(POST_CLIENTE_SALVAR_PATH))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(createClienteRequestDTO)))
                 .andExpect(status().isBadRequest())
@@ -309,7 +309,7 @@ public class ClienteControllerTest {
         when(clienteServiceMock.salvar(ClienteMapper.converterParaEntidade(createClienteRequestDTO)))
                 .thenReturn(cliente);
 
-        final MvcResult result = mvc.perform(post(String.format(POST_ClIENTE_SALVAR_PATH))
+        final MvcResult result = mvc.perform(post(String.format(POST_CLIENTE_SALVAR_PATH))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(createClienteRequestDTO)))
                 .andExpect(status().isBadRequest())

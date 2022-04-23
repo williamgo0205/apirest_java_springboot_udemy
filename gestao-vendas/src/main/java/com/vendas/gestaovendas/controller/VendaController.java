@@ -50,6 +50,6 @@ public class VendaController {
     public ResponseEntity<ClienteVendaResponseDTO> salvar(@PathVariable(name = "codigoCliente") Long codigoCliente,
                                                           @Valid @RequestBody VendaRequestDTO vendaRequestDTO) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(vendaService.salvar(codigoCliente,vendaRequestDTO));
+                .body(vendaService.salvar(codigoCliente, vendaRequestDTO));
     }
 }
