@@ -103,6 +103,9 @@ git@github.com:williamgo0205/apirest_java_springboot_udemy.git
 -- Executando docker compose
 docker-compose up
 
+-- Executando docker compose Liberando Terminal
+docker-compose up -d
+
 -- Executando container mysql
 docker exec -it mysql mysql -uvendas -pvendas
 
