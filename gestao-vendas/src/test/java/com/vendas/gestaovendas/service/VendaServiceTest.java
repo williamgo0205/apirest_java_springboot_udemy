@@ -104,13 +104,13 @@ public class VendaServiceTest {
 
         doReturn(Optional.of(cliente)).when(clienteServiceMock).buscarPorCodigo(COD_CLIENTE);
         doReturn(Arrays.asList(venda)).when(vendaRepositoryMock).findByClienteCodigo(COD_CLIENTE);
-        doReturn(Arrays.asList(itemVenda)).when(itemVendaRepositoryMock).findByVendaCodigo(COD_VENDA);
+        doReturn(Arrays.asList(itemVenda)).when(itemVendaRepositoryMock).buscarPorCodigo(COD_VENDA);
 
         ClienteVendaResponseDTO clienteVendaResponseDTO = vendaService.listarVendasPorCliente(COD_CLIENTE);
 
         verify(clienteServiceMock, times(1)).buscarPorCodigo(anyLong());
         verify(vendaRepositoryMock, times(1)).findByClienteCodigo(anyLong());
-        verify(itemVendaRepositoryMock, times(1)).findByVendaCodigo(anyLong());
+        verify(itemVendaRepositoryMock, times(1)).buscarPorCodigo(anyLong());
 
         // Nome do cliente
         assertEquals(clienteVendaResponseDTO.getNome(),                                cliente.getNome());
@@ -138,7 +138,7 @@ public class VendaServiceTest {
 
         verify(clienteServiceMock, times(1)).buscarPorCodigo(anyLong());
         verify(vendaRepositoryMock, never()).findByClienteCodigo(anyLong());
-        verify(itemVendaRepositoryMock, never()).findByVendaCodigo(anyLong());
+        verify(itemVendaRepositoryMock, never()).buscarPorCodigo(anyLong());
     }
 
     @Test
@@ -161,12 +161,12 @@ public class VendaServiceTest {
                 VendaMockFactory.createItemVenda(COD_ITEM_VENDA, QUANTIDADE, PRECO_VENDIDO, produto, venda);
 
         doReturn(Optional.of(venda)).when(vendaRepositoryMock).findById(COD_VENDA);
-        doReturn(Arrays.asList(itemVenda)).when(itemVendaRepositoryMock).findByVendaCodigo(COD_VENDA);
+        doReturn(Arrays.asList(itemVenda)).when(itemVendaRepositoryMock).buscarPorCodigo(COD_VENDA);
 
         ClienteVendaResponseDTO clienteVendaResponseDTO = vendaService.listarVendaPorCodigo(COD_VENDA);
 
         verify(vendaRepositoryMock, times(1)).findById(anyLong());
-        verify(itemVendaRepositoryMock, times(1)).findByVendaCodigo(anyLong());
+        verify(itemVendaRepositoryMock, times(1)).buscarPorCodigo(anyLong());
 
         // Nome do cliente
         assertEquals(clienteVendaResponseDTO.getNome(),                                cliente.getNome());
@@ -193,7 +193,7 @@ public class VendaServiceTest {
         assertThrows(RegraNegocioException.class, () -> vendaService.listarVendaPorCodigo(COD_VENDA));
 
         verify(vendaRepositoryMock, times(1)).findById(anyLong());
-        verify(itemVendaRepositoryMock, never()).findByVendaCodigo(anyLong());
+        verify(itemVendaRepositoryMock, never()).buscarPorCodigo(anyLong());
     }
 
     @Test
