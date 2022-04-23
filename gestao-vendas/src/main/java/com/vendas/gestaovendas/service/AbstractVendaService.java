@@ -1,5 +1,6 @@
 package com.vendas.gestaovendas.service;
 
+import com.vendas.gestaovendas.dto.venda.model.ClienteVendaResponseDTO;
 import com.vendas.gestaovendas.dto.venda.model.ItemVendaRequestDTO;
 import com.vendas.gestaovendas.dto.venda.model.ItemVendaResponseDTO;
 import com.vendas.gestaovendas.dto.venda.model.VendaResponseDTO;
@@ -7,6 +8,7 @@ import com.vendas.gestaovendas.entity.ItemVenda;
 import com.vendas.gestaovendas.entity.Produto;
 import com.vendas.gestaovendas.entity.Venda;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,5 +41,11 @@ public abstract class AbstractVendaService {
                 itemVendaRequestDTO.getPrecoVendido(),
                 new Produto(itemVendaRequestDTO.getCodigoProduto()),
                 venda);
+    }
+
+    // Metodo para devolver um ClienteVendaResponseDTO
+    protected ClienteVendaResponseDTO retornandoClienteVendaResponseDTO(Venda venda, List<ItemVenda> itensVendaList) {
+        return  new ClienteVendaResponseDTO(venda.getCliente().getNome(),
+                Arrays.asList(criandoVendaResponseDTO(venda, itensVendaList)));
     }
 }

@@ -13,7 +13,6 @@ import com.vendas.gestaovendas.repository.VendaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -51,8 +50,7 @@ public class VendaService extends AbstractVendaService {
     public ClienteVendaResponseDTO listarVendaPorCodigo(Long codigoVenda) {
         Venda venda = validarVendaExiste(codigoVenda);
         List<ItemVenda> itensVenda = itemVendaRepository.buscarPorCodigo(venda.getCodigo());
-        return new ClienteVendaResponseDTO(venda.getCliente().getNome(),
-                Arrays.asList(criandoVendaResponseDTO(venda, itensVenda)));
+        return retornandoClienteVendaResponseDTO(venda, itensVenda);
     }
 
     // Salva uma Venda
@@ -61,9 +59,8 @@ public class VendaService extends AbstractVendaService {
         validarProdutoExiste(vendaRequestDTO.getItensVendaRequestDTO());
         Venda vendaSalva = salvarVenda(cliente, vendaRequestDTO);
 
-        return new ClienteVendaResponseDTO(vendaSalva.getCliente().getNome(),
-                Arrays.asList(criandoVendaResponseDTO(vendaSalva,
-                        itemVendaRepository.buscarPorCodigo(vendaSalva.getCodigo()))));
+        return retornandoClienteVendaResponseDTO(vendaSalva,
+                itemVendaRepository.buscarPorCodigo(vendaSalva.getCodigo()));
     }
 
     private Venda salvarVenda(Cliente cliente, VendaRequestDTO vendaRequestDTO) {
