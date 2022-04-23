@@ -26,6 +26,7 @@ public class GestaoVendasExceptionHandler extends ResponseEntityExceptionHandler
     public static final String CONSTANT_VALIDATION_NOT_NULL = "NotNull";
     public static final String CONSTANT_VALIDATION_LENGTH = "Length";
     public static final String CONSTANT_VALIDATION_PATTERN = "Pattern";
+    public static final String CONSTANT_VALIDATION_MIN = "Min";
 
     /**
      *  Classe de extensao ResponseEntityExceptionHandler consegue tratar as seguintes classes de erro
@@ -125,6 +126,12 @@ public class GestaoVendasExceptionHandler extends ResponseEntityExceptionHandler
         if (fildError.getCode().equals(CONSTANT_VALIDATION_PATTERN)) {
             log.error("Erro de validacao: campo com formato invalido");
             return fildError.getDefaultMessage().concat(" esta com formato invalido.");
+        }
+        if (fildError.getCode().equals(CONSTANT_VALIDATION_MIN)) {
+            log.error(String.format(
+                    "Erro de validacao: quantidade deve ser maior que %s", fildError.getArguments()[1]));
+            return fildError.getDefaultMessage().concat(String.format(" deve ser maior ou igual a %s",
+                    fildError.getArguments()[1]));
         }
         return fildError.toString();
     }

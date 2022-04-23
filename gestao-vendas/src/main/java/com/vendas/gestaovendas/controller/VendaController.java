@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @Api(tags = "Venda")
 @RestController
 @RequestMapping("/venda")
@@ -46,7 +48,7 @@ public class VendaController {
             nickname = "registarVenda")
     @PostMapping("/cliente/{codigoCliente}")
     public ResponseEntity<ClienteVendaResponseDTO> salvar(@PathVariable(name = "codigoCliente") Long codigoCliente,
-                                                          @RequestBody VendaRequestDTO vendaRequestDTO) {
+                                                          @Valid @RequestBody VendaRequestDTO vendaRequestDTO) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(vendaService.salvar(codigoCliente,vendaRequestDTO));
     }
