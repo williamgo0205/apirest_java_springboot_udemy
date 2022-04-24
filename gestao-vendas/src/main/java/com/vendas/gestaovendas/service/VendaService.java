@@ -13,6 +13,8 @@ import com.vendas.gestaovendas.repository.ItemVendaRepository;
 import com.vendas.gestaovendas.repository.VendaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -55,6 +57,11 @@ public class VendaService extends AbstractVendaService {
     }
 
     // Salva uma Venda
+    // Anotacao  @Transactional inclusa para validar qualquer exception existente na transacao
+    // parametros = somente leitura false (readOnly) e rollback informando a "Exception" mais alta caso
+    // tenha algum erro ao salvar os dados
+    // Quando existe salvamento em mais de uma tabela é aconselhado utilizar essa anotacao
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = false, rollbackFor = Exception.class)
     public ClienteVendaResponseDTO salvar(Long codigoCliente, VendaRequestDTO vendaRequestDTO) {
         Cliente cliente = validarClienteVendaExiste(codigoCliente);
         validarProdutoExisteEAtualizarQuantidade(vendaRequestDTO.getItensVendaRequestDTO());
