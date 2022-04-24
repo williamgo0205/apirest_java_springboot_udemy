@@ -6,6 +6,7 @@ import com.vendas.gestaovendas.dto.venda.model.VendaRequestDTO;
 import com.vendas.gestaovendas.dto.venda.model.VendaResponseDTO;
 import com.vendas.gestaovendas.entity.Cliente;
 import com.vendas.gestaovendas.entity.ItemVenda;
+import com.vendas.gestaovendas.entity.Produto;
 import com.vendas.gestaovendas.entity.Venda;
 import com.vendas.gestaovendas.exception.RegraNegocioException;
 import com.vendas.gestaovendas.repository.ItemVendaRepository;
@@ -20,10 +21,10 @@ import java.util.stream.Collectors;
 @Service
 public class VendaService extends AbstractVendaService {
 
-    private ClienteService clienteService;
-    private ProdutoService produtoService;
-    private VendaRepository vendaRepository;
-    private ItemVendaRepository itemVendaRepository;
+    private final ClienteService clienteService;
+    private final ProdutoService produtoService;
+    private final VendaRepository vendaRepository;
+    private final ItemVendaRepository itemVendaRepository;
 
     @Autowired
     public VendaService(ClienteService clienteService, ProdutoService produtoService,
@@ -56,7 +57,7 @@ public class VendaService extends AbstractVendaService {
     // Salva uma Venda
     public ClienteVendaResponseDTO salvar(Long codigoCliente, VendaRequestDTO vendaRequestDTO) {
         Cliente cliente = validarClienteVendaExiste(codigoCliente);
-        validarProdutoExiste(vendaRequestDTO.getItensVendaRequestDTO());
+        validarProdutoExisteEAtualizarQuantidade(vendaRequestDTO.getItensVendaRequestDTO());
         Venda vendaSalva = salvarVenda(cliente, vendaRequestDTO);
 
         return retornandoClienteVendaResponseDTO(vendaSalva,
@@ -72,9 +73,23 @@ public class VendaService extends AbstractVendaService {
         return vendaSalva;
     }
 
-    private void validarProdutoExiste(List<ItemVendaRequestDTO> itensVendaRequestDTO) {
-        itensVendaRequestDTO.forEach(item ->
-                produtoService.validarSeProdutoExiste(item.getCodigoProduto()));
+    private void validarProdutoExisteEAtualizarQuantidade(List<ItemVendaRequestDTO> itensVendaRequestDTO) {
+        itensVendaRequestDTO.forEach(item -> {
+            Produto produto = produtoService.validarSeProdutoExiste(item.getCodigoProduto());
+            // Valida se a quatidade esta disponivel em estoque
+            validarSeQuantidadeProdutoExiste(produto, item.getQuantidade());
+            // Atualizando quantidade disponivel em estoque
+            produto.setQuantidade(produto.getQuantidade() - item.getQuantidade());
+            // Persistir no Banco de dados a quantidade do produto apos a venda
+            produtoService.atualizarQuantidadeAposVenda(produto);
+        });
+    }
+
+    private void validarSeQuantidadeProdutoExiste(Produto produto, Integer qtdeVendaDto) {
+        if(!(produto.getQuantidade() >= qtdeVendaDto)) {
+            throw new RegraNegocioException(String.format("A quantidade %s informada para o produto %s "
+                    + "nao esta disponivel em estoque", qtdeVendaDto, produto.getDescricao()));
+        }
     }
 
     private Venda validarVendaExiste(Long codigoVenda) {

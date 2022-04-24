@@ -211,7 +211,7 @@ public class VendaControllerTest {
 
     @Test
     public void erroSalvarClienteQuantidadeDeProdutoInvalido_ValidationMin() throws Exception {
-        // Quantidade de Produto Inalido
+        // Quantidade de Produto Invalido
         Integer quantidadeProdutoInvalido = 0;
 
         // Criando Cliente

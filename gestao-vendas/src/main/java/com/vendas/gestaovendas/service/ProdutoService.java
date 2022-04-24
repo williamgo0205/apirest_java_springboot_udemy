@@ -100,5 +100,8 @@ public class ProdutoService {
         return optProduto.get();
     }
 
-
+    // Metodo responsavel por atualizar a quantidade do produto apos uma venda
+    protected  void atualizarQuantidadeAposVenda(Produto produto) {
+        produtoRepository.save(produto);
+    }
 }

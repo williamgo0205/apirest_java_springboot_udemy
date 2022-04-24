@@ -222,11 +222,13 @@ public class VendaServiceTest {
         doReturn(Optional.of(cliente)).when(clienteServiceMock).buscarPorCodigo(COD_CLIENTE);
         doReturn(venda).when(vendaRepositoryMock)
                 .save(new Venda(vendaRequestDTO.getData(), cliente));
+        doReturn(produto).when(produtoServiceMock).validarSeProdutoExiste(ID_PRODUTO);
 
         ClienteVendaResponseDTO clienteVendaResponseDTO = vendaService.salvar(COD_CLIENTE, vendaRequestDTO);
 
         verify(clienteServiceMock, times(1)).buscarPorCodigo(anyLong());
         verify(produtoServiceMock, times(1)).validarSeProdutoExiste(anyLong());
+        verify(produtoServiceMock, times(1)).atualizarQuantidadeAposVenda(any());
         verify(vendaRepositoryMock, times(1)).save(any());
         verify(itemVendaRepositoryMock, times(1)).save(any());
 
@@ -281,6 +283,43 @@ public class VendaServiceTest {
 
         verify(clienteServiceMock, times(1)).buscarPorCodigo(anyLong());
         verify(produtoServiceMock, times(1)).validarSeProdutoExiste(anyLong());
+        verify(vendaRepositoryMock, never()).save(any());
+        verify(itemVendaRepositoryMock, never()).save(any());
+    }
+
+    @Test
+    public void erroSalvar_ProdutoSemQuantidadeEmEstoque() {
+        Integer qtdeMaiorQueEstoque = 1000;
+
+        // Criando Cliente
+        Cliente cliente =
+                ClienteMockFactory.createCliente(COD_CLIENTE, NOME_CLIENTE, TELEFONE_CLIENTE, ATIVO_CLIENTE,
+                        LOGRADOURO_CLIENTE, NUMERO_CLIENTE, COMPLEMENTO_CLIENTE, BAIRRO_CLIENTE, CEP_CLIENTE,
+                        CIDADE_CLIENTE, ESTADO_CLIENTE);
+        // Criando Produto
+        Produto produto =
+                ProdutoMockFactory.createProduto(ID_PRODUTO, DESCRICAO_PRODUTO, QUANTIDADE_PRODUTO,
+                        PRECO_CUSTO_PRODUTO, PRECO_VENDA_PRODUTO, OBSERVACAO_PRODUTO,
+                        ID_CATEGORIA, NOME_CATEGORIA);
+        // Criando Venda
+        Venda venda =
+                VendaMockFactory.createVenda(COD_VENDA, DATA_VENDA, cliente);
+        // Criando Item Venda
+        ItemVenda itemVenda =
+                VendaMockFactory.createItemVenda(COD_ITEM_VENDA, qtdeMaiorQueEstoque, PRECO_VENDIDO, produto, venda);
+        // Criando VendaRequestDTO
+        VendaRequestDTO vendaRequestDTO =
+                VendaMockFactory.createVendaRequestDTO(DATA_VENDA,
+                        Arrays.asList(VendaMockFactory.createItemVendaRequestDTO(itemVenda)));
+
+        doReturn(Optional.of(cliente)).when(clienteServiceMock).buscarPorCodigo(COD_CLIENTE);
+        doReturn(produto).when(produtoServiceMock).validarSeProdutoExiste(ID_PRODUTO);
+
+        assertThrows(RegraNegocioException.class, () -> vendaService.salvar(COD_CLIENTE, vendaRequestDTO));
+
+        verify(clienteServiceMock, times(1)).buscarPorCodigo(anyLong());
+        verify(produtoServiceMock, times(1)).validarSeProdutoExiste(anyLong());
+        verify(produtoServiceMock, never()).atualizarQuantidadeAposVenda(any());
         verify(vendaRepositoryMock, never()).save(any());
         verify(itemVendaRepositoryMock, never()).save(any());
     }
