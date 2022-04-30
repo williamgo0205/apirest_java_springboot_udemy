@@ -433,6 +433,36 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "localhost:8080/venda/{codigoVenda}/cliente/{codigoCliente}",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"data\": \"2021-01-02\",\r\n  \"itensVendaRequestDTO\": [\r\n    {\r\n      \"codigoProduto\": 1,\r\n      \"precoVendido\": 1740,\r\n      \"quantidade\": 2\r\n    }\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{localhost}}/venda//1/cliente/1",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"venda",
+								"",
+								"1",
+								"cliente",
+								"1"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},

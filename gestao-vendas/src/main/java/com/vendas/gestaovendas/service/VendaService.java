@@ -63,12 +63,41 @@ public class VendaService extends AbstractVendaService {
     // Quando existe salvamento em mais de uma tabela é aconselhado utilizar essa anotacao
     @Transactional(propagation = Propagation.REQUIRED, readOnly = false, rollbackFor = Exception.class)
     public ClienteVendaResponseDTO salvar(Long codigoCliente, VendaRequestDTO vendaRequestDTO) {
+        // Valida se o cliente existe na base de Dados
         Cliente cliente = validarClienteVendaExiste(codigoCliente);
+        // Valida se o produto existe e atualiza a quantidade em estoque
         validarProdutoExisteEAtualizarQuantidade(vendaRequestDTO.getItensVendaRequestDTO());
+
         Venda vendaSalva = salvarVenda(cliente, vendaRequestDTO);
 
         return retornandoClienteVendaResponseDTO(vendaSalva,
                 itemVendaRepository.buscarPorCodigo(vendaSalva.getCodigo()));
+    }
+
+    // Método para Atualizar uma venda
+    // Anotacao  @Transactional inclusa para validar qualquer exception existente na transacao
+    // parametros = somente leitura false (readOnly) e rollback informando a "Exception" mais alta caso
+    // tenha algum erro ao atualizar os dados
+    // Quando existe salvamento em mais de uma tabela é aconselhado utilizar essa anotacao
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = false, rollbackFor = Exception.class)
+    public ClienteVendaResponseDTO atualizar(Long codigoVenda,  Long codigoCliente, VendaRequestDTO vendaRequestDTO) {
+        // Valida se a Venda existe no banco de dados
+        Venda venda = validarVendaExiste(codigoVenda);
+        // Validar se Cliente Existe na base de dados
+        Cliente cliente = validarClienteVendaExiste(codigoCliente);
+        // Busca os itens da venda que estão na base de dados
+        List<ItemVenda> itemVendasList = itemVendaRepository.buscarPorCodigo(codigoVenda);
+        // Valida se o produto da lista existe e devolve a quantidade em estoque
+        validarProdutoExisteEDevolverEstoque(itemVendasList);
+        // Valida a quantidade do Produto em estoque
+        validarProdutoExisteEAtualizarQuantidade(vendaRequestDTO.getItensVendaRequestDTO());
+        // Deletar os itens da venda anterior para atualizar com os novos vindos da request
+        itemVendaRepository.deleteAll(itemVendasList);
+        // Atualiza a venda com os valores novos
+        Venda vendaAtualizada = atualizarVenda(codigoVenda, cliente, vendaRequestDTO);
+
+        return retornandoClienteVendaResponseDTO(vendaAtualizada,
+                itemVendaRepository.buscarPorCodigo(vendaAtualizada.getCodigo()));
     }
 
     // Método para deletar uma venda
@@ -78,15 +107,15 @@ public class VendaService extends AbstractVendaService {
     // Quando existe salvamento em mais de uma tabela é aconselhado utilizar essa anotacao
     @Transactional(propagation = Propagation.REQUIRED, readOnly = false, rollbackFor = Exception.class)
     public void deletar(Long codigoVenda) {
-        // Valida se a venda existe no banco de dados
+        // Valida se a Venda existe no banco de dados
         validarVendaExiste(codigoVenda);
-        // Busca os itens da venda
+        // Busca os Itens da venda
         List<ItemVenda> itemVendas = itemVendaRepository.buscarPorCodigo(codigoVenda);
-        // Valida se o produto existe e atualiza quantidade do produto em estoque
+        // Valida se o Produto existe e atualiza quantidade do produto em estoque
         validarProdutoExisteEDevolverEstoque(itemVendas);
-        // Deleta os itens da venda
+        // Deleta os Itens da venda
         itemVendaRepository.deleteAll(itemVendas);
-        // Deleta a venda
+        // Deleta a Venda
         vendaRepository.deleteById(codigoVenda);
     }
 
@@ -102,6 +131,15 @@ public class VendaService extends AbstractVendaService {
 
     private Venda salvarVenda(Cliente cliente, VendaRequestDTO vendaRequestDTO) {
         Venda vendaSalva = vendaRepository.save(new Venda(vendaRequestDTO.getData(), cliente));
+        vendaRequestDTO.getItensVendaRequestDTO()
+                .stream()
+                .map(itemVendaRequestDTO -> criandoItemVenda(itemVendaRequestDTO, vendaSalva))
+                .forEach(itemVendaRepository::save);
+        return vendaSalva;
+    }
+
+    private Venda atualizarVenda(Long codigoVenda, Cliente cliente, VendaRequestDTO vendaRequestDTO) {
+        Venda vendaSalva = vendaRepository.save(new Venda(codigoVenda, vendaRequestDTO.getData(), cliente));
         vendaRequestDTO.getItensVendaRequestDTO()
                 .stream()
                 .map(itemVendaRequestDTO -> criandoItemVenda(itemVendaRequestDTO, vendaSalva))

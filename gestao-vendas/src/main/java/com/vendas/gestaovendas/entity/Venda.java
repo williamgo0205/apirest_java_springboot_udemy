@@ -35,6 +35,12 @@ public class Venda {
         this.cliente = cliente;
     }
 
+    public Venda(Long codigo, LocalDate data, Cliente cliente) {
+        this.codigo = codigo;
+        this.data = data;
+        this.cliente = cliente;
+    }
+
     public Long getCodigo() {
         return codigo;
     }
