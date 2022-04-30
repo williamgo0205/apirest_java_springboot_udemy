@@ -22,8 +22,16 @@ import java.util.Optional;
 import static java.lang.String.valueOf;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.anyLong;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ConfigTest
@@ -173,8 +181,6 @@ public class CategoriaControllerTest {
 
     @Test
     public void deletarCategoriaSucesso() throws Exception {
-        CategoriaMockFactory.createCategoria(ID_CATEGORIA_TECNOLOGIA, NOME_CATEGORIA_TECNOLOGIA);
-
         mvc.perform(delete(String.format(DELETE_CATEGORIA_DELETAR_PATH, ID_CATEGORIA_TECNOLOGIA))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent())

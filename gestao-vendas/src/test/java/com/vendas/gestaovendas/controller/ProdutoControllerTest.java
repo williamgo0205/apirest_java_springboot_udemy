@@ -26,8 +26,15 @@ import static java.lang.String.valueOf;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ConfigTest
@@ -232,16 +239,7 @@ public class ProdutoControllerTest {
 
     @Test
     public void deletarProdutoSucesso() throws Exception {
-        // Create Categoria
-        final Categoria categoriaTecnologia = CategoriaMockFactory.createCategoria(ID_CATEGORIA, NOME_CATEGORIA_TECNOLOGIA);
-        // Create Produto
-        final Produto produto =
-                ProdutoMockFactory.createProduto(ID_PRODUTO_NOTEBOOK, DESCRICAO_PRODUTO_NOTEBOOK,
-                        QUANTIDADE_PRODUTO_NOTEBOOK, PRECO_CUSTO_PRODUTO_NOTEBOOK, PRECO_VENDA_PRODUTO_NOTEBOOK,
-                        OBSERVACAO_PRODUTO_NOTEBOOK, ID_CATEGORIA, NOME_CATEGORIA_TECNOLOGIA);
-
-        mvc.perform(delete(String.format(DELETE_PRODUTO_DELETAR_PATH,
-                                         categoriaTecnologia.getCodigo(), produto.getCodigo()))
+        mvc.perform(delete(String.format(DELETE_PRODUTO_DELETAR_PATH, ID_CATEGORIA, ID_PRODUTO_NOTEBOOK))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent())
                 .andReturn();

@@ -34,6 +34,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -44,6 +45,7 @@ public class VendaControllerTest {
     private static final String GET_LISTAR_VENDAS_POR_CLIENTE_PATH  = "/venda/cliente/%s";
     private static final String GET_LISTAR_VENDA_POR_CODIGO_PATH    = "/venda/%s";
     private static final String POST_VENDA_SALVAR_PATH              = "/venda/cliente/%s";
+    private static final String DELETE_VENDA_POR_CODIGO_PATH        = "/venda/%s";
 
     private static final Long       COD_VENDA           = 1L;
     private static final LocalDate  DATA_VENDA          = LocalDate.of(2022, 04, 27);
@@ -210,7 +212,7 @@ public class VendaControllerTest {
     }
 
     @Test
-    public void erroSalvarClienteQuantidadeDeProdutoInvalido_ValidationMin() throws Exception {
+    public void erroSalvarVendaQuantidadeDeProdutoInvalido_ValidationMin() throws Exception {
         // Quantidade de Produto Invalido
         Integer quantidadeProdutoInvalido = 0;
 
@@ -253,6 +255,16 @@ public class VendaControllerTest {
                 .andReturn();
 
         Assertions.assertThat(result.getResponse().getContentAsString()).contains(QUANTIDADE_INVALIDA);
+    }
+
+    @Test
+    public void deletarVendaComSucesso() throws Exception {
+        mvc.perform(delete(String.format(DELETE_VENDA_POR_CODIGO_PATH, COD_VENDA))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent())
+                .andReturn();
+
+        verify(vendaServiceMock, times(1)).deletar(anyLong());
     }
 
     private String createVendaJSON(ClienteVendaResponseDTO clienteVendaResponseDTO) {

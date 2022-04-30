@@ -323,4 +323,55 @@ public class VendaServiceTest {
         verify(vendaRepositoryMock, never()).save(any());
         verify(itemVendaRepositoryMock, never()).save(any());
     }
+
+    @Test
+    public void deletarVendaTest() {
+        // Criando Cliente
+        Cliente cliente =
+                ClienteMockFactory.createCliente(COD_CLIENTE, NOME_CLIENTE, TELEFONE_CLIENTE, ATIVO_CLIENTE,
+                        LOGRADOURO_CLIENTE, NUMERO_CLIENTE, COMPLEMENTO_CLIENTE, BAIRRO_CLIENTE, CEP_CLIENTE,
+                        CIDADE_CLIENTE, ESTADO_CLIENTE);
+        // Criando Produto
+        Produto produto =
+                ProdutoMockFactory.createProduto(ID_PRODUTO, DESCRICAO_PRODUTO, QUANTIDADE_PRODUTO,
+                        PRECO_CUSTO_PRODUTO, PRECO_VENDA_PRODUTO, OBSERVACAO_PRODUTO,
+                        ID_CATEGORIA, NOME_CATEGORIA);
+        // Criando Venda
+        Venda venda =
+                VendaMockFactory.createVenda(COD_VENDA, DATA_VENDA, cliente);
+        // Criando Item Venda
+        ItemVenda itemVenda =
+                VendaMockFactory.createItemVenda(COD_ITEM_VENDA, QUANTIDADE, PRECO_VENDIDO, produto, venda);
+        // Criando VendaRequestDTO
+        VendaRequestDTO vendaRequestDTO =
+                VendaMockFactory.createVendaRequestDTO(DATA_VENDA,
+                        Arrays.asList(VendaMockFactory.createItemVendaRequestDTO(itemVenda)));
+
+        doReturn(Optional.of(venda)).when(vendaRepositoryMock).findById(COD_VENDA);
+        doReturn(Arrays.asList(itemVenda)).when(itemVendaRepositoryMock).buscarPorCodigo(COD_VENDA);
+        doReturn(produto).when(produtoServiceMock).validarSeProdutoExiste(ID_PRODUTO);
+
+        vendaService.deletar(COD_VENDA);
+
+        verify(vendaRepositoryMock, times(1)).findById(anyLong());
+        verify(itemVendaRepositoryMock, times(1)).buscarPorCodigo(anyLong());
+        verify(produtoServiceMock, times(1)).validarSeProdutoExiste(anyLong());
+        verify(produtoServiceMock, times(1)).atualizarQuantidadeEmEstoque(any());
+        verify(itemVendaRepositoryMock, times(1)).deleteAll(any());
+        verify(vendaRepositoryMock, times(1)).deleteById(any());
+    }
+
+    @Test
+    public void erroDeletarVenda_VendaInexistenteTest() {
+        doReturn(Optional.empty()).when(vendaRepositoryMock).findById(COD_VENDA);
+
+        assertThrows(RegraNegocioException.class, () -> vendaService.deletar(COD_VENDA));
+
+        verify(vendaRepositoryMock, times(1)).findById(anyLong());
+        verify(itemVendaRepositoryMock, never()).buscarPorCodigo(anyLong());
+        verify(produtoServiceMock, never()).validarSeProdutoExiste(anyLong());
+        verify(produtoServiceMock, never()).atualizarQuantidadeEmEstoque(any());
+        verify(itemVendaRepositoryMock, never()).deleteAll(any());
+        verify(vendaRepositoryMock, never()).deleteById(any());
+    }
 }

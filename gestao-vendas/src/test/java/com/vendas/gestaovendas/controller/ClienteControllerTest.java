@@ -23,8 +23,16 @@ import java.util.Optional;
 import static java.lang.String.valueOf;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.anyLong;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ConfigTest
@@ -320,20 +328,6 @@ public class ClienteControllerTest {
     }
 
     @Test
-    public void deletarClienteSucesso() throws Exception {
-        ClienteMockFactory.createClienteRequestDTO(NOME_CLIENTE_1, TELEFONE_CLIENTE_1, ATIVO_CLIENTE_1,
-                        LOGRADOURO_CLIENTE_1, NUMERO_CLIENTE_1, COMPLEMENTO_CLIENTE_1, BAIRRO_CLIENTE_1,
-                        CEP_CLIENTE_1, CIDADE_CLIENTE_1, ESTADO_CLIENTE_1);
-
-        mvc.perform(delete(String.format(DELETE_CLIENTE_DELETAR_PATH, COD_CLIENTE_1))
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNoContent())
-                .andReturn();
-
-        verify(clienteServiceMock, times(1)).deletar(anyLong());
-    }
-
-    @Test
     public void atualizarClienteSucesso() throws Exception {
         String nomeClienteAtualizado = "Tony Stark Atualizado";
 
@@ -370,6 +364,16 @@ public class ClienteControllerTest {
 
         verify(clienteServiceMock, times(1)).atualizar(anyLong(), any());
         assertThat(result.getResponse().getContentAsString(), is(createClienteJSON(clienteResponseDTO)));
+    }
+
+    @Test
+    public void deletarClienteSucesso() throws Exception {
+        mvc.perform(delete(String.format(DELETE_CLIENTE_DELETAR_PATH, COD_CLIENTE_1))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent())
+                .andReturn();
+
+        verify(clienteServiceMock, times(1)).deletar(anyLong());
     }
 
     private String createClienteJSON(ClienteResponseDTO clienteResponseDTO) {
