@@ -333,7 +333,7 @@ public class ProdutoServiceTest {
     }
 
     @Test
-    public void validarSeProdutoExiste() {
+    public void validarSeProdutoExisteTest() {
          Produto produto =
                 ProdutoMockFactory.createProduto(ID_PRODUTO_1, DESCRICAO_PRODUTO_1, QUANTIDADE_PRODUTO_1,
                         PRECO_CUSTO_PRODUTO_1, PRECO_VENDA_PRODUTO_1, OBSERVACAO_PRODUTO_1, ID_CATEGORIA_1,
@@ -357,7 +357,7 @@ public class ProdutoServiceTest {
     }
 
     @Test
-    public void erroValidarSeProdutoExiste_CodigoProdutoInexistente() {
+    public void erroValidarSeProdutoExiste_CodigoProdutoInexistenteTest() {
         Long codigoProdutoInexistente = 3L;
 
         doReturn(Optional.empty())
@@ -367,5 +367,11 @@ public class ProdutoServiceTest {
                 produtoService.validarSeProdutoExiste(codigoProdutoInexistente));
 
         verify(produtoRepositoryMock, times(1)).findById(any());
+    }
+
+    @Test
+    public void atualizarQuantidadeEmEstoqueTest() {
+        produtoService.atualizarQuantidadeEmEstoque(new Produto());
+        verify(produtoRepositoryMock, times(1)).save(any());
     }
 }

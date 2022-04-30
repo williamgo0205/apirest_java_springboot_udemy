@@ -37,6 +37,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ConfigTest
@@ -45,7 +46,8 @@ public class VendaControllerTest {
     private static final String GET_LISTAR_VENDAS_POR_CLIENTE_PATH  = "/venda/cliente/%s";
     private static final String GET_LISTAR_VENDA_POR_CODIGO_PATH    = "/venda/%s";
     private static final String POST_VENDA_SALVAR_PATH              = "/venda/cliente/%s";
-    private static final String DELETE_VENDA_POR_CODIGO_PATH        = "/venda/%s";
+    private static final String PUT_VENDA_ATUALIZAR_PATH            = "/venda/%s/cliente/%s";
+    private static final String DELETE_VENDA_DELETAR_PATH           = "/venda/%s";
 
     private static final Long       COD_VENDA           = 1L;
     private static final LocalDate  DATA_VENDA          = LocalDate.of(2022, 04, 27);
@@ -258,8 +260,57 @@ public class VendaControllerTest {
     }
 
     @Test
+    public void atualizarVenda_SucessoTest() throws Exception {
+        Integer quantidadeAlterada = 2;
+
+        // Criando Cliente
+        final Cliente cliente =
+                ClienteMockFactory.createCliente(COD_CLIENTE, NOME_CLIENTE, TELEFONE_CLIENTE, ATIVO_CLIENTE,
+                        LOGRADOURO_CLIENTE, NUMERO_CLIENTE, COMPLEMENTO_CLIENTE, BAIRRO_CLIENTE, CEP_CLIENTE,
+                        CIDADE_CLIENTE, ESTADO_CLIENTE);
+        // Criando Produto
+        final Produto produto =
+                ProdutoMockFactory.createProduto(ID_PRODUTO, DESCRICAO_PRODUTO, QUANTIDADE_PRODUTO,
+                        PRECO_CUSTO_PRODUTO, PRECO_VENDA_PRODUTO, OBSERVACAO_PRODUTO,
+                        ID_CATEGORIA, NOME_CATEGORIA);
+        // Criando Venda
+        final Venda venda =
+                VendaMockFactory.createVenda(COD_VENDA, DATA_VENDA, cliente);
+        // Criando Item Venda
+        final ItemVenda itemVenda =
+                VendaMockFactory.createItemVenda(COD_ITEM_VENDA, QUANTIDADE, PRECO_VENDIDO, produto, venda);
+        final ItemVenda itemVendaAtualizada =
+                VendaMockFactory.createItemVenda(COD_ITEM_VENDA, quantidadeAlterada, PRECO_VENDIDO, produto, venda);
+
+        // Criando createItensVendaResponseDTO
+        final ItemVendaResponseDTO itensVendaResponseDTO =
+                VendaMockFactory.createItensVendaResponseDTO(itemVendaAtualizada);
+        // Criando createVendaResponseDTO
+        final VendaResponseDTO vendaResponseDTO =
+                VendaMockFactory.createVendaResponseDTO(COD_VENDA, DATA_VENDA, Arrays.asList(itensVendaResponseDTO));
+        // Criando ClienteVendaResponseDTO
+        final ClienteVendaResponseDTO clienteVendaResponseDTO =
+                VendaMockFactory.createClienteVendaResponseDTO(NOME_CLIENTE, Arrays.asList(vendaResponseDTO));
+        // Criando VendaRequestDTO
+        VendaRequestDTO vendaRequestDTO =
+                VendaMockFactory.createVendaRequestDTO(DATA_VENDA,
+                        Arrays.asList(VendaMockFactory.createItemVendaRequestDTO(itemVendaAtualizada)));
+
+        when(vendaServiceMock.atualizar(anyLong(), anyLong(), any())).thenReturn(clienteVendaResponseDTO);
+
+        final MvcResult result = mvc.perform(put(String.format(PUT_VENDA_ATUALIZAR_PATH, COD_VENDA, COD_CLIENTE))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(vendaRequestDTO)))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        verify(vendaServiceMock, times(1)).atualizar(anyLong(), anyLong(), any());
+        assertThat(result.getResponse().getContentAsString(), is(createVendaJSON(clienteVendaResponseDTO)));
+    }
+
+    @Test
     public void deletarVendaComSucesso() throws Exception {
-        mvc.perform(delete(String.format(DELETE_VENDA_POR_CODIGO_PATH, COD_VENDA))
+        mvc.perform(delete(String.format(DELETE_VENDA_DELETAR_PATH, COD_VENDA))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent())
                 .andReturn();

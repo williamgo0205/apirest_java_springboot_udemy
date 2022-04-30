@@ -58,7 +58,7 @@ public class CategoriaControllerTest {
     private ObjectMapper objectMapper;
 
     @Test
-    public void listarTodas() throws Exception {
+    public void listarTodasTest() throws Exception {
         // Create List CategoriaResponseDTO
         CategoriaResponseDTO categoriaResponseDTOTecnologia =
                 CategoriaMockFactory.createCategoriaResponseDTO(ID_CATEGORIA_TECNOLOGIA, NOME_CATEGORIA_TECNOLOGIA);
@@ -86,7 +86,7 @@ public class CategoriaControllerTest {
     }
 
     @Test
-    public void listarPorCodigoRetornoSucesso_HttpStatus_200() throws Exception {
+    public void listarPorCodigoRetornoSucesso_HttpStatus_200Test() throws Exception {
         // Create CategoriaResponseDTO
         final CategoriaResponseDTO categoriaResponseDTO =
                 CategoriaMockFactory.createCategoriaResponseDTO(ID_CATEGORIA_TECNOLOGIA, NOME_CATEGORIA_TECNOLOGIA);
@@ -106,7 +106,7 @@ public class CategoriaControllerTest {
     }
 
     @Test
-    public void listarPorCodigoRetornoErroNotFound_HttpStatus_404() throws Exception {
+    public void listarPorCodigoRetornoErroNotFound_HttpStatus_404Test() throws Exception {
         // Create CategoriaResponseDTO
         final CategoriaResponseDTO categoriaResponseDTO =
                 CategoriaMockFactory.createCategoriaResponseDTO(ID_CATEGORIA_TECNOLOGIA, NOME_CATEGORIA_TECNOLOGIA);
@@ -125,7 +125,7 @@ public class CategoriaControllerTest {
     }
 
     @Test
-    public void salvarCategoriaSucesso() throws Exception {
+    public void salvarCategoria_SucessoTest() throws Exception {
         // Create CategoriaResponseDTO
         final CategoriaResponseDTO categoriaResponseDTO =
                 CategoriaMockFactory.createCategoriaResponseDTO(ID_CATEGORIA_TECNOLOGIA, NOME_CATEGORIA_TECNOLOGIA);
@@ -150,7 +150,7 @@ public class CategoriaControllerTest {
     }
 
     @Test
-    public void atualizarCategoriaSucesso() throws Exception {
+    public void atualizarCategoria_SucessoTest() throws Exception {
         String nomeCategoriaAtualizada = "Tecnologia Atualizada";
 
         // Create CategoriaResponseDTO
@@ -180,7 +180,7 @@ public class CategoriaControllerTest {
     }
 
     @Test
-    public void deletarCategoriaSucesso() throws Exception {
+    public void deletarCategoria_SucessoTest() throws Exception {
         mvc.perform(delete(String.format(DELETE_CATEGORIA_DELETAR_PATH, ID_CATEGORIA_TECNOLOGIA))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent())

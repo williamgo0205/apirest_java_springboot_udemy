@@ -82,7 +82,7 @@ public class VendaService extends AbstractVendaService {
     @Transactional(propagation = Propagation.REQUIRED, readOnly = false, rollbackFor = Exception.class)
     public ClienteVendaResponseDTO atualizar(Long codigoVenda,  Long codigoCliente, VendaRequestDTO vendaRequestDTO) {
         // Valida se a Venda existe no banco de dados
-        Venda venda = validarVendaExiste(codigoVenda);
+        validarVendaExiste(codigoVenda);
         // Validar se Cliente Existe na base de dados
         Cliente cliente = validarClienteVendaExiste(codigoCliente);
         // Busca os itens da venda que estão na base de dados

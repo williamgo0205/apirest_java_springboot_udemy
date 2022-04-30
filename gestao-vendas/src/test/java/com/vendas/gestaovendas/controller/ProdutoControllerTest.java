@@ -73,7 +73,7 @@ public class ProdutoControllerTest {
     private ObjectMapper objectMapper;
 
     @Test
-    public void listarTodos() throws Exception {
+    public void listarTodosTest() throws Exception {
         // Create Categoria
         final Categoria categoriaTecnologia =
                 CategoriaMockFactory.createCategoria(ID_CATEGORIA, NOME_CATEGORIA_TECNOLOGIA);
@@ -110,7 +110,7 @@ public class ProdutoControllerTest {
     }
 
     @Test
-    public void listarPorCodigoECategoriaRetornoSucesso_HttpStatus_200() throws Exception {
+    public void listarPorCodigoECategoriaRetornoSucesso_HttpStatus_200Test() throws Exception {
         // Create Categoria
         final Categoria categoriaTecnologia =
                 CategoriaMockFactory.createCategoria(ID_CATEGORIA, NOME_CATEGORIA_TECNOLOGIA);
@@ -138,7 +138,7 @@ public class ProdutoControllerTest {
     }
 
     @Test
-    public void listarPorCodigoECategoriaRetornoErroNotFound_HttpStatus_404() throws Exception {
+    public void listarPorCodigoECategoriaRetornoErroNotFound_HttpStatus_404Test() throws Exception {
         // Create Categoria
         final Categoria categoriaTecnologia =
                 CategoriaMockFactory.createCategoria(ID_CATEGORIA, NOME_CATEGORIA_TECNOLOGIA);
@@ -162,7 +162,7 @@ public class ProdutoControllerTest {
     }
 
     @Test
-    public void salvarProdutoSucesso() throws Exception {
+    public void salvarProduto_SucessoTest() throws Exception {
         // Create Categoria
         final Categoria categoriaTecnologia =
                 CategoriaMockFactory.createCategoria(ID_CATEGORIA, NOME_CATEGORIA_TECNOLOGIA);
@@ -197,7 +197,7 @@ public class ProdutoControllerTest {
     }
 
     @Test
-    public void atualizarProdutoSucesso() throws Exception {
+    public void atualizarProduto_SucessoTest() throws Exception {
         String descricaoProdutoAtualizado = "Notebook Atualizado";
 
         // Create Categoria
@@ -238,7 +238,7 @@ public class ProdutoControllerTest {
     }
 
     @Test
-    public void deletarProdutoSucesso() throws Exception {
+    public void deletarProduto_SucessoTest() throws Exception {
         mvc.perform(delete(String.format(DELETE_PRODUTO_DELETAR_PATH, ID_CATEGORIA, ID_PRODUTO_NOTEBOOK))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent())

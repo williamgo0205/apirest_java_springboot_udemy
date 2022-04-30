@@ -83,7 +83,7 @@ public class ClienteControllerTest {
     private ObjectMapper objectMapper;
 
     @Test
-    public void listarTodos() throws Exception {
+    public void listarTodosTest() throws Exception {
         // Create List ClienteResponseDTO
         final ClienteResponseDTO primeiroClienteResponseDTO =
                 ClienteMockFactory.createClienteResponseDTO(COD_CLIENTE_1, NOME_CLIENTE_1, TELEFONE_CLIENTE_1,
@@ -117,7 +117,7 @@ public class ClienteControllerTest {
     }
 
     @Test
-    public void listarPorCodigoRetornoSucesso_HttpStatus_200() throws Exception {
+    public void listarPorCodigoRetornoSucesso_HttpStatus_200Test() throws Exception {
         // Create ClienteResponseDTO
         final ClienteResponseDTO clienteResponseDTO =
                 ClienteMockFactory.createClienteResponseDTO(COD_CLIENTE_1, NOME_CLIENTE_1, TELEFONE_CLIENTE_1,
@@ -141,7 +141,7 @@ public class ClienteControllerTest {
     }
 
     @Test
-    public void listarPorCodigoRetornoErroNotFound_HttpStatus_404() throws Exception {
+    public void listarPorCodigoRetornoErroNotFound_HttpStatus_404Test() throws Exception {
         // Create ClienteResponseDTO
         final ClienteResponseDTO clienteResponseDTO =
                 ClienteMockFactory.createClienteResponseDTO(COD_CLIENTE_1, NOME_CLIENTE_1, TELEFONE_CLIENTE_1,
@@ -166,7 +166,7 @@ public class ClienteControllerTest {
     }
 
     @Test
-    public void salvarClienteSucesso() throws Exception {
+    public void salvarCliente_SucessoTest() throws Exception {
         // Create ClienteRequestDTO
         final ClienteRequestDTO createClienteRequestDTO =
                 ClienteMockFactory.createClienteRequestDTO(NOME_CLIENTE_1, TELEFONE_CLIENTE_1, ATIVO_CLIENTE_1,
@@ -197,7 +197,7 @@ public class ClienteControllerTest {
     }
 
     @Test
-    public void erroSalvarClienteTelefoneFormatoInvalido_ValidationPattern() throws Exception {
+    public void erroSalvarClienteTelefoneFormatoInvalido_ValidationPatternTest() throws Exception {
         // Formato Telefone correto (00)00000-0000
         String telefoneFormatoInvalido = "00000000000";
 
@@ -230,7 +230,7 @@ public class ClienteControllerTest {
     }
 
     @Test
-    public void erroSalvarClienteCepFormatoInvalido_ValidationPattern() throws Exception {
+    public void erroSalvarClienteCepFormatoInvalido_ValidationPatternTest() throws Exception {
         // Formato Cep correto 00000-000
         String cepFormatoInvalido = "00000000";
 
@@ -263,7 +263,7 @@ public class ClienteControllerTest {
     }
 
     @Test
-    public void erroSalvarClienteNomeComTamanhoInvalido_ValidationLength() throws Exception {
+    public void erroSalvarClienteNomeComTamanhoInvalido_ValidationLengthTest() throws Exception {
         // Tamanho do campo nome inválido, deve ter entre 3 e 50 caracteres
         String nomeInvalido = "W";
 
@@ -297,7 +297,7 @@ public class ClienteControllerTest {
     }
 
     @Test
-    public void erroSalvarClienteNomeCampoObrigatorio_ValidationNotNull() throws Exception {
+    public void erroSalvarClienteNomeCampoObrigatorio_ValidationNotNullTest() throws Exception {
         // Create ClienteRequestDTO
         final ClienteRequestDTO createClienteRequestDTO =
                 ClienteMockFactory.createClienteRequestDTO(null, TELEFONE_CLIENTE_1, ATIVO_CLIENTE_1,
@@ -328,7 +328,7 @@ public class ClienteControllerTest {
     }
 
     @Test
-    public void atualizarClienteSucesso() throws Exception {
+    public void atualizarCliente_SucessoTest() throws Exception {
         String nomeClienteAtualizado = "Tony Stark Atualizado";
 
         // Create ClienteRequestDTO
@@ -367,7 +367,7 @@ public class ClienteControllerTest {
     }
 
     @Test
-    public void deletarClienteSucesso() throws Exception {
+    public void deletarCliente_SucessoTest() throws Exception {
         mvc.perform(delete(String.format(DELETE_CLIENTE_DELETAR_PATH, COD_CLIENTE_1))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent())
