@@ -101,7 +101,7 @@ public class ProdutoService {
     }
 
     // Metodo responsavel por atualizar a quantidade do produto apos uma venda
-    protected  void atualizarQuantidadeAposVenda(Produto produto) {
+    protected  void atualizarQuantidadeEmEstoque(Produto produto) {
         produtoRepository.save(produto);
     }
 }

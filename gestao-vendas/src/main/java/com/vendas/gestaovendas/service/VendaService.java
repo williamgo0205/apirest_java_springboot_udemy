@@ -71,6 +71,35 @@ public class VendaService extends AbstractVendaService {
                 itemVendaRepository.buscarPorCodigo(vendaSalva.getCodigo()));
     }
 
+    // Método para deletar uma venda
+    // Anotacao  @Transactional inclusa para validar qualquer exception existente na transacao
+    // parametros = somente leitura false (readOnly) e rollback informando a "Exception" mais alta caso
+    // tenha algum erro ao deletar os dados
+    // Quando existe salvamento em mais de uma tabela é aconselhado utilizar essa anotacao
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = false, rollbackFor = Exception.class)
+    public void deletar(Long codigoVenda) {
+        // Valida se a venda existe no banco de dados
+        validarVendaExiste(codigoVenda);
+        // Busca os itens da venda
+        List<ItemVenda> itemVendas = itemVendaRepository.buscarPorCodigo(codigoVenda);
+        // Valida se o produto existe e atualiza quantidade do produto em estoque
+        validarProdutoExisteEDevolverEstoque(itemVendas);
+        // Deleta os itens da venda
+        itemVendaRepository.deleteAll(itemVendas);
+        // Deleta a venda
+        vendaRepository.deleteById(codigoVenda);
+    }
+
+    private void validarProdutoExisteEDevolverEstoque(List<ItemVenda> itensVenda) {
+        itensVenda.forEach(itemVenda -> {
+            Produto produto = produtoService.validarSeProdutoExiste(itemVenda.getProduto().getCodigo());
+            // Atualizando quantidade disponivel em estoque
+            produto.setQuantidade(produto.getQuantidade() + itemVenda.getQuantidade());
+            // Persistir no Banco de dados a quantidade do produto no estoque
+            produtoService.atualizarQuantidadeEmEstoque(produto);
+        });
+    }
+
     private Venda salvarVenda(Cliente cliente, VendaRequestDTO vendaRequestDTO) {
         Venda vendaSalva = vendaRepository.save(new Venda(vendaRequestDTO.getData(), cliente));
         vendaRequestDTO.getItensVendaRequestDTO()
@@ -87,8 +116,8 @@ public class VendaService extends AbstractVendaService {
             validarSeQuantidadeProdutoExiste(produto, item.getQuantidade());
             // Atualizando quantidade disponivel em estoque
             produto.setQuantidade(produto.getQuantidade() - item.getQuantidade());
-            // Persistir no Banco de dados a quantidade do produto apos a venda
-            produtoService.atualizarQuantidadeAposVenda(produto);
+            // Persistir no Banco de dados a quantidade do produto no estoque
+            produtoService.atualizarQuantidadeEmEstoque(produto);
         });
     }
 

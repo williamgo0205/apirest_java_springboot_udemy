@@ -76,7 +76,7 @@ public class CategoriaController {
                   nickname = "deletarCategoria")
     @DeleteMapping("/{codigo}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deletar (@PathVariable Long codigo){
+    public void deletar (@PathVariable(name = "codigo") Long codigo){
         categoriaService.deletar(codigo);
     }
 }

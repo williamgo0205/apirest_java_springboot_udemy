@@ -228,7 +228,7 @@ public class VendaServiceTest {
 
         verify(clienteServiceMock, times(1)).buscarPorCodigo(anyLong());
         verify(produtoServiceMock, times(1)).validarSeProdutoExiste(anyLong());
-        verify(produtoServiceMock, times(1)).atualizarQuantidadeAposVenda(any());
+        verify(produtoServiceMock, times(1)).atualizarQuantidadeEmEstoque(any());
         verify(vendaRepositoryMock, times(1)).save(any());
         verify(itemVendaRepositoryMock, times(1)).save(any());
 
@@ -319,7 +319,7 @@ public class VendaServiceTest {
 
         verify(clienteServiceMock, times(1)).buscarPorCodigo(anyLong());
         verify(produtoServiceMock, times(1)).validarSeProdutoExiste(anyLong());
-        verify(produtoServiceMock, never()).atualizarQuantidadeAposVenda(any());
+        verify(produtoServiceMock, never()).atualizarQuantidadeEmEstoque(any());
         verify(vendaRepositoryMock, never()).save(any());
         verify(itemVendaRepositoryMock, never()).save(any());
     }
