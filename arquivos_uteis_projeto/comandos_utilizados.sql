@@ -97,6 +97,27 @@ https://regexr.com/
 ----------------------
 git@github.com:williamgo0205/apirest_java_springboot_udemy.git
 
+-----------------------------------------------------------
+-- ## Gerar imagem do projeto através de uma imagem base --
+-----------------------------------------------------------
+Link: https://hub.docker.com/_/openjdk
+
+comandos utilizados no arquivo Dockerfile
+
+-- versão do java
+FROM openjdk:11
+-- porta da aplicação
+EXPOSE 8080
+-- Arquivo ao qual será gerado o jar 
+-- caminho origem: /target/gestao-vendas-0.0.1-SNAPSHOT.jar
+-- caminho destino: /app/gestao-vendas.jar
+COPY /target/gestao-vendas-0.0.1-SNAPSHOT.jar /app/gestao-vendas.jar
+-- Diretório de trabalho
+WORKDIR /app
+-- Comandos para a execução do arquivo gestao-vendas.jar
+-- exemplo: java -jar gestao-vendas.jar
+ENTRYPOINT [ "java", "-jar", "/app/gestao-vendas.jar"]
+
 ----------------
 -- 1 - DOCKER --
 ----------------
