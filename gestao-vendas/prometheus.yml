@@ -19,4 +19,7 @@ scrape_configs:
     metrics_path: '/actuator/prometheus'
     # Ip da máquina (ip Local)
     static_configs:
+      # Target localhost 
       - targets: ['192.168.1.72:8080']
+      # Target apontando o app da aplicacao
+      # - targets: ['app:8080']

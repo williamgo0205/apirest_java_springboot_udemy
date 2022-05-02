@@ -118,6 +118,11 @@ WORKDIR /app
 -- exemplo: java -jar gestao-vendas.jar
 ENTRYPOINT [ "java", "-jar", "/app/gestao-vendas.jar"]
 
+---------------------------------------------------
+-- ## Controlando Start order com Docker-Compose --
+---------------------------------------------------
+link: https://docs.docker.com/compose/startup-order/
+
 ----------------
 -- 1 - DOCKER --
 ----------------
@@ -126,6 +131,9 @@ docker-compose up
 
 -- Executando docker compose Liberando Terminal
 docker-compose up -d
+
+-- Startando e Buildando no docker compose
+docker-compose up --build
 
 -- Executando container mysql
 docker exec -it mysql mysql -uvendas -pvendas

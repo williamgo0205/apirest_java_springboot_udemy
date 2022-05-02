@@ -3,6 +3,35 @@ version: '3.8'
 
 services:
 
+## INICIO APP PARA SUBIR NO CONTAINER DOCKER
+#  # Configuração do container do APP gestao_venda_app criado no arquivo Dockerfile
+#  app:
+#    build:
+#      # Contexto da aplicacao. Nesse caso onde encontra-se o arquivo docker-compose.yml
+#      # aqui está no mesmo diretorio e por esse motivo o contexto é "."
+#      context: .
+#      # o arquivo Dockerfile
+#      dockerfile: Dockerfile
+#    # Imagem
+#    image: gestao-vendas_app:latest  
+#    # Nome do container
+#    container_name: gestao_venda_app
+#    # Configuracao da porta de conexao
+#    ports:
+#      - 8080:8080
+#     # Dependencias do container App
+#    depends_on:
+#      - mysql
+#      - jaeger
+#      - prometheus
+#      - grafana
+#    #comando para utilizar o arquivo wait-for-mysql.sh e assim que estiver ok o mysql 
+#    # executa o java -jar /app/gestao-vendas.jar
+#    command: ["-c", "/app/wait-for-mysql.sh mysql:3306 && java -jar /app/gestao-vendas.jar"] 
+#    # entrypoint para executar o arquivo wait-for-mysql.sh
+#    entrypoint: ["/bin/sh"]
+## FINAL APP
+
   # Configuração MySql version
   mysql:
     # Imagem a ser baixada
